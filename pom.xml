@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-parent</artifactId>
+        <version>2.2.1.RELEASE</version>
+    </parent>
+
+    <groupId>com.aerospike</groupId>
+    <artifactId>spring-boot-data-aerospike</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Autoconfiguration for Spring Data Aerospike</name>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>spring-boot-autoconfigure-data-aerospike</module>
+        <module>spring-boot-starter-data-aerospike</module>
+        <module>spring-boot-starter-data-aerospike-reactive</module>
+        <module>spring-boot-starter-data-aerospike-example</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <spring-data-aerospike.version>2.2.0.RELEASE</spring-data-aerospike.version>
+        <aerospike-reactor-client.version>4.4.6</aerospike-reactor-client.version>
+        <reactor-core.version>3.3.1.RELEASE</reactor-core.version>
+    </properties>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>Igor Ermolenko</id>
+            <name>Igor Ermolenko</name>
+            <email>iiermolenko@playtika.com</email>
+            <url>https://www.playtika.com</url>
+            <organization>Playtika</organization>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/aerospike-community/spring-boot-data-aerospike.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:aerospike-community/spring-boot-data-aerospike.git
+        </developerConnection>
+        <url>https://github.com/aerospike-community/spring-boot-data-aerospike</url>
+    </scm>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.aerospike</groupId>
+                <artifactId>spring-boot-autoconfigure-data-aerospike</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aerospike</groupId>
+                <artifactId>spring-data-aerospike</artifactId>
+                <version>${spring-data-aerospike.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aerospike</groupId>
+                <artifactId>aerospike-reactor-client</artifactId>
+                <version>${aerospike-reactor-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-core</artifactId>
+                <version>${reactor-core.version}</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>spring-libs-snapshot</id>
+            <url>https://repo.spring.io/libs-snapshot</url>
+        </repository>
+    </repositories>
+
+</project>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.aerospike</groupId>
+        <artifactId>spring-boot-data-aerospike</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>spring-boot-starter-data-aerospike-example</artifactId>
+    <name>Example for Spring Boot Data Aerospike Starter</name>
+    <description>Example for using Spring Boot Data Aerospike Starter</description>
+
+    <properties>
+        <spring-cloud-starter.version>2.2.1.RELEASE</spring-cloud-starter.version>
+        <embedded-aerospike.version>1.26</embedded-aerospike.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.aerospike</groupId>
+            <artifactId>spring-boot-starter-data-aerospike-reactive</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Embedded Aerospike dependencies-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+            <version>${spring-cloud-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.playtika.testcontainers</groupId>
+            <artifactId>embedded-aerospike</artifactId>
+            <version>${embedded-aerospike.version}</version>
+        </dependency>
+    </dependencies>
+</project>
