@@ -1,7 +1,7 @@
 name: Build project
 on:
   push:
-    branches: [ master ]
+    branches: /refs/heads/*
   pull_request:
     branches: [ master ]
 

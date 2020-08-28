@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>spring-boot-autoconfigure-data-aerospike</artifactId>
-    <name>Spring Boot Data Aerospike auto configuration</name>
     <description>Auto configuration for using Spring Data Aerospike</description>
 
     <dependencies>
@@ -28,11 +27,6 @@
             <groupId>com.aerospike</groupId>
             <artifactId>aerospike-reactor-client</artifactId>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
 
         <dependency>

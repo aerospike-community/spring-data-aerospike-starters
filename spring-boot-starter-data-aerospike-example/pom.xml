@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>spring-boot-starter-data-aerospike-example</artifactId>
-    <name>Example for Spring Boot Data Aerospike Starter</name>
     <description>Example for using Spring Boot Data Aerospike Starter</description>
 
     <properties>
@@ -26,7 +25,11 @@
         <dependency>
             <groupId>com.aerospike</groupId>
             <artifactId>spring-boot-starter-data-aerospike-reactive</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Embedded Aerospike dependencies-->
@@ -34,11 +37,13 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>
             <version>${spring-cloud-starter.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.playtika.testcontainers</groupId>
             <artifactId>embedded-aerospike</artifactId>
             <version>${embedded-aerospike.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
