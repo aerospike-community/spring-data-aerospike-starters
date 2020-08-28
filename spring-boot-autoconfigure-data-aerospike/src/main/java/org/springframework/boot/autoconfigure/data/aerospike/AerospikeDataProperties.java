@@ -16,7 +16,6 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -24,7 +23,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  * @author Igor Ermolenko
  */
-@Data
 @ConfigurationProperties(prefix = "spring.data.aerospike")
 public class AerospikeDataProperties {
     private String hosts;

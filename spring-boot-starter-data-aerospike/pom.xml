@@ -10,10 +10,7 @@
     </parent>
 
     <artifactId>spring-boot-starter-data-aerospike</artifactId>
-    <name>Spring Boot Data Aerospike Starter</name>
     <description>Starter for using Spring Data Aerospike</description>
-
-    <packaging>pom</packaging>
 
     <dependencies>
         <dependency>

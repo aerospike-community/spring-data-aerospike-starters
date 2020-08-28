@@ -10,10 +10,7 @@
     </parent>
 
     <artifactId>spring-boot-starter-data-aerospike-reactive</artifactId>
-    <name>Spring Boot Data Aerospike Reactive Starter</name>
     <description>Starter for using Spring Data Aerospike Reactive</description>
-
-    <packaging>pom</packaging>
 
     <dependencies>
         <dependency>
