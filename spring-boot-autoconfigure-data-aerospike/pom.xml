@@ -23,6 +23,7 @@
         <dependency>
             <groupId>com.aerospike</groupId>
             <artifactId>spring-data-aerospike</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -33,6 +34,12 @@
         <dependency>
             <groupId>com.aerospike</groupId>
             <artifactId>aerospike-reactor-client</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure-processor</artifactId>
             <optional>true</optional>
         </dependency>
 
