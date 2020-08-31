@@ -22,19 +22,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Configuration properties for Spring Data Aerospike.
  *
  * @author Igor Ermolenko
+ * @author Anastasiia Smirnova
  */
 @ConfigurationProperties(prefix = "spring.data.aerospike")
 public class AerospikeDataProperties {
-    private String hosts;
+
     private String namespace;
 
-    public String getHosts() {
-        return hosts;
-    }
+    /**
+     * Bin name that will be used for storing entity's type.
+     * <p>
+     * @see org.springframework.data.aerospike.convert.AerospikeTypeAliasAccessor
+     */
+    private String typeKey = "@_class";
 
-    public void setHosts(String hosts) {
-        this.hosts = hosts;
-    }
+    private boolean scansEnabled = false;
+
+    private Class<?> fieldNamingStrategy;
 
     public String getNamespace() {
         return namespace;
@@ -42,5 +46,29 @@ public class AerospikeDataProperties {
 
     public void setNamespace(String namespace) {
         this.namespace = namespace;
+    }
+
+    public String getTypeKey() {
+        return typeKey;
+    }
+
+    public void setTypeKey(String typeKey) {
+        this.typeKey = typeKey;
+    }
+
+    public boolean isScansEnabled() {
+        return scansEnabled;
+    }
+
+    public void setScansEnabled(boolean scansEnabled) {
+        this.scansEnabled = scansEnabled;
+    }
+
+    public Class<?> getFieldNamingStrategy() {
+        return fieldNamingStrategy;
+    }
+
+    public void setFieldNamingStrategy(Class<?> fieldNamingStrategy) {
+        this.fieldNamingStrategy = fieldNamingStrategy;
     }
 }

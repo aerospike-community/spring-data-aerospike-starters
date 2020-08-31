@@ -37,7 +37,6 @@ import org.springframework.data.aerospike.repository.support.AerospikeRepository
 @ConditionalOnClass({AerospikeClient.class, ReactiveAerospikeRepository.class})
 @ConditionalOnRepositoryType(store = "aerospike", type = RepositoryType.IMPERATIVE)
 @ConditionalOnMissingBean(AerospikeRepositoryFactoryBean.class)
-@ConditionalOnProperty(prefix = "spring.data.aerospike", value = "hosts")
 @Import(AerospikeRepositoriesRegistrar.class)
 public class AerospikeRepositoriesAutoConfiguration {
 

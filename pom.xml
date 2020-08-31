@@ -6,13 +6,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-parent</artifactId>
-        <version>2.2.1.RELEASE</version>
+        <version>2.3.1.RELEASE</version>
     </parent>
 
     <groupId>com.aerospike</groupId>
     <artifactId>spring-boot-data-aerospike</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Autoconfiguration for Spring Data Aerospike</name>
 
     <packaging>pom</packaging>
 
@@ -30,9 +29,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <spring-data-aerospike.version>2.2.0.RELEASE</spring-data-aerospike.version>
-        <aerospike-reactor-client.version>4.4.6</aerospike-reactor-client.version>
-        <reactor-core.version>3.3.1.RELEASE</reactor-core.version>
+        <spring-data-aerospike.version>2.4.0.RELEASE</spring-data-aerospike.version>
+        <aerospike-reactor-client.version>4.4.10</aerospike-reactor-client.version>
     </properties>
 
     <licenses>
@@ -47,6 +45,17 @@
             <id>Igor Ermolenko</id>
             <name>Igor Ermolenko</name>
             <email>iiermolenko@playtika.com</email>
+            <url>https://www.playtika.com</url>
+            <organization>Playtika</organization>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+3</timezone>
+        </developer>
+        <developer>
+            <id>Anastasiia Smirnova</id>
+            <name>Anastasiia Smirnova</name>
+            <email>asmirnova@playtika.com</email>
             <url>https://www.playtika.com</url>
             <organization>Playtika</organization>
             <roles>
@@ -86,12 +95,6 @@
                 <groupId>com.aerospike</groupId>
                 <artifactId>aerospike-reactor-client</artifactId>
                 <version>${aerospike-reactor-client.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.projectreactor</groupId>
-                <artifactId>reactor-core</artifactId>
-                <version>${reactor-core.version}</version>
             </dependency>
 
         </dependencies>

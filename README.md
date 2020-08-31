@@ -28,7 +28,7 @@ or non-reactive repository:
 Specify Aerospike host and namespace:
 
 ```properties
-spring.data.aerospike.hosts=127.0.0.1:3000
+spring.aerospike.hosts=127.0.0.1:3000
 spring.data.aerospike.namespace=COMMON
 ```
 

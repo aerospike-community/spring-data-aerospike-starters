@@ -19,8 +19,10 @@ package org.springframework.boot.autoconfigure.data.aerospike;
 import com.aerospike.client.AerospikeClient;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -30,13 +32,15 @@ import org.springframework.data.aerospike.repository.AerospikeRepository;
  * {@link EnableAutoConfiguration Auto-configuration} for Spring Data's Aerospike support.
  *
  * @author Igor Ermolenko
+ * @author Anastasiia Smirnova
  */
 @Configuration
 @ConditionalOnClass({AerospikeClient.class, AerospikeRepository.class})
-@ConditionalOnProperty(prefix = "spring.data.aerospike", value = "hosts")
+@ConditionalOnSingleCandidate(AerospikeClient.class)
+@ConditionalOnProperty("spring.data.aerospike.namespace")
 @EnableConfigurationProperties(AerospikeDataProperties.class)
-@AutoConfigureAfter(AerospikeReactiveDataAutoConfiguration.class)
-@Import({SpringBootAerospikeDataConfiguration.class})
+@AutoConfigureAfter({AerospikeAutoConfiguration.class})
+@Import({AerospikeDataConfiguration.class})
 public class AerospikeDataAutoConfiguration {
 
 }

@@ -38,7 +38,6 @@ import reactor.core.publisher.Flux;
 @ConditionalOnClass({AerospikeReactorClient.class, ReactiveAerospikeRepository.class, Flux.class})
 @ConditionalOnRepositoryType(store = "aerospike", type = RepositoryType.REACTIVE)
 @ConditionalOnMissingBean(ReactiveAerospikeRepositoryFactoryBean.class)
-@ConditionalOnProperty(prefix = "spring.data.aerospike", value = "hosts")
 @Import(AerospikeReactiveRepositoriesRegistrar.class)
 public class AerospikeReactiveRepositoriesAutoConfiguration {
 
