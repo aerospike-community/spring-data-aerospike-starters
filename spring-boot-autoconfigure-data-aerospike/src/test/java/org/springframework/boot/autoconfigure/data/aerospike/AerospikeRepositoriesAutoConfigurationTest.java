@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Igor Ermolenko
  */
-public class AerospikeRepositoriesAutoConfigurationTests {
+public class AerospikeRepositoriesAutoConfigurationTest {
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(AerospikeRepositoriesAutoConfiguration.class, MockConfiguration.class));
 
@@ -48,7 +48,6 @@ public class AerospikeRepositoriesAutoConfigurationTests {
     public void repositoryIsCreated() {
         contextRunner
                 .withUserConfiguration(DefaultConfiguration.class)
-                .withPropertyValues("spring.data.aerospike.hosts=localhost:3000")
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
                     assertThat(context).hasSingleBean(CityRepository.class);
@@ -56,20 +55,9 @@ public class AerospikeRepositoriesAutoConfigurationTests {
     }
 
     @Test
-    public void repositoryIsNotCreatedWhenPropertyIsAbsent() {
-        contextRunner
-                .withUserConfiguration(DefaultConfiguration.class)
-                .run(context -> {
-                    assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
-                    assertThat(context).doesNotHaveBean(CityRepository.class);
-                });
-    }
-
-    @Test
     public void repositoryIsNotCreatedWhenRepositoryInterfaceDoesNotExists() {
         contextRunner
                 .withUserConfiguration(NoRepositoryConfiguration.class)
-                .withPropertyValues("spring.data.aerospike.hosts=localhost:3000")
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
                     assertThat(context).doesNotHaveBean(CityRepository.class);
@@ -80,7 +68,6 @@ public class AerospikeRepositoriesAutoConfigurationTests {
     public void repositoryIsNotCreatedForTypeReactive() {
         contextRunner
                 .withUserConfiguration(DefaultConfiguration.class)
-                .withPropertyValues("spring.data.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.repositories.type=reactive")
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
@@ -92,7 +79,6 @@ public class AerospikeRepositoriesAutoConfigurationTests {
     public void repositoryIsNotCreatedForTypeNone() {
         contextRunner
                 .withUserConfiguration(DefaultConfiguration.class)
-                .withPropertyValues("spring.data.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.repositories.type=none")
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
@@ -114,7 +100,6 @@ public class AerospikeRepositoriesAutoConfigurationTests {
     @Configuration
     static class MockConfiguration {
         @Bean
-        @Primary
         public AerospikeTemplate aerospikeTemplate() {
             AerospikeMappingContext context = new AerospikeMappingContext();
             AerospikeTemplate mock = Mockito.mock(AerospikeTemplate.class);

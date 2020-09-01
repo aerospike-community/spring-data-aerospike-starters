@@ -3,9 +3,17 @@ package org.springframework.boot.autoconfigure.data.aerospike.example.controller
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.aerospike.example.model.Customer;
-import org.springframework.boot.autoconfigure.data.aerospike.example.repository.CustomerRepository;
+import org.springframework.boot.autoconfigure.data.aerospike.example.repository.ReactiveCustomerRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -14,23 +22,25 @@ import javax.validation.Valid;
 import static org.springframework.http.HttpStatus.OK;
 
 @Slf4j
+@RequestMapping("/reactive")
 @RestController
-public class CustomerController {
+public class ReactiveCustomerController {
+
     @Autowired
-    private CustomerRepository repository;
+    private ReactiveCustomerRepository repository;
 
     @PostMapping("/customer")
     public Mono<Customer> createCustomer(@Valid @RequestBody Customer customer) {
         return repository.save(customer)
-                .doOnSuccess(result -> log.info("Created " + result));
+                .doOnSuccess(result -> log.info("Created {}", result));
     }
 
     @GetMapping("/customer/{id}")
     public Mono<ResponseEntity<Customer>> getCustomerById(@PathVariable(value = "id") String customerId) {
         return repository.findById(customerId)
-                .doOnSuccess(result -> log.info("Retrieved " + result))
+                .doOnSuccess(result -> log.info("Retrieved {}", result))
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.noContent().build());
     }
 
     @PutMapping("/customer/{id}")
@@ -42,10 +52,10 @@ public class CustomerController {
                     existing.setLastName(customer.getLastName());
                     existing.setAge(customer.getAge());
                     return repository.save(existing)
-                            .doOnSuccess(result -> log.info("Updated " + result));
+                            .doOnSuccess(result -> log.info("Updated {}", result));
                 })
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.noContent().build());
     }
 
     @DeleteMapping("/customer/{id}")
@@ -54,21 +64,21 @@ public class CustomerController {
                 .flatMap(existing ->
                         repository.delete(existing)
                                 .then(Mono.just(new ResponseEntity<Void>(OK)))
-                                .doOnSuccess(result -> log.info("Deleted " + existing))
+                                .doOnSuccess(result -> log.info("Deleted {}", existing))
                 )
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.noContent().build());
     }
 
     @GetMapping("/customers")
     public Flux<Customer> getAllCustomers() {
         return repository.findAll()
-                .doOnComplete(() -> log.info("Retrieve all customers"));
+                .doOnComplete(() -> log.info("Retrieved all customers"));
     }
 
-    @GetMapping("/customers-by-lastname/{name}")
-    public Flux<Customer> getAllCustomersByLastName(@PathVariable(value = "name") String lastName) {
+    @GetMapping("/customers/search")
+    public Flux<Customer> getAllCustomersByLastName(@RequestParam(value = "lastName") String lastName) {
         return repository.findByLastNameOrderByFirstNameAsc(lastName)
-                .doOnComplete(() -> log.info("Retrieve all customers with last name " + lastName));
+                .doOnComplete(() -> log.info("Retrieved all customers with last name {}", lastName));
     }
 
 }

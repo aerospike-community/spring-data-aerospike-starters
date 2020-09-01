@@ -17,9 +17,12 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.reactor.AerospikeReactorClient;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -30,12 +33,15 @@ import reactor.core.publisher.Flux;
  * {@link EnableAutoConfiguration Auto-configuration} for Spring Data's Reactive Aerospike support.
  *
  * @author Igor Ermolenko
+ * @author Anastasiia Smirnova
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({AerospikeReactorClient.class, ReactiveAerospikeRepository.class, Flux.class})
-@ConditionalOnProperty(prefix = "spring.data.aerospike", value = "hosts")
+@ConditionalOnSingleCandidate(AerospikeReactorClient.class)
+@ConditionalOnProperty("spring.data.aerospike.namespace")
+@AutoConfigureAfter(AerospikeAutoConfiguration.class)
 @EnableConfigurationProperties(AerospikeDataProperties.class)
-@Import(SpringBootAerospikeReactiveDataConfiguration.class)
+@Import(AerospikeReactiveDataConfiguration.class)
 public class AerospikeReactiveDataAutoConfiguration {
 
 }
