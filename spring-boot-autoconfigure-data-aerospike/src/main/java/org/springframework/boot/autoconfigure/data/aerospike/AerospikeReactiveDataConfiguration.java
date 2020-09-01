@@ -37,7 +37,7 @@ import org.springframework.data.aerospike.query.cache.ReactorIndexRefresher;
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class AerospikeReactiveDataConfiguration {
 
 

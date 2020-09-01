@@ -34,7 +34,7 @@ import org.springframework.data.aerospike.repository.AerospikeRepository;
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({AerospikeClient.class, AerospikeRepository.class})
 @ConditionalOnSingleCandidate(AerospikeClient.class)
 @ConditionalOnProperty("spring.data.aerospike.namespace")

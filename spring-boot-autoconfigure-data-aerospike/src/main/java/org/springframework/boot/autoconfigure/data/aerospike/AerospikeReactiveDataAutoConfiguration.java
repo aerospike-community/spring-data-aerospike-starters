@@ -35,7 +35,7 @@ import reactor.core.publisher.Flux;
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({AerospikeReactorClient.class, ReactiveAerospikeRepository.class, Flux.class})
 @ConditionalOnSingleCandidate(AerospikeReactorClient.class)
 @ConditionalOnProperty("spring.data.aerospike.namespace")

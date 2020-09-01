@@ -33,7 +33,7 @@ import org.springframework.data.aerospike.repository.support.AerospikeRepository
  *
  * @author Igor Ermolenko
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({AerospikeClient.class, ReactiveAerospikeRepository.class})
 @ConditionalOnRepositoryType(store = "aerospike", type = RepositoryType.IMPERATIVE)
 @ConditionalOnMissingBean(AerospikeRepositoryFactoryBean.class)

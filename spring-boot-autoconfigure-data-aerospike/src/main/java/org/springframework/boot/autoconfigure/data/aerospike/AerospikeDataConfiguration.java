@@ -50,7 +50,7 @@ import java.util.Collections;
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class AerospikeDataConfiguration {
 
     @Bean(name = "aerospikeTemplate")

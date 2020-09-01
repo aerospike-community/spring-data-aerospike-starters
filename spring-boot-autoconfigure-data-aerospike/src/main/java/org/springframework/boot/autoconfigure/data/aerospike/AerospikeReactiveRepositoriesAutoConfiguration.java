@@ -34,7 +34,7 @@ import reactor.core.publisher.Flux;
  *
  * @author Igor Ermolenko
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass({AerospikeReactorClient.class, ReactiveAerospikeRepository.class, Flux.class})
 @ConditionalOnRepositoryType(store = "aerospike", type = RepositoryType.REACTIVE)
 @ConditionalOnMissingBean(ReactiveAerospikeRepositoryFactoryBean.class)
