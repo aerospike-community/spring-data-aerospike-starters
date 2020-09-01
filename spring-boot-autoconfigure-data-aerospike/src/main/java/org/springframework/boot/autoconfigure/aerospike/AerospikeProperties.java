@@ -20,6 +20,8 @@ import com.aerospike.client.policy.AuthMode;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.time.Duration;
+
 /**
  * Basic configuration properties for Aerospike client.
  * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.ClientPolicy}.
@@ -58,14 +60,14 @@ public class AerospikeProperties {
     private AuthMode authMode;
 
     /**
-     * Initial host connection timeout in milliseconds.
+     * Initial host connection timeout.
      */
-    private Integer timeout = 10_000;
+    private Duration timeout = Duration.ofSeconds(10);
 
     /**
-     * Login timeout in milliseconds.
+     * Login timeout.
      */
-    private Integer loginTimeout;
+    private Duration loginTimeout;
 
     /**
      * Maximum number of connections allowed per server node.
@@ -78,23 +80,23 @@ public class AerospikeProperties {
     private Integer connPoolsPerNode;
 
     /**
-     * Maximum socket idle in seconds.
+     * Maximum socket idle.
      */
-    private Integer maxSocketIdle;
+    private Duration maxSocketIdle;
 
     /**
-     * Interval in milliseconds between cluster tends by maintenance thread.
+     * Interval between cluster tends by maintenance thread.
      */
-    private Integer tendInterval;
+    private Duration tendInterval;
 
     /**
      * Throw exception if all seed connections fail on cluster instantiation.
      */
     private Boolean failIfNotConnected = true;
 
-    private ReadPolicyDefault readPolicyDefault = new ReadPolicyDefault();
+    private ReadPolicyDefault read = new ReadPolicyDefault();
 
-    private WritePolicyDefault writePolicyDefault = new WritePolicyDefault();
+    private WritePolicyDefault write = new WritePolicyDefault();
 
     /**
      * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.Policy}.
@@ -103,20 +105,20 @@ public class AerospikeProperties {
     public static class ReadPolicyDefault {
 
         /**
-         * Socket idle timeout in milliseconds when processing a database command.
+         * Socket idle timeout when processing a database command.
          */
-        public Integer socketTimeout;
+        public Duration socketTimeout;
 
         /**
-         * Total transaction timeout in milliseconds.
+         * Total transaction timeout.
          */
-        public Integer totalTimeout;
+        public Duration totalTimeout;
 
         /**
-         * Delay milliseconds after socket read timeout in an attempt to recover the socket
+         * Delay after socket read timeout in an attempt to recover the socket
          * in the background.
          */
-        public Integer timeoutDelay;
+        public Duration timeoutDelay;
 
         /**
          * Maximum number of retries before aborting the current transaction.
@@ -125,9 +127,9 @@ public class AerospikeProperties {
         public Integer maxRetries;
 
         /**
-         * Milliseconds to sleep between retries.
+         * Time to sleep between retries.
          */
-        public Integer sleepBetweenRetries;
+        public Duration sleepBetweenRetries;
 
     }
 
@@ -138,20 +140,20 @@ public class AerospikeProperties {
     public static class WritePolicyDefault {
 
         /**
-         * Socket idle timeout in milliseconds when processing a database command.
+         * Socket idle timeout when processing a database command.
          */
-        public Integer socketTimeout;
+        public Duration socketTimeout;
 
         /**
-         * Total transaction timeout in milliseconds.
+         * Total transaction timeout.
          */
-        public Integer totalTimeout;
+        public Duration totalTimeout;
 
         /**
-         * Delay milliseconds after socket read timeout in an attempt to recover the socket
+         * Delay after socket read timeout in an attempt to recover the socket
          * in the background.
          */
-        public Integer timeoutDelay;
+        public Duration timeoutDelay;
 
         /**
          * Maximum number of retries before aborting the current transaction.
@@ -160,9 +162,9 @@ public class AerospikeProperties {
         public Integer maxRetries;
 
         /**
-         * Milliseconds to sleep between retries.
+         * Time to sleep between retries.
          */
-        public Integer sleepBetweenRetries;
+        public Duration sleepBetweenRetries;
 
         /**
          * If the transaction results in a record deletion, leave a tombstone for the record.

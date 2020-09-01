@@ -65,12 +65,12 @@ public class AerospikeAutoConfiguration {
         whenPresent(properties.getPassword(), p -> clientPolicy.password = p);
         whenPresent(properties.getClusterName(), p -> clientPolicy.clusterName = p);
         whenPresent(properties.getAuthMode(), p -> clientPolicy.authMode = p);
-        whenPresent(properties.getTimeout(), p -> clientPolicy.timeout = p);
-        whenPresent(properties.getLoginTimeout(), p -> clientPolicy.loginTimeout = p);
+        whenPresent(properties.getTimeout(), p -> clientPolicy.timeout = (int) p.toMillis());
+        whenPresent(properties.getLoginTimeout(), p -> clientPolicy.loginTimeout = (int) p.toMillis());
         whenPresent(properties.getMaxConnsPerNode(), p -> clientPolicy.maxConnsPerNode = p);
         whenPresent(properties.getConnPoolsPerNode(), p -> clientPolicy.connPoolsPerNode = p);
-        whenPresent(properties.getMaxSocketIdle(), p -> clientPolicy.maxSocketIdle = p);
-        whenPresent(properties.getTendInterval(), p -> clientPolicy.tendInterval = p);
+        whenPresent(properties.getMaxSocketIdle(), p -> clientPolicy.maxSocketIdle = (int) p.getSeconds());
+        whenPresent(properties.getTendInterval(), p -> clientPolicy.tendInterval = (int) p.toMillis());
         whenPresent(properties.getFailIfNotConnected(), p -> clientPolicy.failIfNotConnected = p);
 
         clientPolicy.readPolicyDefault = setupReadPolicy(properties);
@@ -100,25 +100,25 @@ public class AerospikeAutoConfiguration {
     }
 
     private WritePolicy setupWritePolicy(AerospikeProperties properties) {
-        AerospikeProperties.WritePolicyDefault writePolicyDefault = properties.getWritePolicyDefault();
+        AerospikeProperties.WritePolicyDefault writePolicyDefault = properties.getWrite();
         WritePolicy policy = new WritePolicy();
-        whenPresent(writePolicyDefault.socketTimeout, p -> policy.socketTimeout = p);
-        whenPresent(writePolicyDefault.totalTimeout, p -> policy.totalTimeout = p);
-        whenPresent(writePolicyDefault.timeoutDelay, p -> policy.timeoutDelay = p);
+        whenPresent(writePolicyDefault.socketTimeout, p -> policy.socketTimeout = (int) p.toMillis());
+        whenPresent(writePolicyDefault.totalTimeout, p -> policy.totalTimeout = (int) p.toMillis());
+        whenPresent(writePolicyDefault.timeoutDelay, p -> policy.timeoutDelay = (int) p.toMillis());
         whenPresent(writePolicyDefault.maxRetries, p -> policy.maxRetries = p);
-        whenPresent(writePolicyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = p);
+        whenPresent(writePolicyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = (int) p.toMillis());
         whenPresent(writePolicyDefault.durableDelete, p -> policy.durableDelete = p);
         return policy;
     }
 
     private Policy setupReadPolicy(AerospikeProperties properties) {
-        AerospikeProperties.ReadPolicyDefault readPolicyDefault = properties.getReadPolicyDefault();
+        AerospikeProperties.ReadPolicyDefault readPolicyDefault = properties.getRead();
         Policy policy = new Policy();
-        whenPresent(readPolicyDefault.socketTimeout, p -> policy.socketTimeout = p);
-        whenPresent(readPolicyDefault.totalTimeout, p -> policy.totalTimeout = p);
-        whenPresent(readPolicyDefault.timeoutDelay, p -> policy.timeoutDelay = p);
+        whenPresent(readPolicyDefault.socketTimeout, p -> policy.socketTimeout = (int) p.toMillis());
+        whenPresent(readPolicyDefault.totalTimeout, p -> policy.totalTimeout = (int) p.toMillis());
+        whenPresent(readPolicyDefault.timeoutDelay, p -> policy.timeoutDelay = (int) p.toMillis());
         whenPresent(readPolicyDefault.maxRetries, p -> policy.maxRetries = p);
-        whenPresent(readPolicyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = p);
+        whenPresent(readPolicyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = (int) p.toMillis());
         return policy;
     }
 
