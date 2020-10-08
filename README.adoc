@@ -1,0 +1,53 @@
+=  Auto configuration for Spring Data Aerospike
+
+:repo-master: https://github.com/aerospike-community/spring-boot-data-aerospike/blob/master
+
+== Usage
+
+=== Maven configuration
+
+Add the Maven dependency for **reactive** repository:
+
+[source,xml]
+----
+<dependency>
+  <groupId>com.aerospike</groupId>
+  <artifactId>spring-boot-starter-data-aerospike-reactive</artifactId>
+</dependency>
+----
+
+or **non-reactive** repository:
+
+[source,xml]
+----
+<dependency>
+  <groupId>com.aerospike</groupId>
+  <artifactId>spring-boot-starter-data-aerospike</artifactId>
+</dependency>
+----
+
+=== Minimal configuration
+
+Specify Aerospike server hosts and namespace:
+
+[source,properties]
+----
+spring.aerospike.hosts=aerospike-1-server-ip:3000,aerospike-2-server-ip:3000
+spring.data.aerospike.namespace=TEST
+----
+
+== Configuration options
+
+All available properties for configuring Aerospike client can be checked in {repo-master}/spring-boot-autoconfigure-data-aerospike/src/main/java/org/springframework/boot/autoconfigure/aerospike/AerospikeProperties.java[AerospikeProperties].
+
+Properties for configuring `spring-data-aerospike` can be checked in {repo-master}/spring-boot-autoconfigure-data-aerospike/src/main/java/org/springframework/boot/autoconfigure/data/aerospike/AerospikeDataProperties.java[AerospikeDataProperties].
+
+To disable Aerospike repositories use:
+[source,properties]
+----
+spring.data.aerospike.repositories.type=NONE
+----
+
+== Example
+
+You can find usage example in {repo-master}/spring-boot-starter-data-aerospike-example[_spring-boot-starter-data-aerospike-example_] module.
