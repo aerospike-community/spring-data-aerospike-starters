@@ -27,6 +27,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.data.aerospike")
 public class AerospikeDataProperties {
 
+    /**
+     * Aerospike namespace to store data in.
+     */
     private String namespace;
 
     /**
@@ -36,8 +39,14 @@ public class AerospikeDataProperties {
      */
     private String typeKey = "@_class";
 
+    /**
+     * Gives ability to disable queries that will run scan on Aerospike server.
+     */
     private boolean scansEnabled = false;
 
+    /**
+     * Specifies fully qualified name of the FieldNamingStrategy for the entities.
+     */
     private Class<?> fieldNamingStrategy;
 
     public String getNamespace() {

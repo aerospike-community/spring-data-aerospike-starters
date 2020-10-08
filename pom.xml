@@ -31,6 +31,7 @@
 
         <spring-data-aerospike.version>2.4.0.RELEASE</spring-data-aerospike.version>
         <aerospike-reactor-client.version>4.4.10</aerospike-reactor-client.version>
+        <aerospike-client.version>4.4.18</aerospike-client.version>
     </properties>
 
     <licenses>
@@ -95,6 +96,11 @@
                 <groupId>com.aerospike</groupId>
                 <artifactId>aerospike-reactor-client</artifactId>
                 <version>${aerospike-reactor-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aerospike</groupId>
+                <artifactId>aerospike-client</artifactId>
+                <version>${aerospike-client.version}</version>
             </dependency>
 
         </dependencies>

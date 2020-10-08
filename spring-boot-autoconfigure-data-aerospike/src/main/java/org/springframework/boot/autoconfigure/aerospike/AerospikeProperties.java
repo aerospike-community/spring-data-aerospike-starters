@@ -62,7 +62,7 @@ public class AerospikeProperties {
     /**
      * Initial host connection timeout.
      */
-    private Duration timeout = Duration.ofSeconds(10);
+    private Duration connectTimeout = Duration.ofSeconds(10);
 
     /**
      * Login timeout.
@@ -157,7 +157,7 @@ public class AerospikeProperties {
 
         /**
          * Maximum number of retries before aborting the current transaction.
-         * The initial attempt is not counted as a retry.
+         * NOTE: The initial attempt is not counted as a retry.
          */
         public Integer maxRetries;
 
