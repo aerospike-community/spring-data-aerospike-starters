@@ -1,4 +1,4 @@
-package org.springframework.boot.autoconfigure.data.aerospike.example.model;
+package org.springframework.boot.autoconfigure.data.aerospike.example.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -2,7 +2,7 @@ package org.springframework.boot.autoconfigure.data.aerospike.example.controller
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.aerospike.example.model.Customer;
+import org.springframework.boot.autoconfigure.data.aerospike.example.entity.Customer;
 import org.springframework.boot.autoconfigure.data.aerospike.example.repository.ReactiveCustomerRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

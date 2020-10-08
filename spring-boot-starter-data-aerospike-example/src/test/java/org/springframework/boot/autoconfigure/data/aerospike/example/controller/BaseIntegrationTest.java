@@ -6,7 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.data.aerospike.example.ReactiveSpringDataAerospikeExampleApplication;
-import org.springframework.boot.autoconfigure.data.aerospike.example.model.Customer;
+import org.springframework.boot.autoconfigure.data.aerospike.example.entity.Customer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
