@@ -16,11 +16,11 @@
 
 package org.springframework.boot.autoconfigure.aerospike;
 
+import java.time.Duration;
+
 import com.aerospike.client.policy.AuthMode;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.time.Duration;
 
 /**
  * Basic configuration properties for Aerospike client.
@@ -98,46 +98,13 @@ public class AerospikeProperties {
 
     private WritePolicyDefault write = new WritePolicyDefault();
 
+    private BatchPolicyDefault batch = new BatchPolicyDefault();
+
     /**
      * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.Policy}.
      */
     @Data
-    public static class ReadPolicyDefault {
-
-        /**
-         * Socket idle timeout when processing a database command.
-         */
-        public Duration socketTimeout;
-
-        /**
-         * Total transaction timeout.
-         */
-        public Duration totalTimeout;
-
-        /**
-         * Delay after socket read timeout in an attempt to recover the socket
-         * in the background.
-         */
-        public Duration timeoutDelay;
-
-        /**
-         * Maximum number of retries before aborting the current transaction.
-         * The initial attempt is not counted as a retry.
-         */
-        public Integer maxRetries;
-
-        /**
-         * Time to sleep between retries.
-         */
-        public Duration sleepBetweenRetries;
-
-    }
-
-    /**
-     * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.WritePolicy}.
-     */
-    @Data
-    public static class WritePolicyDefault {
+    public abstract static class PolicyDefault {
 
         /**
          * Socket idle timeout when processing a database command.
@@ -165,6 +132,17 @@ public class AerospikeProperties {
          * Time to sleep between retries.
          */
         public Duration sleepBetweenRetries;
+    }
+
+    @Data
+    public static class ReadPolicyDefault extends PolicyDefault {
+    }
+
+    /**
+     * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.WritePolicy}.
+     */
+    @Data
+    public static class WritePolicyDefault extends PolicyDefault {
 
         /**
          * If the transaction results in a record deletion, leave a tombstone for the record.
@@ -172,4 +150,23 @@ public class AerospikeProperties {
         public Boolean durableDelete;
     }
 
+    /**
+     * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.BatchPolicy}.
+     */
+    @Data
+    public static class BatchPolicyDefault extends PolicyDefault {
+
+        /**
+         * Number of concurrent synchronous batch request threads to server nodes.
+         */
+        public Integer maxConcurrentThreads;
+        /**
+         * Allow batch to be processed immediately in the server's receiving thread.
+         */
+        public Boolean allowInline;
+        /**
+         * Send set name for every key in the batch.
+         */
+        public Boolean sendSetName;
+    }
 }
