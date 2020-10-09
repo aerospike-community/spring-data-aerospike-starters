@@ -16,10 +16,15 @@
 
 package org.springframework.boot.autoconfigure.aerospike;
 
+import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.aerospike.client.AerospikeClient;
 import com.aerospike.client.Host;
 import com.aerospike.client.async.EventLoops;
 import com.aerospike.client.async.NioEventLoops;
+import com.aerospike.client.policy.BatchPolicy;
 import com.aerospike.client.policy.ClientPolicy;
 import com.aerospike.client.policy.Policy;
 import com.aerospike.client.policy.WritePolicy;
@@ -32,10 +37,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Flux;
-
-import java.util.Collection;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Aerospike client.
@@ -75,6 +76,7 @@ public class AerospikeAutoConfiguration {
 
         clientPolicy.readPolicyDefault = setupReadPolicy(properties);
         clientPolicy.writePolicyDefault = setupWritePolicy(properties);
+        clientPolicy.batchPolicyDefault = setupBatchPolicy(properties);
         aerospikeEventLoops.ifPresent(loops -> clientPolicy.eventLoops = loops);
 
         return clientPolicy;
@@ -102,11 +104,7 @@ public class AerospikeAutoConfiguration {
     private WritePolicy setupWritePolicy(AerospikeProperties properties) {
         AerospikeProperties.WritePolicyDefault writePolicyDefault = properties.getWrite();
         WritePolicy policy = new WritePolicy();
-        whenPresent(writePolicyDefault.socketTimeout, p -> policy.socketTimeout = (int) p.toMillis());
-        whenPresent(writePolicyDefault.totalTimeout, p -> policy.totalTimeout = (int) p.toMillis());
-        whenPresent(writePolicyDefault.timeoutDelay, p -> policy.timeoutDelay = (int) p.toMillis());
-        whenPresent(writePolicyDefault.maxRetries, p -> policy.maxRetries = p);
-        whenPresent(writePolicyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = (int) p.toMillis());
+        setGeneralPolicyProperties(policy, writePolicyDefault);
         whenPresent(writePolicyDefault.durableDelete, p -> policy.durableDelete = p);
         return policy;
     }
@@ -114,12 +112,26 @@ public class AerospikeAutoConfiguration {
     private Policy setupReadPolicy(AerospikeProperties properties) {
         AerospikeProperties.ReadPolicyDefault readPolicyDefault = properties.getRead();
         Policy policy = new Policy();
-        whenPresent(readPolicyDefault.socketTimeout, p -> policy.socketTimeout = (int) p.toMillis());
-        whenPresent(readPolicyDefault.totalTimeout, p -> policy.totalTimeout = (int) p.toMillis());
-        whenPresent(readPolicyDefault.timeoutDelay, p -> policy.timeoutDelay = (int) p.toMillis());
-        whenPresent(readPolicyDefault.maxRetries, p -> policy.maxRetries = p);
-        whenPresent(readPolicyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = (int) p.toMillis());
+        setGeneralPolicyProperties(policy, readPolicyDefault);
         return policy;
+    }
+
+    private BatchPolicy setupBatchPolicy(AerospikeProperties properties) {
+        AerospikeProperties.BatchPolicyDefault batchPolicyDefault = properties.getBatch();
+        BatchPolicy policy = new BatchPolicy();
+        setGeneralPolicyProperties(policy, batchPolicyDefault);
+        whenPresent(batchPolicyDefault.maxConcurrentThreads, p -> policy.maxConcurrentThreads = p);
+        whenPresent(batchPolicyDefault.allowInline, p -> policy.allowInline = p);
+        whenPresent(batchPolicyDefault.sendSetName, p -> policy.sendSetName = p);
+        return policy;
+    }
+
+    private void setGeneralPolicyProperties(Policy policy, AerospikeProperties.PolicyDefault policyDefault) {
+        whenPresent(policyDefault.socketTimeout, p -> policy.socketTimeout = (int) p.toMillis());
+        whenPresent(policyDefault.totalTimeout, p -> policy.totalTimeout = (int) p.toMillis());
+        whenPresent(policyDefault.timeoutDelay, p -> policy.timeoutDelay = (int) p.toMillis());
+        whenPresent(policyDefault.maxRetries, p -> policy.maxRetries = p);
+        whenPresent(policyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = (int) p.toMillis());
     }
 
     private <T> void whenPresent(T param, Consumer<T> consumer) {
