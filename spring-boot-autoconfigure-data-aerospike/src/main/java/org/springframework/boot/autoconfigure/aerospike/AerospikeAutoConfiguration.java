@@ -16,7 +16,6 @@
 
 package org.springframework.boot.autoconfigure.aerospike;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -53,8 +52,8 @@ public class AerospikeAutoConfiguration {
     @ConditionalOnMissingBean
     public AerospikeClient aerospikeClient(AerospikeProperties properties,
                                            ClientPolicy aerospikeClientPolicy) {
-        Collection<Host> hosts = Host.parseServiceHosts(properties.getHosts());
-        return new AerospikeClient(aerospikeClientPolicy, hosts.toArray(new Host[hosts.size()]));
+        Host[] hosts = Host.parseHosts(properties.getHosts(), properties.getDefaultPort());
+        return new AerospikeClient(aerospikeClientPolicy, hosts);
     }
 
     @Bean(name = "aerospikeClientPolicy")

@@ -35,9 +35,16 @@ public class AerospikeProperties {
     /**
      * Potential hosts to seed the cluster from string format: hostname1:port1,hostname2:port2 ... .
      * <p>
-     * See {@link com.aerospike.client.Host#parseServiceHosts} documentation for more details.
+     * See {@link com.aerospike.client.Host#parseHosts} documentation for more details.
      */
     private String hosts;
+
+    /**
+     * Port is used if no port specified in AerospikeProperties#hosts.
+     * <p>
+     * See {@link com.aerospike.client.Host#parseHosts} documentation for more details.
+     */
+    private int defaultPort = 3000;
 
     /**
      * User authentication to cluster.
