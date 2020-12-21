@@ -70,6 +70,7 @@ class AerospikeCommonDataConfiguration {
             context.setFieldNamingStrategy((FieldNamingStrategy) BeanUtils.instantiateClass(fieldNamingStrategy));
         }
         context.setDefaultNameSpace(aerospikeDataProperties.getNamespace());
+        context.setCreateIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
         return context;
     }
 
