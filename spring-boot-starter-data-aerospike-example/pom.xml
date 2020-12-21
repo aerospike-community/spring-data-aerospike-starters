@@ -9,26 +9,23 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
+    <packaging>pom</packaging>
     <artifactId>spring-boot-starter-data-aerospike-example</artifactId>
     <description>Example for using Spring Boot Data Aerospike Starter</description>
 
     <properties>
-        <spring-cloud-starter.version>2.2.1.RELEASE</spring-cloud-starter.version>
         <embedded-aerospike.version>1.81</embedded-aerospike.version>
     </properties>
+
+    <modules>
+        <module>reactive</module>
+        <module>sync</module>
+    </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.aerospike</groupId>
-            <artifactId>spring-boot-starter-data-aerospike-reactive</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -40,7 +37,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>
-            <version>${spring-cloud-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>com.playtika.testcontainers</groupId>
