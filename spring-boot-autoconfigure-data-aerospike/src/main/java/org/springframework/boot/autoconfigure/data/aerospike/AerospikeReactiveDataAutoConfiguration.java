@@ -41,7 +41,7 @@ import reactor.core.publisher.Flux;
 @ConditionalOnProperty("spring.data.aerospike.namespace")
 @AutoConfigureAfter(AerospikeAutoConfiguration.class)
 @EnableConfigurationProperties(AerospikeDataProperties.class)
-@Import(AerospikeReactiveDataConfiguration.class)
+@Import({AerospikeReactiveDataConfiguration.class, AerospikeCommonDataConfiguration.class})
 public class AerospikeReactiveDataAutoConfiguration {
 
 }

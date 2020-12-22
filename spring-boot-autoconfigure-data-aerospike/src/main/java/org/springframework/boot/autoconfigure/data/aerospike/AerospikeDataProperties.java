@@ -49,6 +49,11 @@ public class AerospikeDataProperties {
      */
     private Class<?> fieldNamingStrategy;
 
+    /**
+     * Specifies whether to create secondary indexes for @Indexed annotated fields on application startup.
+     */
+    private boolean createIndexesOnStartup = true;
+
     public String getNamespace() {
         return namespace;
     }
@@ -79,5 +84,13 @@ public class AerospikeDataProperties {
 
     public void setFieldNamingStrategy(Class<?> fieldNamingStrategy) {
         this.fieldNamingStrategy = fieldNamingStrategy;
+    }
+
+    public boolean isCreateIndexesOnStartup() {
+        return createIndexesOnStartup;
+    }
+
+    public void setCreateIndexesOnStartup(boolean createIndexesOnStartup) {
+        this.createIndexesOnStartup = createIndexesOnStartup;
     }
 }

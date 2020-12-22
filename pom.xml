@@ -29,9 +29,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <spring-data-aerospike.version>2.4.0.RELEASE</spring-data-aerospike.version>
+        <spring-data-aerospike.version>2.4.1.RELEASE</spring-data-aerospike.version>
         <aerospike-reactor-client.version>4.4.10</aerospike-reactor-client.version>
         <aerospike-client.version>4.4.18</aerospike-client.version>
+
+        <spring-cloud-starter.version>2.2.6.RELEASE</spring-cloud-starter.version>
     </properties>
 
     <licenses>
@@ -85,6 +87,11 @@
                 <artifactId>spring-boot-starter-data-aerospike-reactive</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.aerospike</groupId>
+                <artifactId>spring-boot-starter-data-aerospike</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.aerospike</groupId>
@@ -101,6 +108,17 @@
                 <groupId>com.aerospike</groupId>
                 <artifactId>aerospike-client</artifactId>
                 <version>${aerospike-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-test-support</artifactId>
+                <version>${spring-cloud-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter</artifactId>
+                <version>${spring-cloud-starter.version}</version>
             </dependency>
 
         </dependencies>
