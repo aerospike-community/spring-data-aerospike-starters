@@ -71,7 +71,7 @@ class AerospikeReactiveDataConfiguration {
                                                                  IndexesCacheUpdater indexesCacheUpdater) {
         ReactorIndexRefresher refresher = new ReactorIndexRefresher(aerospikeReactorClient, aerospikeReactorClient.getInfoPolicyDefault(),
                 new InternalIndexOperations(new IndexInfoParser()), indexesCacheUpdater);
-        refresher.refreshIndexes();
+        refresher.refreshIndexes().block();
         return refresher;
     }
 
