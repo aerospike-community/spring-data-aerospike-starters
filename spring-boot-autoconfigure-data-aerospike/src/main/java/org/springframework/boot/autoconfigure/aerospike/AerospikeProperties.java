@@ -19,6 +19,7 @@ package org.springframework.boot.autoconfigure.aerospike;
 import java.time.Duration;
 
 import com.aerospike.client.policy.AuthMode;
+import com.aerospike.client.policy.QueryPolicy;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -107,6 +108,8 @@ public class AerospikeProperties {
 
     private BatchPolicyDefault batch = new BatchPolicyDefault();
 
+    private QueryPolicyDefault query = new QueryPolicyDefault();
+
     /**
      * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.Policy}.
      */
@@ -141,6 +144,39 @@ public class AerospikeProperties {
         public Duration sleepBetweenRetries;
     }
 
+    /**
+     * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.QueryPolicy}.
+     */
+    @Data
+    public static class QueryPolicyDefault extends PolicyDefault {
+
+        /**
+         * Approximate number of records to return to client.
+         */
+        public Long maxRecords;
+
+        /**
+         * Maximum number of concurrent requests to server nodes at any point in time.
+         */
+        public Integer maxConcurrentNodes;
+
+        /**
+         * Number of records to place in queue before blocking.
+         */
+        public Integer recordQueueSize;
+
+        /**
+         * Should bin data be retrieved. If false, only record digests (and user keys
+         * if stored on the server) are retrieved.
+         */
+        public Boolean includeBinData;
+
+        /**
+         * Terminate query if cluster is in migration state.
+         */
+        public Boolean failOnClusterChange;
+    }
+
     @Data
     public static class ReadPolicyDefault extends PolicyDefault {
     }
@@ -150,6 +186,11 @@ public class AerospikeProperties {
      */
     @Data
     public static class WritePolicyDefault extends PolicyDefault {
+
+        /**
+         * If the key is sent on a write, the key will be stored with the record on the server.
+         */
+        public Boolean sendKey;
 
         /**
          * If the transaction results in a record deletion, leave a tombstone for the record.

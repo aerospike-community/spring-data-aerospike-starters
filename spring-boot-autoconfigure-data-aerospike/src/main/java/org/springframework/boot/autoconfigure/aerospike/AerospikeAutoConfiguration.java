@@ -26,6 +26,7 @@ import com.aerospike.client.async.NioEventLoops;
 import com.aerospike.client.policy.BatchPolicy;
 import com.aerospike.client.policy.ClientPolicy;
 import com.aerospike.client.policy.Policy;
+import com.aerospike.client.policy.QueryPolicy;
 import com.aerospike.client.policy.WritePolicy;
 import com.aerospike.client.reactor.AerospikeReactorClient;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -76,6 +77,7 @@ public class AerospikeAutoConfiguration {
         clientPolicy.readPolicyDefault = setupReadPolicy(properties);
         clientPolicy.writePolicyDefault = setupWritePolicy(properties);
         clientPolicy.batchPolicyDefault = setupBatchPolicy(properties);
+        clientPolicy.queryPolicyDefault = setupQueryPolicy(properties);
         aerospikeEventLoops.ifPresent(loops -> clientPolicy.eventLoops = loops);
 
         return clientPolicy;
@@ -105,6 +107,7 @@ public class AerospikeAutoConfiguration {
         WritePolicy policy = new WritePolicy();
         setGeneralPolicyProperties(policy, writePolicyDefault);
         whenPresent(writePolicyDefault.durableDelete, p -> policy.durableDelete = p);
+        whenPresent(writePolicyDefault.sendKey, p -> policy.sendKey = p);
         return policy;
     }
 
@@ -122,6 +125,18 @@ public class AerospikeAutoConfiguration {
         whenPresent(batchPolicyDefault.maxConcurrentThreads, p -> policy.maxConcurrentThreads = p);
         whenPresent(batchPolicyDefault.allowInline, p -> policy.allowInline = p);
         whenPresent(batchPolicyDefault.sendSetName, p -> policy.sendSetName = p);
+        return policy;
+    }
+
+    private QueryPolicy setupQueryPolicy(AerospikeProperties properties) {
+        AerospikeProperties.QueryPolicyDefault queryPolicyDefault = properties.getQuery();
+        QueryPolicy policy = new QueryPolicy();
+        setGeneralPolicyProperties(policy, queryPolicyDefault);
+        whenPresent(queryPolicyDefault.maxRecords, p -> policy.maxRecords = p);
+        whenPresent(queryPolicyDefault.failOnClusterChange, p -> policy.failOnClusterChange = p);
+        whenPresent(queryPolicyDefault.includeBinData, p -> policy.includeBinData = p);
+        whenPresent(queryPolicyDefault.maxConcurrentNodes, p -> policy.maxConcurrentNodes = p);
+        whenPresent(queryPolicyDefault.recordQueueSize, p -> policy.recordQueueSize = p);
         return policy;
     }
 
