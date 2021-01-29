@@ -48,7 +48,8 @@ class AerospikeCommonDataConfiguration {
     @Bean(name = "aerospikeTypeAliasAccessor")
     @ConditionalOnMissingBean(name = "aerospikeTypeAliasAccessor")
     public AerospikeTypeAliasAccessor aerospikeTypeAliasAccessor(AerospikeDataProperties aerospikeDataProperties) {
-        return new AerospikeTypeAliasAccessor(aerospikeDataProperties.getTypeKey());
+        String typeKey = aerospikeDataProperties.getTypeKey();
+        return new AerospikeTypeAliasAccessor(typeKey != null && typeKey.equals("") ? null : typeKey);
     }
 
     @Bean(name = "aerospikeCustomConversions")

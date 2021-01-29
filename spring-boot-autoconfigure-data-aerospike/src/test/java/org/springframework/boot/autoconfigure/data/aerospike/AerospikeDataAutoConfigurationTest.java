@@ -110,6 +110,21 @@ public class AerospikeDataAutoConfigurationTest {
     }
 
     @Test
+    public void typeKeyCanBeNull() {
+        contextRunner
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000")
+                .withPropertyValues("spring.data.aerospike.namespace=TEST")
+                .withUserConfiguration(AerospikeClientMockConfiguration.class)
+                .withPropertyValues("spring.data.aerospike.type-key=")
+                .run((context) -> {
+                    AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
+                    String typeKey = getField(aliasAccessor, "typeKey");
+
+                    assertThat(typeKey).isNull();
+                });
+    }
+
+    @Test
     public void customConversions() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
