@@ -31,7 +31,7 @@
 
         <spring-data-aerospike.version>2.4.2.RELEASE</spring-data-aerospike.version>
         <aerospike-reactor-client.version>4.4.10</aerospike-reactor-client.version>
-        <aerospike-client.version>4.4.18</aerospike-client.version>
+        <aerospike-client.version>5.1.5</aerospike-client.version>
 
         <spring-cloud-starter.version>3.0.0</spring-cloud-starter.version>
     </properties>
