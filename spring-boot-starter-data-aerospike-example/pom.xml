@@ -14,7 +14,7 @@
     <description>Example for using Spring Boot Data Aerospike Starter</description>
 
     <properties>
-        <embedded-aerospike.version>2.0.0</embedded-aerospike.version>
+        <embedded-aerospike.version>2.0.10</embedded-aerospike.version>
     </properties>
 
     <modules>
