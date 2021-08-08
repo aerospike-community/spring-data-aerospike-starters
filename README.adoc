@@ -1,6 +1,6 @@
 =  Auto configuration for Spring Data Aerospike
 
-:repo-master: https://github.com/aerospike-community/spring-boot-data-aerospike/blob/master
+:repo-master: https://github.com/aerospike-community/spring-data-aerospike-starters/blob/master
 
 == Usage
 
