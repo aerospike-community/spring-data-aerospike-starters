@@ -42,7 +42,6 @@ import org.springframework.data.aerospike.query.cache.ReactorIndexRefresher;
 @Configuration(proxyBeanMethods = false)
 class AerospikeReactiveDataConfiguration {
 
-
     @Bean(name = "reactiveAerospikeTemplate")
     @ConditionalOnMissingBean(name = "reactiveAerospikeTemplate")
     public ReactiveAerospikeTemplate reactiveAerospikeTemplate(MappingAerospikeConverter mappingAerospikeConverter,

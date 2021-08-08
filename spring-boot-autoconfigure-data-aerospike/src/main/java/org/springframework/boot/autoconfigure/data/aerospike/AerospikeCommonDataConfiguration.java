@@ -36,7 +36,6 @@ class AerospikeCommonDataConfiguration {
         return new IndexesCacheHolder();
     }
 
-
     @Bean(name = "mappingAerospikeConverter")
     @ConditionalOnMissingBean(name = "mappingAerospikeConverter")
     public MappingAerospikeConverter mappingAerospikeConverter(AerospikeMappingContext aerospikeMappingContext,
