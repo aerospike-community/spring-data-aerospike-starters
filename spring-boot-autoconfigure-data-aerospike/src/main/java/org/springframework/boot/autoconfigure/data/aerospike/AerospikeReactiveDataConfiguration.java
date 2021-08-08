@@ -82,5 +82,4 @@ class AerospikeReactiveDataConfiguration {
             @Lazy ReactiveAerospikeTemplate template) {
         return new ReactiveAerospikePersistenceEntityIndexCreator(aerospikeMappingContext, template);
     }
-
 }

@@ -20,7 +20,6 @@ import com.aerospike.client.reactor.AerospikeReactorClient;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.ConditionalOnRepositoryType;
 import org.springframework.boot.autoconfigure.data.RepositoryType;
 import org.springframework.context.annotation.Configuration;
