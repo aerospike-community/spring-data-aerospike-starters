@@ -2,6 +2,18 @@
 
 :repo-master: https://github.com/aerospike-community/spring-data-aerospike-starters/blob/master
 
+== Verions compatibility table
+
+|===
+|`spring-data-aerospike-starters` |`spring-data-aerospike` |`aerospike-client` |`aerospike-reactor-client`
+
+|0.5.x
+|2.4.x
+|4.4.x
+|4.4.x
+|===
+
+
 == Usage
 
 === Maven configuration
