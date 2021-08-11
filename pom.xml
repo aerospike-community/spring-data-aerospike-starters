@@ -10,8 +10,16 @@
     </parent>
 
     <groupId>com.aerospike</groupId>
-    <artifactId>spring-boot-data-aerospike</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>spring-data-aerospike-starters</artifactId>
+    <version>${revision}</version>
+
+    <name>Spring Data Aerospike Starters</name>
+    <description>Autoconfiguration project for Spring Data Aerospike.</description>
+    <url>https://github.com/aerospike-community/spring-data-aerospike-starters</url>
+    <organization>
+        <name>Aerospike Inc.</name>
+        <url>https://www.aerospike.com</url>
+    </organization>
 
     <packaging>pom</packaging>
 
@@ -23,11 +31,13 @@
     </modules>
 
     <properties>
+        <revision>0.5.0</revision>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
 
         <spring-data-aerospike.version>2.4.2.RELEASE</spring-data-aerospike.version>
         <aerospike-reactor-client.version>4.4.10</aerospike-reactor-client.version>
@@ -69,10 +79,10 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/aerospike-community/spring-boot-data-aerospike.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:aerospike-community/spring-boot-data-aerospike.git
+        <connection>scm:git:git://github.com/aerospike-community/spring-data-aerospike-starters.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:aerospike-community/spring-data-aerospike-starters.git
         </developerConnection>
-        <url>https://github.com/aerospike-community/spring-boot-data-aerospike</url>
+        <url>https://github.com/aerospike-community/spring-data-aerospike-starters</url>
     </scm>
 
     <dependencyManagement>
@@ -120,9 +130,7 @@
                 <artifactId>spring-cloud-starter-bootstrap</artifactId>
                 <version>${spring-cloud-starter.version}</version>
             </dependency>
-
         </dependencies>
-
     </dependencyManagement>
 
     <repositories>
@@ -164,10 +172,22 @@
                 </executions>
                 <configuration>
                     <doclint>none</doclint>
-                    <failOnError>false</failOnError>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven.gpg.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>
