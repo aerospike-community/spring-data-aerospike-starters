@@ -49,5 +49,4 @@ public class AerospikeRepositoriesRegistrar extends AbstractRepositoryConfigurat
     @EnableAerospikeRepositories
     private static class EnableAerospikeRepositoriesConfiguration {
     }
-
 }

@@ -19,7 +19,6 @@ package org.springframework.boot.autoconfigure.aerospike;
 import java.time.Duration;
 
 import com.aerospike.client.policy.AuthMode;
-import com.aerospike.client.policy.QueryPolicy;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

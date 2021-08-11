@@ -97,8 +97,7 @@ public class AerospikeAutoConfiguration {
         @Bean(name = "aerospikeEventLoops", destroyMethod = "close")
         @ConditionalOnMissingBean
         public EventLoops aerospikeEventLoops() {
-            NioEventLoops eventLoops = new NioEventLoops();
-            return eventLoops;
+            return new NioEventLoops();
         }
     }
 
