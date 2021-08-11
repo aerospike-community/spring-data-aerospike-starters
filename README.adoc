@@ -13,7 +13,6 @@
 |4.4.x
 |===
 
-
 == Usage
 
 === Maven configuration
