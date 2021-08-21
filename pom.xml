@@ -205,13 +205,7 @@
                 <version>1.2.7</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
-                    <pomElements>
-                        <name/>
-                        <description/>
-                        <developers/>
-                        <url/>
-                        <scm/>
-                    </pomElements>
+                    <flattenMode>bom</flattenMode>
                 </configuration>
                 <executions>
                     <execution>
