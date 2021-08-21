@@ -9,6 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>Spring Data Aerospike Starters: spring-boot-starter-data-aerospike-example, sync</name>
     <artifactId>sync</artifactId>
 
     <dependencies>

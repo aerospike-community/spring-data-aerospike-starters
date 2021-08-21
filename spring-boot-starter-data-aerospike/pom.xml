@@ -9,6 +9,7 @@
         <version>${revision}</version>
     </parent>
 
+    <name>Spring Data Aerospike Starters: spring-boot-starter-data-aerospike</name>
     <artifactId>spring-boot-starter-data-aerospike</artifactId>
     <description>Starter for using Spring Data Aerospike</description>
 

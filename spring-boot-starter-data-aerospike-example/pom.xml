@@ -9,7 +9,9 @@
         <version>${revision}</version>
     </parent>
 
+
     <packaging>pom</packaging>
+    <name>Spring Data Aerospike Starters: spring-boot-starter-data-aerospike-example</name>
     <artifactId>spring-boot-starter-data-aerospike-example</artifactId>
     <description>Example for using Spring Boot Data Aerospike Starter</description>
 
