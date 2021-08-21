@@ -7,7 +7,7 @@
 |===
 |`spring-data-aerospike-starters` |`spring-data-aerospike` |`aerospike-client` |`aerospike-reactor-client`
 
-|0.5.x
+|0.5.x, 0.6.x
 |2.4.x
 |4.4.x
 |4.4.x
