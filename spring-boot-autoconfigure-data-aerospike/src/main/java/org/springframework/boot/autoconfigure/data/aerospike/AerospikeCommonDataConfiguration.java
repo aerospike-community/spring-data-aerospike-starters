@@ -13,6 +13,7 @@ import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
 import org.springframework.data.aerospike.core.DefaultAerospikeExceptionTranslator;
 import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
 import org.springframework.data.aerospike.mapping.Document;
+import org.springframework.data.aerospike.query.FilterExpressionsBuilder;
 import org.springframework.data.aerospike.query.StatementBuilder;
 import org.springframework.data.aerospike.query.cache.IndexesCache;
 import org.springframework.data.aerospike.query.cache.IndexesCacheHolder;
@@ -23,6 +24,12 @@ import java.util.Collections;
 
 @Configuration(proxyBeanMethods = false)
 class AerospikeCommonDataConfiguration {
+
+    @Bean(name = "aerospikeFilterExpressionsBuilder")
+    @ConditionalOnMissingBean(name = "aerospikeFilterExpressionsBuilder")
+    public FilterExpressionsBuilder aerospikeFilterExpressionsBuilder() {
+        return new FilterExpressionsBuilder();
+    }
 
     @Bean(name = "aerospikeStatementBuilder")
     @ConditionalOnMissingBean(name = "aerospikeStatementBuilder")
@@ -69,7 +76,6 @@ class AerospikeCommonDataConfiguration {
         if (fieldNamingStrategy != null) {
             context.setFieldNamingStrategy((FieldNamingStrategy) BeanUtils.instantiateClass(fieldNamingStrategy));
         }
-        context.setDefaultNameSpace(aerospikeDataProperties.getNamespace());
         context.setCreateIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
         return context;
     }

@@ -26,6 +26,7 @@ import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
 import org.springframework.data.aerospike.core.AerospikeTemplate;
 import org.springframework.data.aerospike.index.AerospikePersistenceEntityIndexCreator;
 import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
+import org.springframework.data.aerospike.query.FilterExpressionsBuilder;
 import org.springframework.data.aerospike.query.QueryEngine;
 import org.springframework.data.aerospike.query.StatementBuilder;
 import org.springframework.data.aerospike.query.cache.IndexInfoParser;
@@ -61,11 +62,14 @@ class AerospikeDataConfiguration {
     @ConditionalOnMissingBean(name = "aerospikeQueryEngine")
     public QueryEngine aerospikeQueryEngine(AerospikeClient aerospikeClient,
                                             AerospikeDataProperties aerospikeDataProperties,
+                                            FilterExpressionsBuilder filterExpressionsBuilder,
                                             StatementBuilder statementBuilder) {
-        QueryEngine queryEngine = new QueryEngine(aerospikeClient, statementBuilder, aerospikeClient.getQueryPolicyDefault());
+        QueryEngine queryEngine = new QueryEngine(aerospikeClient, statementBuilder, filterExpressionsBuilder, aerospikeClient.getQueryPolicyDefault());
         queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
         return queryEngine;
     }
+
+
 
     @Bean(name = "aerospikeIndexRefresher")
     @ConditionalOnMissingBean(name = "aerospikeIndexRefresher")
