@@ -26,6 +26,7 @@ import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
 import org.springframework.data.aerospike.core.ReactiveAerospikeTemplate;
 import org.springframework.data.aerospike.index.ReactiveAerospikePersistenceEntityIndexCreator;
 import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
+import org.springframework.data.aerospike.query.FilterExpressionsBuilder;
 import org.springframework.data.aerospike.query.ReactorQueryEngine;
 import org.springframework.data.aerospike.query.StatementBuilder;
 import org.springframework.data.aerospike.query.cache.IndexInfoParser;
@@ -58,8 +59,9 @@ class AerospikeReactiveDataConfiguration {
     @ConditionalOnMissingBean(name = "reactiveAerospikeQueryEngine")
     public ReactorQueryEngine reactiveAerospikeQueryEngine(AerospikeReactorClient aerospikeReactorClient,
                                                            AerospikeDataProperties aerospikeDataProperties,
+                                                           FilterExpressionsBuilder filterExpressionsBuilder,
                                                            StatementBuilder statementBuilder) {
-        ReactorQueryEngine queryEngine = new ReactorQueryEngine(aerospikeReactorClient, statementBuilder, aerospikeReactorClient.getQueryPolicyDefault());
+        ReactorQueryEngine queryEngine = new ReactorQueryEngine(aerospikeReactorClient, statementBuilder, filterExpressionsBuilder, aerospikeReactorClient.getQueryPolicyDefault());
         queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
         return queryEngine;
     }
