@@ -17,6 +17,7 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.reactor.AerospikeReactorClient;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
 import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
 import org.springframework.data.aerospike.core.ReactiveAerospikeTemplate;
+import org.springframework.data.aerospike.index.AerospikeIndexResolver;
 import org.springframework.data.aerospike.index.ReactiveAerospikePersistenceEntityIndexCreator;
 import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
 import org.springframework.data.aerospike.query.FilterExpressionsBuilder;
@@ -79,8 +81,12 @@ class AerospikeReactiveDataConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "reactiveAerospikePersistenceEntityIndexCreator")
     public ReactiveAerospikePersistenceEntityIndexCreator reactiveAerospikePersistenceEntityIndexCreator(
-            AerospikeMappingContext aerospikeMappingContext,
-            @Lazy ReactiveAerospikeTemplate template) {
-        return new ReactiveAerospikePersistenceEntityIndexCreator(aerospikeMappingContext, template);
+            AerospikeDataProperties aerospikeDataProperties,
+            @Lazy ReactiveAerospikeTemplate template,
+            ObjectProvider<AerospikeMappingContext> aerospikeMappingContext,
+            AerospikeIndexResolver aerospikeIndexResolver) {
+        return new ReactiveAerospikePersistenceEntityIndexCreator(aerospikeMappingContext, aerospikeDataProperties.isCreateIndexesOnStartup(),
+                aerospikeIndexResolver,
+                template);
     }
 }
