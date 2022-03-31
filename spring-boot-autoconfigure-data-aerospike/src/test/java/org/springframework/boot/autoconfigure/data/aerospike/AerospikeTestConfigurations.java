@@ -1,28 +1,23 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import com.aerospike.client.AerospikeClient;
-import com.aerospike.client.cluster.Cluster;
+import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.cluster.Node;
+import com.aerospike.client.policy.InfoPolicy;
 import com.aerospike.client.policy.WritePolicy;
-import com.aerospike.client.reactor.AerospikeReactorClient;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.data.aerospike.city.City;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.aerospike.convert.AerospikeCustomConversions;
-import org.springframework.data.aerospike.query.cache.IndexInfoParser;
-import org.springframework.data.aerospike.query.cache.IndexesCacheUpdater;
-import org.springframework.data.aerospike.query.cache.InternalIndexOperations;
 import org.springframework.data.aerospike.query.cache.ReactorIndexRefresher;
-import org.springframework.util.ReflectionUtils;
+import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AerospikeTestConfigurations {
 
@@ -30,22 +25,11 @@ public class AerospikeTestConfigurations {
     public static class AerospikeClientMockConfiguration {
 
         @Bean
-        public AerospikeClient aerospikeClientMock() {
-            Cluster cluster = mock(Cluster.class);
-            setField(cluster, "nodes", new Node[]{});
-            setField(cluster, "nodeIndex", new AtomicInteger());
-
-            AerospikeClient client = mock(AerospikeClient.class);
-            setField(client, "cluster", cluster);
-            setField(client, "writePolicyDefault", new WritePolicy());
-
+        public IAerospikeClient aerospikeClientMock() {
+            IAerospikeClient client = mock(IAerospikeClient.class);
+            when(client.getNodes()).thenReturn(new Node[]{});
+            when(client.getWritePolicyDefault()).thenReturn(new WritePolicy());
             return client;
-        }
-
-        private void setField(Object object, String fieldName, Object fieldValue) {
-            Field field = ReflectionUtils.findField(object.getClass(), fieldName);
-            field.setAccessible(true);
-            ReflectionUtils.setField(field, object, fieldValue);
         }
 
     }

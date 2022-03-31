@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 
 import com.aerospike.client.AerospikeClient;
 import com.aerospike.client.Host;
+import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.async.EventLoops;
 import com.aerospike.client.async.NioEventLoops;
 import com.aerospike.client.policy.BatchPolicy;
@@ -50,7 +51,7 @@ import reactor.core.publisher.Flux;
 public class AerospikeAutoConfiguration {
 
     @Bean(name = "aerospikeClient", destroyMethod = "close")
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(IAerospikeClient.class)
     public AerospikeClient aerospikeClient(AerospikeProperties properties,
                                            ClientPolicy aerospikeClientPolicy) {
         Host[] hosts = Host.parseHosts(properties.getHosts(), properties.getDefaultPort());
@@ -89,7 +90,7 @@ public class AerospikeAutoConfiguration {
         @Bean(name = "aerospikeReactorClient", destroyMethod = "")
         @ConditionalOnMissingBean
         //disable destroy method, because we do not want AerospikeReactorClient to close AerospikeClient
-        public AerospikeReactorClient aerospikeReactorClient(AerospikeClient aerospikeClient,
+        public AerospikeReactorClient aerospikeReactorClient(IAerospikeClient aerospikeClient,
                                                              EventLoops eventLoops) {
             return new AerospikeReactorClient(aerospikeClient, eventLoops);
         }

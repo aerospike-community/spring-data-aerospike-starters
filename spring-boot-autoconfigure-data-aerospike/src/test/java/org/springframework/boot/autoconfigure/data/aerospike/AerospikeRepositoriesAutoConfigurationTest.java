@@ -16,8 +16,7 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.TestAutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.data.aerospike.city.City;
@@ -27,12 +26,12 @@ import org.springframework.boot.autoconfigure.data.aerospike.empty.EmptyDataPack
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.aerospike.core.AerospikeTemplate;
 import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
 import org.springframework.data.mapping.context.MappingContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -102,9 +101,14 @@ public class AerospikeRepositoriesAutoConfigurationTest {
         @Bean
         public AerospikeTemplate aerospikeTemplate() {
             AerospikeMappingContext context = new AerospikeMappingContext();
-            AerospikeTemplate mock = Mockito.mock(AerospikeTemplate.class);
+            AerospikeTemplate mock = mock(AerospikeTemplate.class);
             when(mock.getMappingContext()).thenReturn((MappingContext) context);
             return mock;
+        }
+
+        @Bean
+        public MappingContext aerospikeMappingContext() {
+            return mock(MappingContext.class);
         }
     }
 
