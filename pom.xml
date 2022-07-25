@@ -40,7 +40,7 @@
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
 
         <spring-data-aerospike.version>3.4.1</spring-data-aerospike.version>
-        <aerospike-reactor-client.version>5.1.11</aerospike-reactor-client.version>
+        <aerospike-reactor-client.version>6.1.0</aerospike-reactor-client.version>
         <aerospike-client.version>5.1.11</aerospike-client.version>
 
         <spring-cloud-starter.version>3.1.1</spring-cloud-starter.version>
