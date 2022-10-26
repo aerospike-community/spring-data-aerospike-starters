@@ -37,7 +37,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
+        <maven.gpg.plugin.version>3.0.1</maven.gpg.plugin.version>
 
         <spring-data-aerospike.version>3.4.1</spring-data-aerospike.version>
         <aerospike-reactor-client.version>5.1.11</aerospike-reactor-client.version>
