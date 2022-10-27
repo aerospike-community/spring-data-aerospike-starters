@@ -10,6 +10,11 @@ image:https://github.com/aerospike-community/spring-data-aerospike-starters/work
 |===
 |`spring-data-aerospike-starters` |`spring-data-aerospike` |`aerospike-client` |`aerospike-reactor-client`
 
+|0.8.x
+|3.5.x
+|6.1.x
+|6.1.x
+
 |0.7.x
 |3.4.x
 |5.1.x
