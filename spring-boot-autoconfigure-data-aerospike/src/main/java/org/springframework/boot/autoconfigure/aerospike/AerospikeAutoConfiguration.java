@@ -69,6 +69,7 @@ public class AerospikeAutoConfiguration {
         whenPresent(properties.getAuthMode(), p -> clientPolicy.authMode = p);
         whenPresent(properties.getConnectTimeout(), p -> clientPolicy.timeout = (int) p.toMillis());
         whenPresent(properties.getLoginTimeout(), p -> clientPolicy.loginTimeout = (int) p.toMillis());
+        whenPresent(properties.getMinConnsPerNode(), p -> clientPolicy.minConnsPerNode = p);
         whenPresent(properties.getMaxConnsPerNode(), p -> clientPolicy.maxConnsPerNode = p);
         whenPresent(properties.getConnPoolsPerNode(), p -> clientPolicy.connPoolsPerNode = p);
         whenPresent(properties.getMaxSocketIdle(), p -> clientPolicy.maxSocketIdle = (int) p.getSeconds());
