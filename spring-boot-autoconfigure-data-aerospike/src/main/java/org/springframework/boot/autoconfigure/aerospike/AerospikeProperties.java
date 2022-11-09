@@ -77,6 +77,11 @@ public class AerospikeProperties {
     private Duration loginTimeout;
 
     /**
+     * Minimum number of synchronous connections allowed per server node
+     */
+    private Integer minConnsPerNode;
+
+    /**
      * Maximum number of connections allowed per server node.
      */
     private Integer maxConnsPerNode;
