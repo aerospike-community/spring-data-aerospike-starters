@@ -31,6 +31,7 @@ import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
 import org.springframework.data.aerospike.core.AerospikeTemplate;
 import org.springframework.data.aerospike.core.ReactiveAerospikeTemplate;
 import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
+import org.springframework.data.util.TypeInformation;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Set;
@@ -72,8 +73,7 @@ public class AerospikeDataAutoConfigurationTest {
                 .withUserConfiguration(EntityScanConfiguration.class, AerospikeClientMockConfiguration.class)
                 .run(context -> {
                     AerospikeMappingContext mappingContext = context.getBean(AerospikeMappingContext.class);
-                    Set<Class<?>> initialEntitySet = (Set<Class<?>>) ReflectionTestUtils.getField(mappingContext, "initialEntitySet");
-                    assertThat(initialEntitySet).containsOnly(City.class);
+                    assertThat(mappingContext.getManagedTypes()).containsOnly(TypeInformation.of(City.class));
                 });
     }
 
