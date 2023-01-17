@@ -17,6 +17,7 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.reactor.AerospikeReactorClient;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
@@ -35,7 +36,7 @@ import reactor.core.publisher.Flux;
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnClass({AerospikeReactorClient.class, ReactiveAerospikeRepository.class, Flux.class})
 @ConditionalOnSingleCandidate(AerospikeReactorClient.class)
 @ConditionalOnProperty("spring.data.aerospike.namespace")

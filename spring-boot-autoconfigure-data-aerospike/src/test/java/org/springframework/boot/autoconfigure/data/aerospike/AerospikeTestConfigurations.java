@@ -4,6 +4,7 @@ import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.cluster.Node;
 import com.aerospike.client.policy.InfoPolicy;
 import com.aerospike.client.policy.WritePolicy;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.data.aerospike.city.City;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class AerospikeTestConfigurations {
 
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     public static class AerospikeClientMockConfiguration {
 
         @Bean
@@ -34,7 +35,7 @@ public class AerospikeTestConfigurations {
 
     }
 
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     public static class MockReactiveIndexRefresher {
 
         @Bean
@@ -43,13 +44,13 @@ public class AerospikeTestConfigurations {
         }
     }
 
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     @EntityScan("org.springframework.boot.autoconfigure.data.aerospike.city")
     public static class EntityScanConfiguration {
 
     }
 
-    @Configuration(proxyBeanMethods = false)
+    @AutoConfiguration
     public static class CustomConversionsConfig {
 
         @Bean(name = "aerospikeCustomConversions")

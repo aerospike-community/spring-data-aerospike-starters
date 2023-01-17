@@ -30,6 +30,7 @@ import com.aerospike.client.policy.Policy;
 import com.aerospike.client.policy.QueryPolicy;
 import com.aerospike.client.policy.WritePolicy;
 import com.aerospike.client.reactor.AerospikeReactorClient;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -44,7 +45,7 @@ import reactor.core.publisher.Flux;
  *
  * @author Anastasiia Smirnova
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnClass(AerospikeClient.class)
 @ConditionalOnProperty("spring.aerospike.hosts")
 @EnableConfigurationProperties(AerospikeProperties.class)

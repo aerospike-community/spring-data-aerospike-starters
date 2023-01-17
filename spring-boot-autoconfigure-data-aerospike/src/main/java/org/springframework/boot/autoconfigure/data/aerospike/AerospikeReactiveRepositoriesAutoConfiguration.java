@@ -17,6 +17,7 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.reactor.AerospikeReactorClient;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -33,7 +34,7 @@ import reactor.core.publisher.Flux;
  *
  * @author Igor Ermolenko
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 @ConditionalOnClass({AerospikeReactorClient.class, ReactiveAerospikeRepository.class, Flux.class})
 @ConditionalOnRepositoryType(store = "aerospike", type = RepositoryType.REACTIVE)
 @ConditionalOnMissingBean(ReactiveAerospikeRepositoryFactoryBean.class)

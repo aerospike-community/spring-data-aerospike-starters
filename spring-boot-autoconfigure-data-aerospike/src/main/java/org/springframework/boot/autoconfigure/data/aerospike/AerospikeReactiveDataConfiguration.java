@@ -18,6 +18,7 @@ package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.reactor.AerospikeReactorClient;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +43,7 @@ import org.springframework.data.aerospike.query.cache.ReactorIndexRefresher;
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 class AerospikeReactiveDataConfiguration {
 
     @Bean(name = "reactiveAerospikeTemplate")

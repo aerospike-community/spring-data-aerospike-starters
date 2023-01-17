@@ -1,6 +1,7 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScanner;
 import org.springframework.context.ApplicationContext;
@@ -23,7 +24,7 @@ import org.springframework.data.mapping.model.FieldNamingStrategy;
 
 import java.util.Collections;
 
-@Configuration(proxyBeanMethods = false)
+@AutoConfiguration
 class AerospikeCommonDataConfiguration {
 
     @Bean(name = "aerospikeFilterExpressionsBuilder")
