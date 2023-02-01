@@ -35,6 +35,7 @@ public class AerospikeDataProperties {
     /**
      * Bin name that will be used for storing entity's type.
      * <p>
+     *
      * @see org.springframework.data.aerospike.convert.AerospikeTypeAliasAccessor
      */
     private String typeKey = "@_class";

@@ -21,7 +21,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
 import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
@@ -71,8 +70,6 @@ class AerospikeDataConfiguration {
         queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
         return queryEngine;
     }
-
-
 
     @Bean(name = "aerospikeIndexRefresher")
     @ConditionalOnMissingBean(name = "aerospikeIndexRefresher")
