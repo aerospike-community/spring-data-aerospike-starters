@@ -30,9 +30,7 @@ import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
 import org.springframework.data.aerospike.core.AerospikeTemplate;
 import org.springframework.data.aerospike.core.ReactiveAerospikeTemplate;
 import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.Set;
+import org.springframework.data.util.TypeInformation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.autoconfigure.data.aerospike.TestUtils.getField;
@@ -69,8 +67,7 @@ public class AerospikeReactiveDataAutoConfigurationTest {
                 .withUserConfiguration(AerospikeTestConfigurations.EntityScanConfiguration.class, AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class)
                 .run(context -> {
                     AerospikeMappingContext mappingContext = context.getBean(AerospikeMappingContext.class);
-                    Set<Class<?>> initialEntitySet = (Set<Class<?>>) ReflectionTestUtils.getField(mappingContext, "initialEntitySet");
-                    assertThat(initialEntitySet).containsOnly(City.class);
+                    assertThat(mappingContext.getManagedTypes()).containsOnly(TypeInformation.of(City.class));
                 });
     }
 
