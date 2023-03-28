@@ -52,7 +52,7 @@ public class AerospikeAutoConfiguration {
 
     @Bean(name = "aerospikeClient", destroyMethod = "close")
     @ConditionalOnMissingBean(IAerospikeClient.class)
-    public AerospikeClient aerospikeClient(AerospikeProperties properties,
+    public IAerospikeClient aerospikeClient(AerospikeProperties properties,
                                            ClientPolicy aerospikeClientPolicy) {
         Host[] hosts = Host.parseHosts(properties.getHosts(), properties.getDefaultPort());
         return new AerospikeClient(aerospikeClientPolicy, hosts);
