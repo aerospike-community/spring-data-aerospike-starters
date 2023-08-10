@@ -108,7 +108,6 @@ public class AerospikeAutoConfiguration {
         WritePolicy policy = new WritePolicy();
         setGeneralPolicyProperties(policy, writePolicyDefault);
         whenPresent(writePolicyDefault.durableDelete, p -> policy.durableDelete = p);
-        whenPresent(writePolicyDefault.sendKey, p -> policy.sendKey = p);
         return policy;
     }
 
@@ -147,6 +146,7 @@ public class AerospikeAutoConfiguration {
         whenPresent(policyDefault.timeoutDelay, p -> policy.timeoutDelay = (int) p.toMillis());
         whenPresent(policyDefault.maxRetries, p -> policy.maxRetries = p);
         whenPresent(policyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = (int) p.toMillis());
+        whenPresent(policyDefault.sendKey, p -> policy.sendKey = p);
     }
 
     private <T> void whenPresent(T param, Consumer<T> consumer) {
