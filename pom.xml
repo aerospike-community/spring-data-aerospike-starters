@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
     </parent>
 
     <groupId>com.aerospike</groupId>
@@ -44,7 +44,7 @@
         <aerospike-reactor-client.version>7.0.0</aerospike-reactor-client.version>
         <aerospike-client.version>7.0.0</aerospike-client.version>
 
-        <spring-cloud-starter.version>4.0.3</spring-cloud-starter.version>
+        <spring-cloud-starter.version>4.0.4</spring-cloud-starter.version>
     </properties>
 
     <licenses>
