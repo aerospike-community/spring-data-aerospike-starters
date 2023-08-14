@@ -146,6 +146,11 @@ public class AerospikeProperties {
          * Time to sleep between retries.
          */
         public Duration sleepBetweenRetries;
+
+        /**
+         * If the key is sent on a write, the key will be stored with the record on the server.
+         */
+        public Boolean sendKey;
     }
 
     /**
@@ -192,11 +197,6 @@ public class AerospikeProperties {
     public static class WritePolicyDefault extends PolicyDefault {
 
         /**
-         * If the key is sent on a write, the key will be stored with the record on the server.
-         */
-        public Boolean sendKey;
-
-        /**
          * If the transaction results in a record deletion, leave a tombstone for the record.
          */
         public Boolean durableDelete;
@@ -212,10 +212,12 @@ public class AerospikeProperties {
          * Number of concurrent synchronous batch request threads to server nodes.
          */
         public Integer maxConcurrentThreads;
+
         /**
          * Allow batch to be processed immediately in the server's receiving thread.
          */
         public Boolean allowInline;
+
         /**
          * Send set name for every key in the batch.
          */
