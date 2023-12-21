@@ -58,8 +58,12 @@ class AerospikeDataConfiguration {
                                                AerospikeExceptionTranslator aerospikeExceptionTranslator,
                                                QueryEngine queryEngine, IndexRefresher indexRefresher,
                                                ServerVersionSupport serverVersionSupport) {
-        return new AerospikeTemplate(aerospikeClient, aerospikeDataProperties.getNamespace(), mappingAerospikeConverter,
-                aerospikeMappingContext, aerospikeExceptionTranslator, queryEngine, indexRefresher, serverVersionSupport);
+        return new AerospikeTemplate(aerospikeClient,
+                aerospikeDataProperties.getNamespace(),
+                mappingAerospikeConverter,
+                aerospikeMappingContext,
+                aerospikeExceptionTranslator, queryEngine, indexRefresher,
+                serverVersionSupport);
     }
 
     @Bean(name = "aerospikeQueryEngine")

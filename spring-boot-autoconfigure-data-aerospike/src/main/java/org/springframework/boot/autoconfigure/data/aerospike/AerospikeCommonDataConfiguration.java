@@ -1,6 +1,5 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import com.aerospike.client.IAerospikeClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -21,7 +20,6 @@ import org.springframework.data.aerospike.query.FilterExpressionsBuilder;
 import org.springframework.data.aerospike.query.StatementBuilder;
 import org.springframework.data.aerospike.query.cache.IndexesCache;
 import org.springframework.data.aerospike.query.cache.IndexesCacheHolder;
-import org.springframework.data.aerospike.server.version.ServerVersionSupport;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.data.mapping.model.FieldNamingStrategy;
 
@@ -82,7 +80,8 @@ class AerospikeCommonDataConfiguration {
     @ConditionalOnMissingBean(name = "aerospikeMappingContext")
     public AerospikeMappingContext aerospikeMappingContext(ApplicationContext applicationContext,
                                                            AerospikeCustomConversions aerospikeCustomConversions,
-                                                           AerospikeDataProperties aerospikeDataProperties) throws Exception {
+                                                           AerospikeDataProperties aerospikeDataProperties)
+            throws Exception {
         AerospikeMappingContext context = new AerospikeMappingContext();
         context.setInitialEntitySet(new EntityScanner(applicationContext).scan(Document.class, Persistent.class));
         context.setSimpleTypeHolder(aerospikeCustomConversions.getSimpleTypeHolder());
@@ -97,26 +96,6 @@ class AerospikeCommonDataConfiguration {
     @ConditionalOnMissingBean(name = "aerospikeExceptionTranslator")
     public AerospikeExceptionTranslator aerospikeExceptionTranslator() {
         return new DefaultAerospikeExceptionTranslator();
-    }
-
-    @Bean(name = "aerospikeServerVersionSupport")
-    public ServerVersionSupport serverVersionSupport(IAerospikeClient aerospikeClient,
-                                                     AerospikeDataProperties aerospikeDataProperties) {
-        ServerVersionSupport serverVersionSupport = new ServerVersionSupport(aerospikeClient);
-        int serverVersionRefreshFrequency =
-                aerospikeDataSettings(aerospikeDataProperties).getServerVersionRefreshSeconds();
-        processServerVersionRefreshFrequency(serverVersionRefreshFrequency, serverVersionSupport);
-        return serverVersionSupport;
-    }
-
-    private void processServerVersionRefreshFrequency(int serverVersionRefreshSeconds,
-                                                      ServerVersionSupport serverVersionSupport) {
-        if (serverVersionRefreshSeconds <= 0) {
-            log.info("Periodic server version refreshing is not scheduled, interval ({}) is <= 0",
-                    serverVersionRefreshSeconds);
-        } else {
-            serverVersionSupport.scheduleServerVersionRefresh(serverVersionRefreshSeconds);
-        }
     }
 
     private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties) {

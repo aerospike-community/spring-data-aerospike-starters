@@ -16,6 +16,8 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -25,6 +27,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Anastasiia Smirnova
  */
 @ConfigurationProperties(prefix = "spring.data.aerospike")
+@Getter
+@Setter
 public class AerospikeDataProperties {
 
     /**
@@ -46,11 +50,6 @@ public class AerospikeDataProperties {
     private boolean scansEnabled = false;
 
     /**
-     * Limit amount of results returned by server. Non-positive value means no limit.
-     */
-    private long queryMaxRecords = 10_000L;
-
-    /**
      * Specifies fully qualified name of the FieldNamingStrategy for the entities.
      */
     private Class<?> fieldNamingStrategy;
@@ -65,59 +64,29 @@ public class AerospikeDataProperties {
      */
     private boolean sendKey = true;
 
-    public String getNamespace() {
-        return namespace;
-    }
+    /**
+     * Automatically refresh indexes cache every <N> seconds
+     */
+    private int indexCacheRefreshSeconds = 3600;
 
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
+    /**
+     * Automatically refresh cached server version every <N> seconds
+     */
+    private int serverVersionRefreshSeconds = 0;
 
-    public String getTypeKey() {
-        return typeKey;
-    }
+    /**
+     * Limit amount of results returned by server. Non-positive value means no limit.
+     */
+    private long queryMaxRecords = 10_000L;
 
-    public void setTypeKey(String typeKey) {
-        this.typeKey = typeKey;
-    }
+    /**
+     * Maximum batch size for batch write operations
+     */
+    private int batchWriteSize = 100;
 
-    public boolean isScansEnabled() {
-        return scansEnabled;
-    }
-
-    public void setScansEnabled(boolean scansEnabled) {
-        this.scansEnabled = scansEnabled;
-    }
-
-    public long getQueryMaxRecords() {
-        return queryMaxRecords;
-    }
-
-    public void setQueryMaxRecords(long queryMaxRecords) {
-        this.queryMaxRecords = queryMaxRecords;
-    }
-
-    public Class<?> getFieldNamingStrategy() {
-        return fieldNamingStrategy;
-    }
-
-    public void setFieldNamingStrategy(Class<?> fieldNamingStrategy) {
-        this.fieldNamingStrategy = fieldNamingStrategy;
-    }
-
-    public boolean isCreateIndexesOnStartup() {
-        return createIndexesOnStartup;
-    }
-
-    public void setCreateIndexesOnStartup(boolean createIndexesOnStartup) {
-        this.createIndexesOnStartup = createIndexesOnStartup;
-    }
-
-    public boolean isSendKey() {
-        return sendKey;
-    }
-
-    public void setSendKey(boolean sendKey) {
-        this.sendKey = sendKey;
-    }
+    /**
+     * Define how @Id fields (primary keys) and Map keys are stored: false - always as String,
+     * true - preserve original type if supported
+     */
+    private boolean keepOriginalKeyTypes = false;
 }
