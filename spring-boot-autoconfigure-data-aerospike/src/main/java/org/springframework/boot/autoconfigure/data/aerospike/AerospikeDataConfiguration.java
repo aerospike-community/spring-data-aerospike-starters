@@ -17,11 +17,13 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.IAerospikeClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.aerospike.config.AerospikeDataSettings;
 import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
 import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
 import org.springframework.data.aerospike.core.AerospikeTemplate;
@@ -35,6 +37,7 @@ import org.springframework.data.aerospike.query.cache.IndexInfoParser;
 import org.springframework.data.aerospike.query.cache.IndexRefresher;
 import org.springframework.data.aerospike.query.cache.IndexesCacheUpdater;
 import org.springframework.data.aerospike.query.cache.InternalIndexOperations;
+import org.springframework.data.aerospike.server.version.ServerVersionSupport;
 
 /**
  * Configure Spring Data's Aerospike support.
@@ -42,6 +45,7 @@ import org.springframework.data.aerospike.query.cache.InternalIndexOperations;
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
+@Slf4j
 @AutoConfiguration
 class AerospikeDataConfiguration {
 
@@ -52,12 +56,10 @@ class AerospikeDataConfiguration {
                                                MappingAerospikeConverter mappingAerospikeConverter,
                                                AerospikeMappingContext aerospikeMappingContext,
                                                AerospikeExceptionTranslator aerospikeExceptionTranslator,
-                                               QueryEngine queryEngine, IndexRefresher indexRefresher) {
-        return new AerospikeTemplate(aerospikeClient,
-                aerospikeDataProperties.getNamespace(),
-                mappingAerospikeConverter,
-                aerospikeMappingContext,
-                aerospikeExceptionTranslator, queryEngine, indexRefresher);
+                                               QueryEngine queryEngine, IndexRefresher indexRefresher,
+                                               ServerVersionSupport serverVersionSupport) {
+        return new AerospikeTemplate(aerospikeClient, aerospikeDataProperties.getNamespace(), mappingAerospikeConverter,
+                aerospikeMappingContext, aerospikeExceptionTranslator, queryEngine, indexRefresher, serverVersionSupport);
     }
 
     @Bean(name = "aerospikeQueryEngine")
@@ -66,26 +68,55 @@ class AerospikeDataConfiguration {
                                             AerospikeDataProperties aerospikeDataProperties,
                                             FilterExpressionsBuilder filterExpressionsBuilder,
                                             StatementBuilder statementBuilder) {
-        QueryEngine queryEngine = new QueryEngine(aerospikeClient, statementBuilder, filterExpressionsBuilder, aerospikeClient.getQueryPolicyDefault());
+        QueryEngine queryEngine = new QueryEngine(aerospikeClient, statementBuilder, filterExpressionsBuilder);
         queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
+        queryEngine.setQueryMaxRecords(aerospikeDataProperties.getQueryMaxRecords());
         return queryEngine;
     }
 
     @Bean(name = "aerospikeIndexRefresher")
     @ConditionalOnMissingBean(name = "aerospikeIndexRefresher")
-    public IndexRefresher aerospikeIndexRefresher(IAerospikeClient aerospikeClient, IndexesCacheUpdater indexesCacheUpdater) {
-        IndexRefresher refresher = new IndexRefresher(aerospikeClient, aerospikeClient.getInfoPolicyDefault(), new InternalIndexOperations(new IndexInfoParser()), indexesCacheUpdater);
+    public IndexRefresher indexRefresher(IAerospikeClient aerospikeClient, IndexesCacheUpdater indexesCacheUpdater,
+                                         ServerVersionSupport serverVersionSupport,
+                                         AerospikeDataProperties aerospikeDataProperties) {
+        IndexRefresher refresher = new IndexRefresher(aerospikeClient, aerospikeClient.getInfoPolicyDefault(),
+                new InternalIndexOperations(new IndexInfoParser()), indexesCacheUpdater, serverVersionSupport);
         refresher.refreshIndexes();
+        int refreshFrequency = aerospikeDataSettings(aerospikeDataProperties).getIndexCacheRefreshSeconds();
+        processCacheRefreshFrequency(refreshFrequency, refresher);
         return refresher;
+    }
+
+    private void processCacheRefreshFrequency(int indexCacheRefreshSeconds, IndexRefresher indexRefresher) {
+        if (indexCacheRefreshSeconds <= 0) {
+            log.info("Periodic index cache refreshing is not scheduled, interval ({}) is <= 0",
+                    indexCacheRefreshSeconds);
+        } else {
+            indexRefresher.scheduleRefreshIndexes(indexCacheRefreshSeconds);
+        }
     }
 
     @Bean
     @ConditionalOnMissingBean(name = "aerospikePersistenceEntityIndexCreator")
     public AerospikePersistenceEntityIndexCreator aerospikePersistenceEntityIndexCreator(
             AerospikeDataProperties aerospikeDataProperties,
-            @Lazy AerospikeTemplate template,
+            @Lazy ObjectProvider<AerospikeTemplate> template,
             ObjectProvider<AerospikeMappingContext> aerospikeMappingContext,
             AerospikeIndexResolver aerospikeIndexResolver) {
-        return new AerospikePersistenceEntityIndexCreator(aerospikeMappingContext, aerospikeDataProperties.isCreateIndexesOnStartup(), aerospikeIndexResolver, template);
+        return new AerospikePersistenceEntityIndexCreator(aerospikeMappingContext,
+                aerospikeDataProperties.isCreateIndexesOnStartup(), aerospikeIndexResolver, template);
+    }
+
+    private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties) {
+        AerospikeDataSettings.AerospikeDataSettingsBuilder builder = AerospikeDataSettings.builder();
+        configureDataSettings(builder, aerospikeDataProperties);
+        return builder.build();
+    }
+
+    private void configureDataSettings(AerospikeDataSettings.AerospikeDataSettingsBuilder builder,
+                                         AerospikeDataProperties aerospikeDataProperties) {
+        builder.scansEnabled(aerospikeDataProperties.isScansEnabled());
+        builder.sendKey(aerospikeDataProperties.isSendKey());
+        builder.createIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
     }
 }

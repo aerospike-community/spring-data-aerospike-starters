@@ -46,6 +46,11 @@ public class AerospikeDataProperties {
     private boolean scansEnabled = false;
 
     /**
+     * Limit amount of results returned by server. Non-positive value means no limit.
+     */
+    private long queryMaxRecords = 10_000L;
+
+    /**
      * Specifies fully qualified name of the FieldNamingStrategy for the entities.
      */
     private Class<?> fieldNamingStrategy;
@@ -54,6 +59,11 @@ public class AerospikeDataProperties {
      * Specifies whether to create secondary indexes for @Indexed annotated fields on application startup.
      */
     private boolean createIndexesOnStartup = true;
+
+    /**
+     * Send user defined key in addition to hash digest on both reads and writes
+     */
+    private boolean sendKey = true;
 
     public String getNamespace() {
         return namespace;
@@ -79,6 +89,14 @@ public class AerospikeDataProperties {
         this.scansEnabled = scansEnabled;
     }
 
+    public long getQueryMaxRecords() {
+        return queryMaxRecords;
+    }
+
+    public void setQueryMaxRecords(long queryMaxRecords) {
+        this.queryMaxRecords = queryMaxRecords;
+    }
+
     public Class<?> getFieldNamingStrategy() {
         return fieldNamingStrategy;
     }
@@ -93,5 +111,13 @@ public class AerospikeDataProperties {
 
     public void setCreateIndexesOnStartup(boolean createIndexesOnStartup) {
         this.createIndexesOnStartup = createIndexesOnStartup;
+    }
+
+    public boolean isSendKey() {
+        return sendKey;
+    }
+
+    public void setSendKey(boolean sendKey) {
+        this.sendKey = sendKey;
     }
 }

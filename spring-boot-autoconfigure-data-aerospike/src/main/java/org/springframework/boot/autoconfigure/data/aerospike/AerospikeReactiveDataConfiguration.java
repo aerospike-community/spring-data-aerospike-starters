@@ -35,6 +35,7 @@ import org.springframework.data.aerospike.query.cache.IndexInfoParser;
 import org.springframework.data.aerospike.query.cache.IndexesCacheUpdater;
 import org.springframework.data.aerospike.query.cache.InternalIndexOperations;
 import org.springframework.data.aerospike.query.cache.ReactorIndexRefresher;
+import org.springframework.data.aerospike.server.version.ServerVersionSupport;
 
 /**
  * Configure Spring Data's Reactive Aerospike support.
@@ -52,9 +53,12 @@ class AerospikeReactiveDataConfiguration {
                                                                AerospikeMappingContext aerospikeMappingContext,
                                                                AerospikeExceptionTranslator aerospikeExceptionTranslator,
                                                                AerospikeReactorClient aerospikeReactorClient,
-                                                               ReactorQueryEngine reactorQueryEngine, ReactorIndexRefresher reactorIndexRefresher) {
-        return new ReactiveAerospikeTemplate(aerospikeReactorClient, aerospikeDataProperties.getNamespace(), mappingAerospikeConverter, aerospikeMappingContext,
-                aerospikeExceptionTranslator, reactorQueryEngine, reactorIndexRefresher);
+                                                               ReactorQueryEngine reactorQueryEngine,
+                                                               ReactorIndexRefresher reactorIndexRefresher,
+                                                               ServerVersionSupport serverVersionSupport) {
+        return new ReactiveAerospikeTemplate(aerospikeReactorClient, aerospikeDataProperties.getNamespace(),
+                mappingAerospikeConverter, aerospikeMappingContext,
+                aerospikeExceptionTranslator, reactorQueryEngine, reactorIndexRefresher, serverVersionSupport);
     }
 
     @Bean(name = "reactiveAerospikeQueryEngine")
@@ -63,17 +67,20 @@ class AerospikeReactiveDataConfiguration {
                                                            AerospikeDataProperties aerospikeDataProperties,
                                                            FilterExpressionsBuilder filterExpressionsBuilder,
                                                            StatementBuilder statementBuilder) {
-        ReactorQueryEngine queryEngine = new ReactorQueryEngine(aerospikeReactorClient, statementBuilder, filterExpressionsBuilder, aerospikeReactorClient.getQueryPolicyDefault());
+        ReactorQueryEngine queryEngine = new ReactorQueryEngine(aerospikeReactorClient, statementBuilder,
+                filterExpressionsBuilder);
         queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
+        queryEngine.setQueryMaxRecords(aerospikeDataProperties.getQueryMaxRecords());
         return queryEngine;
     }
 
     @Bean(name = "reactiveAerospikeIndexRefresher")
     @ConditionalOnMissingBean(name = "reactiveAerospikeIndexRefresher")
     public ReactorIndexRefresher reactiveAerospikeIndexRefresher(AerospikeReactorClient aerospikeReactorClient,
-                                                                 IndexesCacheUpdater indexesCacheUpdater) {
+                                                                 IndexesCacheUpdater indexesCacheUpdater,
+                                                                 ServerVersionSupport serverVersionSupport) {
         ReactorIndexRefresher refresher = new ReactorIndexRefresher(aerospikeReactorClient, aerospikeReactorClient.getInfoPolicyDefault(),
-                new InternalIndexOperations(new IndexInfoParser()), indexesCacheUpdater);
+                new InternalIndexOperations(new IndexInfoParser()), indexesCacheUpdater, serverVersionSupport);
         refresher.refreshIndexes().block();
         return refresher;
     }
@@ -82,10 +89,11 @@ class AerospikeReactiveDataConfiguration {
     @ConditionalOnMissingBean(name = "reactiveAerospikePersistenceEntityIndexCreator")
     public ReactiveAerospikePersistenceEntityIndexCreator reactiveAerospikePersistenceEntityIndexCreator(
             AerospikeDataProperties aerospikeDataProperties,
-            @Lazy ReactiveAerospikeTemplate template,
+            @Lazy ObjectProvider<ReactiveAerospikeTemplate> template,
             ObjectProvider<AerospikeMappingContext> aerospikeMappingContext,
             AerospikeIndexResolver aerospikeIndexResolver) {
-        return new ReactiveAerospikePersistenceEntityIndexCreator(aerospikeMappingContext, aerospikeDataProperties.isCreateIndexesOnStartup(),
+        return new ReactiveAerospikePersistenceEntityIndexCreator(aerospikeMappingContext,
+                aerospikeDataProperties.isCreateIndexesOnStartup(),
                 aerospikeIndexResolver,
                 template);
     }

@@ -9,6 +9,11 @@ image:https://github.com/aerospike-community/spring-data-aerospike-starters/work
 
 |===
 |`spring-data-aerospike-starters` |`spring-data-aerospike` |`aerospike-client` |`aerospike-reactor-client`
+|0.13.x
+|4.6.x
+|7.2.x
+|7.1.x
+
 |0.12.x
 |4.5.x
 |7.1.x
@@ -76,7 +81,7 @@ Specify Aerospike server hosts and namespace:
 [source,properties]
 ----
 spring.aerospike.hosts=aerospike-1-server-ip:3000,aerospike-2-server-ip:3000
-spring.data.aerospike.namespace=TEST
+spring.data.aerospike.namespace=test
 ----
 
 == Configuration options
