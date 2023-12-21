@@ -2,21 +2,18 @@ package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.cluster.Node;
-import com.aerospike.client.policy.InfoPolicy;
 import com.aerospike.client.policy.WritePolicy;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.data.aerospike.city.City;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.aerospike.convert.AerospikeCustomConversions;
 import org.springframework.data.aerospike.query.cache.ReactorIndexRefresher;
-import reactor.core.publisher.Mono;
+import org.springframework.data.aerospike.server.version.ServerVersionSupport;
 
-import java.util.Arrays;
+import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +29,17 @@ public class AerospikeTestConfigurations {
             when(client.getWritePolicyDefault()).thenReturn(new WritePolicy());
             return client;
         }
+    }
 
+    @AutoConfiguration
+    public static class AerospikeServerVersionSupportMockConfiguration {
+
+        @Bean
+        public ServerVersionSupport aerospikeServerVersionSupportMock() {
+            ServerVersionSupport serverVersionSupport = mock(ServerVersionSupport.class);
+            when(serverVersionSupport.getServerVersion()).thenReturn("5.0.0.0");
+            return serverVersionSupport;
+        }
     }
 
     @AutoConfiguration
@@ -55,9 +62,8 @@ public class AerospikeTestConfigurations {
 
         @Bean(name = "aerospikeCustomConversions")
         AerospikeCustomConversions myCustomConversions() {
-            return new AerospikeCustomConversions(Arrays.asList(new CityToStringConverter()));
+            return new AerospikeCustomConversions(List.of(new CityToStringConverter()));
         }
-
     }
 
     public static class CityToStringConverter implements Converter<City, String> {
@@ -66,6 +72,5 @@ public class AerospikeTestConfigurations {
         public String convert(City value) {
             return value.getName();
         }
-
     }
 }

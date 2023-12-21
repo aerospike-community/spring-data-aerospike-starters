@@ -16,6 +16,8 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -25,6 +27,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Anastasiia Smirnova
  */
 @ConfigurationProperties(prefix = "spring.data.aerospike")
+@Getter
+@Setter
 public class AerospikeDataProperties {
 
     /**
@@ -55,43 +59,34 @@ public class AerospikeDataProperties {
      */
     private boolean createIndexesOnStartup = true;
 
-    public String getNamespace() {
-        return namespace;
-    }
+    /**
+     * Send user defined key in addition to hash digest on both reads and writes
+     */
+    private boolean sendKey = true;
 
-    public void setNamespace(String namespace) {
-        this.namespace = namespace;
-    }
+    /**
+     * Automatically refresh indexes cache every <N> seconds
+     */
+    private int indexCacheRefreshSeconds = 3600;
 
-    public String getTypeKey() {
-        return typeKey;
-    }
+    /**
+     * Automatically refresh cached server version every <N> seconds
+     */
+    private int serverVersionRefreshSeconds = 0;
 
-    public void setTypeKey(String typeKey) {
-        this.typeKey = typeKey;
-    }
+    /**
+     * Limit amount of results returned by server. Non-positive value means no limit.
+     */
+    private long queryMaxRecords = 10_000L;
 
-    public boolean isScansEnabled() {
-        return scansEnabled;
-    }
+    /**
+     * Maximum batch size for batch write operations
+     */
+    private int batchWriteSize = 100;
 
-    public void setScansEnabled(boolean scansEnabled) {
-        this.scansEnabled = scansEnabled;
-    }
-
-    public Class<?> getFieldNamingStrategy() {
-        return fieldNamingStrategy;
-    }
-
-    public void setFieldNamingStrategy(Class<?> fieldNamingStrategy) {
-        this.fieldNamingStrategy = fieldNamingStrategy;
-    }
-
-    public boolean isCreateIndexesOnStartup() {
-        return createIndexesOnStartup;
-    }
-
-    public void setCreateIndexesOnStartup(boolean createIndexesOnStartup) {
-        this.createIndexesOnStartup = createIndexesOnStartup;
-    }
+    /**
+     * Define how @Id fields (primary keys) and Map keys are stored: false - always as String,
+     * true - preserve original type if supported
+     */
+    private boolean keepOriginalKeyTypes = false;
 }

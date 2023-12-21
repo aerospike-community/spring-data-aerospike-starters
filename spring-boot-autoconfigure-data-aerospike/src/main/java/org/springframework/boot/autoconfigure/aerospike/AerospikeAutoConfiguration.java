@@ -21,19 +21,17 @@ import com.aerospike.client.Host;
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.async.EventLoops;
 import com.aerospike.client.async.NioEventLoops;
-import com.aerospike.client.policy.BatchPolicy;
-import com.aerospike.client.policy.ClientPolicy;
-import com.aerospike.client.policy.Policy;
-import com.aerospike.client.policy.QueryPolicy;
-import com.aerospike.client.policy.WritePolicy;
+import com.aerospike.client.policy.*;
 import com.aerospike.client.reactor.AerospikeReactorClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.aerospike.AerospikeDataProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.aerospike.server.version.ServerVersionSupport;
 import reactor.core.publisher.Flux;
 
 import java.util.Optional;
@@ -56,6 +54,22 @@ public class AerospikeAutoConfiguration {
                                            ClientPolicy aerospikeClientPolicy) {
         Host[] hosts = Host.parseHosts(properties.getHosts(), properties.getDefaultPort());
         return new AerospikeClient(aerospikeClientPolicy, hosts);
+    }
+
+    @Bean(name = "aerospikeServerVersionSupport")
+    @ConditionalOnMissingBean(ServerVersionSupport.class)
+    public ServerVersionSupport serverVersionSupport(IAerospikeClient aerospikeClient,
+                                                     AerospikeDataProperties properties) {
+        ServerVersionSupport serverVersionSupport = new ServerVersionSupport(aerospikeClient);
+        processServerVersionRefreshFrequency(properties.getServerVersionRefreshSeconds(), serverVersionSupport);
+        return serverVersionSupport;
+    }
+
+    private void processServerVersionRefreshFrequency(int serverVersionRefreshSeconds,
+                                                      ServerVersionSupport serverVersionSupport) {
+        if (serverVersionRefreshSeconds > 0) {
+            serverVersionSupport.scheduleServerVersionRefresh(serverVersionRefreshSeconds);
+        }
     }
 
     @Bean(name = "aerospikeClientPolicy")

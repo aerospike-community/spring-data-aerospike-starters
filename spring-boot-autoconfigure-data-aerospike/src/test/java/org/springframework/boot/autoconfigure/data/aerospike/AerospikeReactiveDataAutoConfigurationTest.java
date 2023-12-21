@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeProperties;
 import org.springframework.boot.autoconfigure.data.aerospike.AerospikeTestConfigurations.AerospikeClientMockConfiguration;
+import org.springframework.boot.autoconfigure.data.aerospike.AerospikeTestConfigurations.AerospikeServerVersionSupportMockConfiguration;
 import org.springframework.boot.autoconfigure.data.aerospike.AerospikeTestConfigurations.MockReactiveIndexRefresher;
 import org.springframework.boot.autoconfigure.data.aerospike.city.City;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -43,7 +44,7 @@ import static org.springframework.boot.autoconfigure.data.aerospike.TestUtils.ge
  */
 public class AerospikeReactiveDataAutoConfigurationTest {
 
-    private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+    private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(
                     AerospikeAutoConfiguration.class, AerospikeReactiveDataAutoConfiguration.class));
 
@@ -59,12 +60,13 @@ public class AerospikeReactiveDataAutoConfigurationTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void entityScanShouldSetInitialEntitySet() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withUserConfiguration(AerospikeTestConfigurations.EntityScanConfiguration.class, AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class)
+                .withUserConfiguration(AerospikeTestConfigurations.EntityScanConfiguration.class,
+                        AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class,
+                        AerospikeServerVersionSupportMockConfiguration.class)
                 .run(context -> {
                     AerospikeMappingContext mappingContext = context.getBean(AerospikeMappingContext.class);
                     assertThat(mappingContext.getManagedTypes()).containsOnly(TypeInformation.of(City.class));
@@ -76,7 +78,8 @@ public class AerospikeReactiveDataAutoConfigurationTest {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withUserConfiguration(AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class)
+                .withUserConfiguration(AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class,
+                        AerospikeServerVersionSupportMockConfiguration.class)
                 .run(context -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
                     String typeKey = getField(aliasAccessor, "typeKey");
@@ -91,7 +94,8 @@ public class AerospikeReactiveDataAutoConfigurationTest {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withUserConfiguration(AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class)
+                .withUserConfiguration(AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class,
+                        AerospikeServerVersionSupportMockConfiguration.class)
                 .withPropertyValues("spring.data.aerospike.type-key=++amazing++")
                 .run((context) -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
@@ -106,7 +110,9 @@ public class AerospikeReactiveDataAutoConfigurationTest {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withUserConfiguration(AerospikeTestConfigurations.CustomConversionsConfig.class, AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class)
+                .withUserConfiguration(AerospikeTestConfigurations.CustomConversionsConfig.class,
+                        AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class,
+                        AerospikeServerVersionSupportMockConfiguration.class)
                 .run(context -> {
                     MappingAerospikeConverter converter = context.getBean(MappingAerospikeConverter.class);
                     assertThat(converter.getConversionService().canConvert(City.class, String.class)).isTrue();
@@ -118,7 +124,8 @@ public class AerospikeReactiveDataAutoConfigurationTest {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withUserConfiguration(AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class)
+                .withUserConfiguration(AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class,
+                        AerospikeServerVersionSupportMockConfiguration.class)
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(AerospikeTemplate.class);
                     assertThat(context).hasSingleBean(ReactiveAerospikeTemplate.class);
@@ -127,5 +134,4 @@ public class AerospikeReactiveDataAutoConfigurationTest {
                     assertThat(context).hasSingleBean(AerospikeMappingContext.class);
                 });
     }
-
 }
