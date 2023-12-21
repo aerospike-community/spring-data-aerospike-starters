@@ -72,7 +72,6 @@ public class AerospikeAutoConfiguration {
         }
     }
 
-
     @Bean(name = "aerospikeClientPolicy")
     @ConditionalOnMissingBean
     public ClientPolicy aerospikeClientPolicy(AerospikeProperties properties,

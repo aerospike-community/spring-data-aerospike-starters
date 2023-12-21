@@ -29,7 +29,6 @@ public class AerospikeTestConfigurations {
             when(client.getWritePolicyDefault()).thenReturn(new WritePolicy());
             return client;
         }
-
     }
 
     @AutoConfiguration
@@ -41,7 +40,6 @@ public class AerospikeTestConfigurations {
             when(serverVersionSupport.getServerVersion()).thenReturn("5.0.0.0");
             return serverVersionSupport;
         }
-
     }
 
     @AutoConfiguration
@@ -66,7 +64,6 @@ public class AerospikeTestConfigurations {
         AerospikeCustomConversions myCustomConversions() {
             return new AerospikeCustomConversions(List.of(new CityToStringConverter()));
         }
-
     }
 
     public static class CityToStringConverter implements Converter<City, String> {
