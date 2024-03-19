@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.domain.EntityScanner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.aerospike.config.AerospikeConnectionSettings;
 import org.springframework.data.aerospike.config.AerospikeDataSettings;
 import org.springframework.data.aerospike.convert.AerospikeCustomConversions;
 import org.springframework.data.aerospike.convert.AerospikeTypeAliasAccessor;
@@ -97,6 +98,16 @@ class AerospikeCommonDataConfiguration {
     @ConditionalOnMissingBean(name = "aerospikeExceptionTranslator")
     public AerospikeExceptionTranslator aerospikeExceptionTranslator() {
         return new DefaultAerospikeExceptionTranslator();
+    }
+
+    @Bean
+    public AerospikeDataSettings readAerospikeDataSettings() {
+        return new AerospikeDataSettings();
+    }
+
+    @Bean
+    public AerospikeConnectionSettings readAerospikeSettings() {
+        return new AerospikeConnectionSettings();
     }
 
     private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties,
