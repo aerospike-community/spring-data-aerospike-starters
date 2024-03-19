@@ -15,10 +15,6 @@
     <artifactId>spring-boot-starter-data-aerospike-example</artifactId>
     <description>Example for using Spring Boot Data Aerospike Starter</description>
 
-    <properties>
-        <embedded-aerospike.version>3.1.1</embedded-aerospike.version>
-    </properties>
-
     <modules>
         <module>reactive</module>
         <module>sync</module>
