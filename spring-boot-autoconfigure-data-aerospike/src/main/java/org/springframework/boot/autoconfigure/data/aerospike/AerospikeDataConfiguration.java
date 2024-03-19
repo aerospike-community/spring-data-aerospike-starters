@@ -82,11 +82,12 @@ class AerospikeDataConfiguration {
     @ConditionalOnMissingBean(name = "aerospikeIndexRefresher")
     public IndexRefresher indexRefresher(IAerospikeClient aerospikeClient, IndexesCacheUpdater indexesCacheUpdater,
                                          ServerVersionSupport serverVersionSupport,
-                                         AerospikeDataProperties aerospikeDataProperties) {
+                                         AerospikeDataProperties aerospikeDataProperties,
+                                         AerospikeDataSettings dataSettings) {
         IndexRefresher refresher = new IndexRefresher(aerospikeClient, aerospikeClient.getInfoPolicyDefault(),
                 new InternalIndexOperations(new IndexInfoParser()), indexesCacheUpdater, serverVersionSupport);
         refresher.refreshIndexes();
-        int refreshFrequency = aerospikeDataSettings(aerospikeDataProperties).getIndexCacheRefreshSeconds();
+        int refreshFrequency = aerospikeDataSettings(aerospikeDataProperties, dataSettings).getIndexCacheRefreshSeconds();
         processCacheRefreshFrequency(refreshFrequency, refresher);
         return refresher;
     }
@@ -111,16 +112,15 @@ class AerospikeDataConfiguration {
                 aerospikeDataProperties.isCreateIndexesOnStartup(), aerospikeIndexResolver, template);
     }
 
-    private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties) {
-        AerospikeDataSettings.AerospikeDataSettingsBuilder builder = AerospikeDataSettings.builder();
-        configureDataSettings(builder, aerospikeDataProperties);
-        return builder.build();
+    private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties,
+                                                        AerospikeDataSettings dataSettings) {
+        return configureDataSettings(dataSettings, aerospikeDataProperties);
     }
 
-    private void configureDataSettings(AerospikeDataSettings.AerospikeDataSettingsBuilder builder,
-                                         AerospikeDataProperties aerospikeDataProperties) {
-        builder.scansEnabled(aerospikeDataProperties.isScansEnabled());
-        builder.sendKey(aerospikeDataProperties.isSendKey());
-        builder.createIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
+    private AerospikeDataSettings configureDataSettings(AerospikeDataSettings dataSettings,
+                                       AerospikeDataProperties aerospikeDataProperties) {
+        dataSettings.setScansEnabled(aerospikeDataProperties.isScansEnabled());
+        dataSettings.setCreateIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
+        return dataSettings;
     }
 }

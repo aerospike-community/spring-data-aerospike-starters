@@ -58,9 +58,10 @@ class AerospikeCommonDataConfiguration {
     public MappingAerospikeConverter mappingAerospikeConverter(AerospikeMappingContext aerospikeMappingContext,
                                                                AerospikeTypeAliasAccessor aerospikeTypeAliasAccessor,
                                                                AerospikeCustomConversions aerospikeCustomConversions,
-                                                               AerospikeDataProperties aerospikeDataProperties) {
+                                                               AerospikeDataProperties aerospikeDataProperties,
+                                                               AerospikeDataSettings dataSettings) {
         return new MappingAerospikeConverter(aerospikeMappingContext, aerospikeCustomConversions,
-                aerospikeTypeAliasAccessor, aerospikeDataSettings(aerospikeDataProperties));
+                aerospikeTypeAliasAccessor, aerospikeDataSettings(aerospikeDataProperties, dataSettings));
     }
 
     @Bean(name = "aerospikeTypeAliasAccessor")
@@ -98,16 +99,15 @@ class AerospikeCommonDataConfiguration {
         return new DefaultAerospikeExceptionTranslator();
     }
 
-    private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties) {
-        AerospikeDataSettings.AerospikeDataSettingsBuilder builder = AerospikeDataSettings.builder();
-        configureDataSettings(builder, aerospikeDataProperties);
-        return builder.build();
+    private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties,
+                                                        AerospikeDataSettings dataSettings) {
+        return configureDataSettings(dataSettings, aerospikeDataProperties);
     }
 
-    private void configureDataSettings(AerospikeDataSettings.AerospikeDataSettingsBuilder builder,
-                                         AerospikeDataProperties aerospikeDataProperties) {
-        builder.scansEnabled(aerospikeDataProperties.isScansEnabled());
-        builder.sendKey(aerospikeDataProperties.isSendKey());
-        builder.createIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
+    private AerospikeDataSettings configureDataSettings(AerospikeDataSettings dataSettings,
+                                                        AerospikeDataProperties aerospikeDataProperties) {
+        dataSettings.setScansEnabled(aerospikeDataProperties.isScansEnabled());
+        dataSettings.setCreateIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
+        return dataSettings;
     }
 }
