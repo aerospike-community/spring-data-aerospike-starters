@@ -19,13 +19,16 @@ package org.springframework.boot.autoconfigure.data.aerospike;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.aerospike.config.AerospikeDataSettings;
 
 /**
  * Configuration properties for Spring Data Aerospike.
+ * @deprecated since 0.14.0, {@link AerospikeDataSettings} will be used instead.
  *
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
+@Deprecated(since = "0.14.0", forRemoval = true)
 @ConfigurationProperties(prefix = "spring.data.aerospike")
 @Getter
 @Setter
