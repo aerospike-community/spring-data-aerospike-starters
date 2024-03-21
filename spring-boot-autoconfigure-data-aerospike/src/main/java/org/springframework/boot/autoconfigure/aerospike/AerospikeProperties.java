@@ -19,6 +19,7 @@ package org.springframework.boot.autoconfigure.aerospike;
 import com.aerospike.client.policy.AuthMode;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.aerospike.config.AerospikeDataSettings;
 
 import java.time.Duration;
 
@@ -36,14 +37,22 @@ public class AerospikeProperties {
      * Potential hosts to seed the cluster from string format: hostname1:port1,hostname2:port2 ... .
      * <p>
      * See {@link com.aerospike.client.Host#parseHosts} documentation for more details.
+     *
+     * @deprecated since 0.14.0, {@link AerospikeDataSettings} with the prefix "spring-data-aerospike.connection".
+     * will be used instead to read from application.properties
      */
+    @Deprecated(since = "0.14.0", forRemoval = true)
     private String hosts;
 
     /**
      * Port is used if no port specified in AerospikeProperties#hosts.
      * <p>
      * See {@link com.aerospike.client.Host#parseHosts} documentation for more details.
+     *
+     * @deprecated since 0.14.0, {@link AerospikeDataSettings} with the prefix "spring-data-aerospike.connection".
+     * will be used instead to read from application.properties
      */
+    @Deprecated(since = "0.14.0", forRemoval = true)
     private int defaultPort = 3000;
 
     /**

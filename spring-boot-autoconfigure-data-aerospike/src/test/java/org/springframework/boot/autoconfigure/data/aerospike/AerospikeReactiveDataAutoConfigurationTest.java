@@ -26,6 +26,7 @@ import org.springframework.boot.autoconfigure.data.aerospike.AerospikeTestConfig
 import org.springframework.boot.autoconfigure.data.aerospike.AerospikeTestConfigurations.MockReactiveIndexRefresher;
 import org.springframework.boot.autoconfigure.data.aerospike.city.City;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.data.aerospike.convert.AerospikeConverter;
 import org.springframework.data.aerospike.convert.AerospikeTypeAliasAccessor;
 import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
 import org.springframework.data.aerospike.core.AerospikeTemplate;
@@ -74,7 +75,7 @@ public class AerospikeReactiveDataAutoConfigurationTest {
     }
 
     @Test
-    public void typeKeyDefault() {
+    public void classKeyDefault() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
@@ -82,10 +83,9 @@ public class AerospikeReactiveDataAutoConfigurationTest {
                         AerospikeServerVersionSupportMockConfiguration.class)
                 .run(context -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
-                    String typeKey = getField(aliasAccessor, "typeKey");
-                    String defaultTypeKey = getField(aliasAccessor, "TYPE_KEY");
+                    String typeKey = getField(aliasAccessor, "classKey");
 
-                    assertThat(typeKey).isEqualTo(defaultTypeKey);
+                    assertThat(typeKey).isEqualTo(AerospikeConverter.CLASS_KEY);
                 });
     }
 
@@ -99,7 +99,7 @@ public class AerospikeReactiveDataAutoConfigurationTest {
                 .withPropertyValues("spring.data.aerospike.type-key=++amazing++")
                 .run((context) -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
-                    String typeKey = getField(aliasAccessor, "typeKey");
+                    String typeKey = getField(aliasAccessor, "classKey");
 
                     assertThat(typeKey).isEqualTo("++amazing++");
                 });

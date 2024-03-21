@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.domain.EntityScanner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.aerospike.config.AerospikeConnectionSettings;
 import org.springframework.data.aerospike.config.AerospikeDataSettings;
 import org.springframework.data.aerospike.convert.AerospikeCustomConversions;
 import org.springframework.data.aerospike.convert.AerospikeTypeAliasAccessor;
@@ -58,9 +59,10 @@ class AerospikeCommonDataConfiguration {
     public MappingAerospikeConverter mappingAerospikeConverter(AerospikeMappingContext aerospikeMappingContext,
                                                                AerospikeTypeAliasAccessor aerospikeTypeAliasAccessor,
                                                                AerospikeCustomConversions aerospikeCustomConversions,
-                                                               AerospikeDataProperties aerospikeDataProperties) {
+                                                               AerospikeDataProperties aerospikeDataProperties,
+                                                               AerospikeDataSettings dataSettings) {
         return new MappingAerospikeConverter(aerospikeMappingContext, aerospikeCustomConversions,
-                aerospikeTypeAliasAccessor, aerospikeDataSettings(aerospikeDataProperties));
+                aerospikeTypeAliasAccessor, aerospikeDataSettings(aerospikeDataProperties, dataSettings));
     }
 
     @Bean(name = "aerospikeTypeAliasAccessor")
@@ -98,16 +100,25 @@ class AerospikeCommonDataConfiguration {
         return new DefaultAerospikeExceptionTranslator();
     }
 
-    private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties) {
-        AerospikeDataSettings.AerospikeDataSettingsBuilder builder = AerospikeDataSettings.builder();
-        configureDataSettings(builder, aerospikeDataProperties);
-        return builder.build();
+    @Bean
+    public AerospikeDataSettings readAerospikeDataSettings() {
+        return new AerospikeDataSettings();
     }
 
-    private void configureDataSettings(AerospikeDataSettings.AerospikeDataSettingsBuilder builder,
-                                         AerospikeDataProperties aerospikeDataProperties) {
-        builder.scansEnabled(aerospikeDataProperties.isScansEnabled());
-        builder.sendKey(aerospikeDataProperties.isSendKey());
-        builder.createIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
+    @Bean
+    public AerospikeConnectionSettings readAerospikeSettings() {
+        return new AerospikeConnectionSettings();
+    }
+
+    private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties,
+                                                        AerospikeDataSettings dataSettings) {
+        return configureDataSettings(dataSettings, aerospikeDataProperties);
+    }
+
+    private AerospikeDataSettings configureDataSettings(AerospikeDataSettings dataSettings,
+                                                        AerospikeDataProperties aerospikeDataProperties) {
+        dataSettings.setScansEnabled(aerospikeDataProperties.isScansEnabled());
+        dataSettings.setCreateIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
+        return dataSettings;
     }
 }
