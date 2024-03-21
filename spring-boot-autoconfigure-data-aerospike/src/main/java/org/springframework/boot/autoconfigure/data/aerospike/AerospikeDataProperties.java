@@ -23,7 +23,8 @@ import org.springframework.data.aerospike.config.AerospikeDataSettings;
 
 /**
  * Configuration properties for Spring Data Aerospike.
- * @deprecated since 0.14.0, {@link AerospikeDataSettings} will be used instead.
+ * @deprecated since 0.14.0, {@link AerospikeDataSettings} with the prefix "spring-data-aerospike.data".
+ * will be used instead to read from application.properties.
  *
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
