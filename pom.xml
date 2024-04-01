@@ -45,7 +45,7 @@
         <aerospike-client.version>7.2.1</aerospike-client.version>
         <embedded-aerospike.version>3.1.5</embedded-aerospike.version>
 
-        <spring-cloud-starter.version>4.1.1</spring-cloud-starter.version>
+        <spring-cloud-starter.version>4.1.2</spring-cloud-starter.version>
     </properties>
 
     <licenses>
