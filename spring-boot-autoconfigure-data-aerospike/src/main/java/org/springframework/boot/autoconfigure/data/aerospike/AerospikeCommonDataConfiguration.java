@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.aerospike.config.AerospikeConnectionSettings;
 import org.springframework.data.aerospike.config.AerospikeDataSettings;
+import org.springframework.data.aerospike.config.AerospikeSettings;
 import org.springframework.data.aerospike.convert.AerospikeCustomConversions;
 import org.springframework.data.aerospike.convert.AerospikeTypeAliasAccessor;
 import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
@@ -108,6 +109,12 @@ class AerospikeCommonDataConfiguration {
     @Bean
     public AerospikeConnectionSettings readAerospikeSettings() {
         return new AerospikeConnectionSettings();
+    }
+
+    @Bean
+    public AerospikeSettings aerospikeSettings(AerospikeDataSettings dataSettings,
+                                               AerospikeConnectionSettings connectionSettings) {
+        return new AerospikeSettings(connectionSettings, dataSettings);
     }
 
     private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties,
