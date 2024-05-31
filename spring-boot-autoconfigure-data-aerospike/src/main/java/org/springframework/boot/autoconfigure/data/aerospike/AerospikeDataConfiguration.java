@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.aerospike.config.AerospikeDataSettings;
+import org.springframework.data.aerospike.config.AerospikeSettings;
 import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
 import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
 import org.springframework.data.aerospike.core.AerospikeTemplate;
@@ -71,8 +72,9 @@ class AerospikeDataConfiguration {
     public QueryEngine aerospikeQueryEngine(IAerospikeClient aerospikeClient,
                                             AerospikeDataProperties aerospikeDataProperties,
                                             FilterExpressionsBuilder filterExpressionsBuilder,
-                                            StatementBuilder statementBuilder) {
-        QueryEngine queryEngine = new QueryEngine(aerospikeClient, statementBuilder, filterExpressionsBuilder);
+                                            StatementBuilder statementBuilder, AerospikeSettings settings) {
+        QueryEngine queryEngine = new QueryEngine(aerospikeClient, statementBuilder, filterExpressionsBuilder,
+                settings.getDataSettings());
         queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
         queryEngine.setQueryMaxRecords(aerospikeDataProperties.getQueryMaxRecords());
         return queryEngine;
@@ -118,7 +120,7 @@ class AerospikeDataConfiguration {
     }
 
     private AerospikeDataSettings configureDataSettings(AerospikeDataSettings dataSettings,
-                                       AerospikeDataProperties aerospikeDataProperties) {
+                                                        AerospikeDataProperties aerospikeDataProperties) {
         dataSettings.setScansEnabled(aerospikeDataProperties.isScansEnabled());
         dataSettings.setCreateIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
         return dataSettings;

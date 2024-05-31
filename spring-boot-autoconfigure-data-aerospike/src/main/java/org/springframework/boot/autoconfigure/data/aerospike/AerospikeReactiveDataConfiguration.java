@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.aerospike.config.AerospikeSettings;
 import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
 import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
 import org.springframework.data.aerospike.core.ReactiveAerospikeTemplate;
@@ -66,9 +67,10 @@ class AerospikeReactiveDataConfiguration {
     public ReactorQueryEngine reactiveAerospikeQueryEngine(AerospikeReactorClient aerospikeReactorClient,
                                                            AerospikeDataProperties aerospikeDataProperties,
                                                            FilterExpressionsBuilder filterExpressionsBuilder,
-                                                           StatementBuilder statementBuilder) {
+                                                           StatementBuilder statementBuilder,
+                                                           AerospikeSettings settings) {
         ReactorQueryEngine queryEngine = new ReactorQueryEngine(aerospikeReactorClient, statementBuilder,
-                filterExpressionsBuilder);
+                filterExpressionsBuilder, settings.getDataSettings());
         queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
         queryEngine.setQueryMaxRecords(aerospikeDataProperties.getQueryMaxRecords());
         return queryEngine;
