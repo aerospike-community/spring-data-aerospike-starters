@@ -43,7 +43,7 @@
         <spring-data-aerospike.version>4.8.0</spring-data-aerospike.version>
         <aerospike-reactor-client.version>7.1.0</aerospike-reactor-client.version>
         <aerospike-client.version>7.2.1</aerospike-client.version>
-        <embedded-aerospike.version>3.1.6</embedded-aerospike.version>
+        <embedded-aerospike.version>3.1.7</embedded-aerospike.version>
 
         <spring-cloud-starter.version>4.1.2</spring-cloud-starter.version>
     </properties>
