@@ -41,7 +41,7 @@
         <flatten.maven.plugin.version>1.6.0</flatten.maven.plugin.version>
 
         <spring-data-aerospike.version>4.8.0</spring-data-aerospike.version>
-        <aerospike-reactor-client.version>7.1.0</aerospike-reactor-client.version>
+        <aerospike-reactor-client.version>8.1.2</aerospike-reactor-client.version>
         <aerospike-client.version>7.2.1</aerospike-client.version>
         <embedded-aerospike.version>3.1.6</embedded-aerospike.version>
 
