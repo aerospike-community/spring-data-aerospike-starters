@@ -24,15 +24,9 @@ import org.springframework.boot.autoconfigure.data.aerospike.city.CityRepository
 import org.springframework.boot.autoconfigure.data.aerospike.city.ReactiveCityRepository;
 import org.springframework.boot.autoconfigure.data.aerospike.empty.EmptyDataPackage;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.aerospike.core.AerospikeTemplate;
-import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
-import org.springframework.data.mapping.context.MappingContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link AerospikeRepositoriesAutoConfiguration}.
@@ -41,12 +35,14 @@ import static org.mockito.Mockito.when;
  */
 public class AerospikeRepositoriesAutoConfigurationTest {
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(AerospikeRepositoriesAutoConfiguration.class, MockConfiguration.class));
+            .withConfiguration(AutoConfigurations.of(AerospikeRepositoriesAutoConfiguration.class));
 
     @Test
     public void repositoryIsCreated() {
         contextRunner
                 .withUserConfiguration(DefaultConfiguration.class)
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000", // TODO: determining port of embedded image
+                        "spring.data.aerospike.namespace=test")
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
                     assertThat(context).hasSingleBean(CityRepository.class);
@@ -57,6 +53,8 @@ public class AerospikeRepositoriesAutoConfigurationTest {
     public void repositoryIsNotCreatedWhenRepositoryInterfaceDoesNotExists() {
         contextRunner
                 .withUserConfiguration(NoRepositoryConfiguration.class)
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000", // TODO: determining port of embedded image
+                        "spring.data.aerospike.namespace=test")
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
                     assertThat(context).doesNotHaveBean(CityRepository.class);
@@ -95,21 +93,4 @@ public class AerospikeRepositoriesAutoConfigurationTest {
     @TestAutoConfigurationPackage(EmptyDataPackage.class)
     static class NoRepositoryConfiguration {
     }
-
-    @Configuration
-    static class MockConfiguration {
-        @Bean
-        public AerospikeTemplate aerospikeTemplate() {
-            AerospikeMappingContext context = new AerospikeMappingContext();
-            AerospikeTemplate mock = mock(AerospikeTemplate.class);
-            when(mock.getMappingContext()).thenReturn((MappingContext) context);
-            return mock;
-        }
-
-        @Bean
-        public MappingContext aerospikeMappingContext() {
-            return mock(MappingContext.class);
-        }
-    }
-
 }

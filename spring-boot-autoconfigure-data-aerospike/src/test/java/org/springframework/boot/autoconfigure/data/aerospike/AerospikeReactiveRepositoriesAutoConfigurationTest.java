@@ -17,7 +17,6 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.TestAutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.data.aerospike.city.City;
@@ -25,15 +24,9 @@ import org.springframework.boot.autoconfigure.data.aerospike.city.CityRepository
 import org.springframework.boot.autoconfigure.data.aerospike.city.ReactiveCityRepository;
 import org.springframework.boot.autoconfigure.data.aerospike.empty.EmptyDataPackage;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.aerospike.core.ReactiveAerospikeTemplate;
-import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
-import org.springframework.data.mapping.context.MappingContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link AerospikeReactiveRepositoriesAutoConfiguration}.
@@ -42,12 +35,15 @@ import static org.mockito.Mockito.when;
  */
 public class AerospikeReactiveRepositoriesAutoConfigurationTest {
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(AerospikeReactiveRepositoriesAutoConfiguration.class, MockConfiguration.class));
+//            .withConfiguration(AutoConfigurations.of(AerospikeReactiveRepositoriesAutoConfiguration.class, MockConfiguration.class));
+            .withConfiguration(AutoConfigurations.of(AerospikeReactiveRepositoriesAutoConfiguration.class));
 
     @Test
     public void reactiveRepositoryIsCreated() {
         contextRunner
                 .withUserConfiguration(DefaultConfiguration.class)
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000", // TODO: determining port of embedded image
+                        "spring.data.aerospike.namespace=test")
                 .run(context -> {
                     assertThat(context).hasSingleBean(ReactiveCityRepository.class);
                     assertThat(context).doesNotHaveBean(CityRepository.class);
@@ -58,6 +54,8 @@ public class AerospikeReactiveRepositoriesAutoConfigurationTest {
     public void repositoryIsNotCreatedWhenRepositoryInterfaceNotExists() {
         contextRunner
                 .withUserConfiguration(NoRepositoryConfiguration.class)
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000", // TODO: determining port of embedded image
+                        "spring.data.aerospike.namespace=test")
                 .run(context -> {
                     assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
                     assertThat(context).doesNotHaveBean(CityRepository.class);
@@ -96,23 +94,4 @@ public class AerospikeReactiveRepositoriesAutoConfigurationTest {
     @TestAutoConfigurationPackage(EmptyDataPackage.class)
     static class NoRepositoryConfiguration {
     }
-
-    @Configuration
-    static class MockConfiguration {
-
-        @Bean
-        public ReactiveAerospikeTemplate reactiveAerospikeTemplate() {
-            AerospikeMappingContext context = new AerospikeMappingContext();
-            ReactiveAerospikeTemplate mock = Mockito.mock(ReactiveAerospikeTemplate.class);
-            when(mock.getMappingContext()).thenReturn((MappingContext) context);
-            return mock;
-        }
-
-
-        @Bean
-        public MappingContext aerospikeMappingContext() {
-            return mock(MappingContext.class);
-        }
-    }
-
 }
