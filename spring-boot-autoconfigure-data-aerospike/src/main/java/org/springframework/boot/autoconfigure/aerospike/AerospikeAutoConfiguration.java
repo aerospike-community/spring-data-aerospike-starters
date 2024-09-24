@@ -23,15 +23,14 @@ import com.aerospike.client.async.EventLoops;
 import com.aerospike.client.async.NioEventLoops;
 import com.aerospike.client.policy.*;
 import com.aerospike.client.reactor.AerospikeReactorClient;
+import com.aerospike.client.reactor.IAerospikeReactorClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.data.aerospike.AerospikeDataProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.aerospike.server.version.ServerVersionSupport;
 import reactor.core.publisher.Flux;
 
 import java.util.Optional;
@@ -50,26 +49,10 @@ public class AerospikeAutoConfiguration {
 
     @Bean(name = "aerospikeClient", destroyMethod = "close")
     @ConditionalOnMissingBean(IAerospikeClient.class)
-    public AerospikeClient aerospikeClient(AerospikeProperties properties,
-                                           ClientPolicy aerospikeClientPolicy) {
+    public IAerospikeClient aerospikeClient(AerospikeProperties properties,
+                                            ClientPolicy aerospikeClientPolicy) {
         Host[] hosts = Host.parseHosts(properties.getHosts(), properties.getDefaultPort());
         return new AerospikeClient(aerospikeClientPolicy, hosts);
-    }
-
-    @Bean(name = "aerospikeServerVersionSupport")
-    @ConditionalOnMissingBean(ServerVersionSupport.class)
-    public ServerVersionSupport serverVersionSupport(IAerospikeClient aerospikeClient,
-                                                     AerospikeDataProperties properties) {
-        ServerVersionSupport serverVersionSupport = new ServerVersionSupport(aerospikeClient);
-        processServerVersionRefreshFrequency(properties.getServerVersionRefreshSeconds(), serverVersionSupport);
-        return serverVersionSupport;
-    }
-
-    private void processServerVersionRefreshFrequency(int serverVersionRefreshSeconds,
-                                                      ServerVersionSupport serverVersionSupport) {
-        if (serverVersionRefreshSeconds > 0) {
-            serverVersionSupport.scheduleServerVersionRefresh(serverVersionRefreshSeconds);
-        }
     }
 
     @Bean(name = "aerospikeClientPolicy")
@@ -108,8 +91,8 @@ public class AerospikeAutoConfiguration {
         @Bean(name = "aerospikeReactorClient", destroyMethod = "")
         @ConditionalOnMissingBean
         //disable destroy method, because we do not want AerospikeReactorClient to close AerospikeClient
-        public AerospikeReactorClient aerospikeReactorClient(IAerospikeClient aerospikeClient,
-                                                             EventLoops eventLoops) {
+        public IAerospikeReactorClient aerospikeReactorClient(IAerospikeClient aerospikeClient,
+                                                              EventLoops eventLoops) {
             return new AerospikeReactorClient(aerospikeClient, eventLoops);
         }
 
