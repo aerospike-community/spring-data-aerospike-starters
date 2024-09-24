@@ -94,6 +94,9 @@ public class AerospikeAutoConfiguration {
         clientPolicy.writePolicyDefault = setupWritePolicy(properties);
         clientPolicy.batchPolicyDefault = setupBatchPolicy(properties);
         clientPolicy.queryPolicyDefault = setupQueryPolicy(properties);
+        clientPolicy.batchWritePolicyDefault = setupBatchWritePolicy(properties);
+        clientPolicy.batchDeletePolicyDefault = setupBatchDeletePolicy(properties);
+        clientPolicy.batchUDFPolicyDefault = setupBatchUDFPolicy(properties);
         aerospikeEventLoops.ifPresent(loops -> clientPolicy.eventLoops = loops);
 
         return clientPolicy;
@@ -139,6 +142,27 @@ public class AerospikeAutoConfiguration {
         whenPresent(batchPolicyDefault.maxConcurrentThreads, p -> policy.maxConcurrentThreads = p);
         whenPresent(batchPolicyDefault.allowInline, p -> policy.allowInline = p);
         whenPresent(batchPolicyDefault.sendSetName, p -> policy.sendSetName = p);
+        return policy;
+    }
+
+    private BatchWritePolicy setupBatchWritePolicy(AerospikeProperties properties) {
+        AerospikeProperties.BatchWritePolicyDefault batchWritePolicyDefault = properties.getBatchWrite();
+        BatchWritePolicy policy = new BatchWritePolicy();
+        whenPresent(batchWritePolicyDefault.durableDelete, p -> policy.durableDelete = p);
+        return policy;
+    }
+
+    private BatchDeletePolicy setupBatchDeletePolicy(AerospikeProperties properties) {
+        AerospikeProperties.BatchDeletePolicyDefault batchDeletePolicyDefault = properties.getBatchDelete();
+        BatchDeletePolicy policy = new BatchDeletePolicy();
+        whenPresent(batchDeletePolicyDefault.durableDelete, p -> policy.durableDelete = p);
+        return policy;
+    }
+
+    private BatchUDFPolicy setupBatchUDFPolicy(AerospikeProperties properties) {
+        AerospikeProperties.BatchUDFPolicyDefault batchUDFPolicyDefault = properties.getBatchUdf();
+        BatchUDFPolicy policy = new BatchUDFPolicy();
+        whenPresent(batchUDFPolicyDefault.durableDelete, p -> policy.durableDelete = p);
         return policy;
     }
 
