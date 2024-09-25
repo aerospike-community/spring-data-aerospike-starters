@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.domain.EntityScanner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.aerospike.cache.AerospikeCacheKeyProcessor;
-import org.springframework.data.aerospike.cache.AerospikeCacheKeyProcessorImpl;
 import org.springframework.data.aerospike.config.AerospikeConnectionSettings;
 import org.springframework.data.aerospike.config.AerospikeDataSettings;
 import org.springframework.data.aerospike.config.AerospikeSettings;
@@ -73,11 +71,6 @@ class AerospikeCommonDataConfiguration {
     @ConditionalOnMissingBean(name = "aerospikeIndexCache")
     public IndexesCacheHolder aerospikeIndexCache() {
         return new IndexesCacheHolder();
-    }
-
-    @Bean(name = "aerospikeCacheKeyProcessor")
-    public AerospikeCacheKeyProcessor cacheKeyProcessor() {
-        return new AerospikeCacheKeyProcessorImpl();
     }
 
     @Bean(name = "mappingAerospikeConverter")

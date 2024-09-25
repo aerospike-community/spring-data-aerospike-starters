@@ -16,7 +16,7 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import com.aerospike.client.AerospikeClient;
+import com.aerospike.client.IAerospikeClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -33,7 +33,7 @@ import org.springframework.data.aerospike.repository.support.AerospikeRepository
  * @author Igor Ermolenko
  */
 @AutoConfiguration
-@ConditionalOnClass({AerospikeClient.class, ReactiveAerospikeRepository.class})
+@ConditionalOnClass({IAerospikeClient.class, ReactiveAerospikeRepository.class})
 @ConditionalOnRepositoryType(store = "aerospike", type = RepositoryType.IMPERATIVE)
 @ConditionalOnMissingBean(AerospikeRepositoryFactoryBean.class)
 @Import(AerospikeRepositoriesRegistrar.class)

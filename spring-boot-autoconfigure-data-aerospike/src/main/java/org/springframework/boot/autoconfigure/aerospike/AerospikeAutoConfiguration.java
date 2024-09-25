@@ -42,7 +42,7 @@ import java.util.function.Consumer;
  * @author Anastasiia Smirnova
  */
 @AutoConfiguration
-@ConditionalOnClass(AerospikeClient.class)
+@ConditionalOnClass(IAerospikeClient.class)
 @ConditionalOnProperty("spring.aerospike.hosts")
 @EnableConfigurationProperties(AerospikeProperties.class)
 public class AerospikeAutoConfiguration {
@@ -85,7 +85,7 @@ public class AerospikeAutoConfiguration {
         return clientPolicy;
     }
 
-    @ConditionalOnClass({AerospikeReactorClient.class, Flux.class})
+    @ConditionalOnClass({IAerospikeReactorClient.class, Flux.class})
     public static class AerospikeReactiveAutoConfiguration {
 
         @Bean(name = "aerospikeReactorClient", destroyMethod = "")

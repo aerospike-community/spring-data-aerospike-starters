@@ -17,7 +17,7 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.AerospikeClient;
-import com.aerospike.client.reactor.AerospikeReactorClient;
+import com.aerospike.client.reactor.IAerospikeReactorClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
@@ -49,7 +49,7 @@ import static org.springframework.boot.autoconfigure.data.aerospike.TestUtils.ge
 public class AerospikeDataAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withClassLoader(new FilteredClassLoader(AerospikeReactorClient.class))
+            .withClassLoader(new FilteredClassLoader(IAerospikeReactorClient.class))
             .withConfiguration(AutoConfigurations.of(
                     AerospikeAutoConfiguration.class, AerospikeDataAutoConfiguration.class));
 

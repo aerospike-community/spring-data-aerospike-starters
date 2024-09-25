@@ -16,7 +16,6 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import com.aerospike.client.AerospikeClient;
 import com.aerospike.client.IAerospikeClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -39,8 +38,8 @@ import org.springframework.data.aerospike.repository.AerospikeRepository;
 @AutoConfiguration
 // match only if we do not have reactive client
 // we want sync context to be loaded when only sync client is on classpath
-@ConditionalOnMissingClass("com.aerospike.client.reactor.AerospikeReactorClient")
-@ConditionalOnClass({AerospikeClient.class, AerospikeRepository.class})
+@ConditionalOnMissingClass("com.aerospike.client.reactor.IAerospikeReactorClient")
+@ConditionalOnClass({IAerospikeClient.class, AerospikeRepository.class})
 @ConditionalOnSingleCandidate(IAerospikeClient.class)
 @ConditionalOnProperty("spring.data.aerospike.namespace")
 @EnableConfigurationProperties(AerospikeDataProperties.class)

@@ -2,12 +2,7 @@ package com.aerospike.example.sync;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -66,8 +61,7 @@ public class SyncIntegrationTest {
                 .assertThat()
                 .statusCode(200)
                 .body("id", equalTo("andrea"))
-                .body("age", equalTo(61))
-        ;
+                .body("age", equalTo(61));
     }
 
     @Order(2)
@@ -87,8 +81,6 @@ public class SyncIntegrationTest {
                 .assertThat()
                 .statusCode(200)
                 .body("[0].id", equalTo("andrea"))
-                .body("[0].age", equalTo(61))
-        ;
+                .body("[0].age", equalTo(61));
     }
-
 }
