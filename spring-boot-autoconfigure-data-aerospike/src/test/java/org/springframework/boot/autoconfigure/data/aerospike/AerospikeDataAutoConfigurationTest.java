@@ -17,7 +17,9 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.AerospikeClient;
+import com.aerospike.client.reactor.AerospikeReactorClient;
 import com.aerospike.client.reactor.IAerospikeReactorClient;
+import com.aerospike.client.reactor.retry.AerospikeReactorRetryClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
@@ -149,6 +151,37 @@ public class AerospikeDataAutoConfigurationTest {
                     assertThat(context).hasSingleBean(AerospikeDataProperties.class);
                     assertThat(context).hasSingleBean(AerospikeProperties.class);
                     assertThat(context).hasSingleBean(AerospikeMappingContext.class);
+                });
+    }
+
+    @Test
+    public void dataConfigurationIsNotAppliedWithBothClients() {
+        contextRunner
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000")
+                .withPropertyValues("spring.data.aerospike.namespace=TEST")
+                .withUserConfiguration(AerospikeClientMockConfiguration.class,
+                        AerospikeServerVersionSupportMockConfiguration.class)
+                .withClassLoader(AerospikeReactorClient.class.getClassLoader())
+                .run(context -> {
+                    assertThat(context).doesNotHaveBean(ReactiveAerospikeTemplate.class);
+                    assertThat(context).doesNotHaveBean(AerospikeTemplate.class);
+                    assertThat(context).doesNotHaveBean(AerospikeDataProperties.class);
+                    assertThat(context).hasSingleBean(AerospikeProperties.class);
+                    assertThat(context).doesNotHaveBean(AerospikeMappingContext.class);
+                });
+
+        contextRunner
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000")
+                .withPropertyValues("spring.data.aerospike.namespace=TEST")
+                .withUserConfiguration(AerospikeClientMockConfiguration.class,
+                        AerospikeServerVersionSupportMockConfiguration.class)
+                .withClassLoader(AerospikeReactorRetryClient.class.getClassLoader())
+                .run(context -> {
+                    assertThat(context).doesNotHaveBean(ReactiveAerospikeTemplate.class);
+                    assertThat(context).doesNotHaveBean(AerospikeTemplate.class);
+                    assertThat(context).doesNotHaveBean(AerospikeDataProperties.class);
+                    assertThat(context).hasSingleBean(AerospikeProperties.class);
+                    assertThat(context).doesNotHaveBean(AerospikeMappingContext.class);
                 });
     }
 }
