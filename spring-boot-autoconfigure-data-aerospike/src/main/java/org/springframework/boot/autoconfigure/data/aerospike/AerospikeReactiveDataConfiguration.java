@@ -16,7 +16,7 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import com.aerospike.client.reactor.AerospikeReactorClient;
+import com.aerospike.client.reactor.IAerospikeReactorClient;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -53,7 +53,7 @@ class AerospikeReactiveDataConfiguration {
                                                                AerospikeDataProperties aerospikeDataProperties,
                                                                AerospikeMappingContext aerospikeMappingContext,
                                                                AerospikeExceptionTranslator aerospikeExceptionTranslator,
-                                                               AerospikeReactorClient aerospikeReactorClient,
+                                                               IAerospikeReactorClient aerospikeReactorClient,
                                                                ReactorQueryEngine reactorQueryEngine,
                                                                ReactorIndexRefresher reactorIndexRefresher,
                                                                ServerVersionSupport serverVersionSupport) {
@@ -64,7 +64,7 @@ class AerospikeReactiveDataConfiguration {
 
     @Bean(name = "reactiveAerospikeQueryEngine")
     @ConditionalOnMissingBean(name = "reactiveAerospikeQueryEngine")
-    public ReactorQueryEngine reactiveAerospikeQueryEngine(AerospikeReactorClient aerospikeReactorClient,
+    public ReactorQueryEngine reactiveAerospikeQueryEngine(IAerospikeReactorClient aerospikeReactorClient,
                                                            AerospikeDataProperties aerospikeDataProperties,
                                                            FilterExpressionsBuilder filterExpressionsBuilder,
                                                            StatementBuilder statementBuilder,
@@ -78,7 +78,7 @@ class AerospikeReactiveDataConfiguration {
 
     @Bean(name = "reactiveAerospikeIndexRefresher")
     @ConditionalOnMissingBean(name = "reactiveAerospikeIndexRefresher")
-    public ReactorIndexRefresher reactiveAerospikeIndexRefresher(AerospikeReactorClient aerospikeReactorClient,
+    public ReactorIndexRefresher reactiveAerospikeIndexRefresher(IAerospikeReactorClient aerospikeReactorClient,
                                                                  IndexesCacheUpdater indexesCacheUpdater,
                                                                  ServerVersionSupport serverVersionSupport) {
         ReactorIndexRefresher refresher = new ReactorIndexRefresher(aerospikeReactorClient, aerospikeReactorClient.getInfoPolicyDefault(),

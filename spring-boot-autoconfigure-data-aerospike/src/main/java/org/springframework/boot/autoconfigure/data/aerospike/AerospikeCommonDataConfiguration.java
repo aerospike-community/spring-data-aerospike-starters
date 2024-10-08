@@ -1,5 +1,6 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
+import com.aerospike.client.IAerospikeClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -22,6 +23,7 @@ import org.springframework.data.aerospike.query.FilterExpressionsBuilder;
 import org.springframework.data.aerospike.query.StatementBuilder;
 import org.springframework.data.aerospike.query.cache.IndexesCache;
 import org.springframework.data.aerospike.query.cache.IndexesCacheHolder;
+import org.springframework.data.aerospike.server.version.ServerVersionSupport;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.data.mapping.model.FieldNamingStrategy;
 
@@ -30,6 +32,22 @@ import java.util.Collections;
 @Slf4j
 @AutoConfiguration
 class AerospikeCommonDataConfiguration {
+
+    @Bean(name = "aerospikeServerVersionSupport")
+    @ConditionalOnMissingBean(ServerVersionSupport.class)
+    public ServerVersionSupport serverVersionSupport(IAerospikeClient aerospikeClient,
+                                                     AerospikeDataProperties properties) {
+        ServerVersionSupport serverVersionSupport = new ServerVersionSupport(aerospikeClient);
+        processServerVersionRefreshFrequency(properties.getServerVersionRefreshSeconds(), serverVersionSupport);
+        return serverVersionSupport;
+    }
+
+    private void processServerVersionRefreshFrequency(int serverVersionRefreshSeconds,
+                                                      ServerVersionSupport serverVersionSupport) {
+        if (serverVersionRefreshSeconds > 0) {
+            serverVersionSupport.scheduleServerVersionRefresh(serverVersionRefreshSeconds);
+        }
+    }
 
     @Bean(name = "aerospikeFilterExpressionsBuilder")
     @ConditionalOnMissingBean(name = "aerospikeFilterExpressionsBuilder")

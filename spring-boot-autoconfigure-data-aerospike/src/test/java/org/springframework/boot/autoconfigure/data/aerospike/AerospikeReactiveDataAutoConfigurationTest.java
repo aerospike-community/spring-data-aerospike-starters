@@ -16,7 +16,7 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import com.aerospike.client.AerospikeClient;
+import com.aerospike.client.IAerospikeClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
@@ -52,7 +52,7 @@ public class AerospikeReactiveDataAutoConfigurationTest {
     @Test
     public void aerospikeTemplateAndClientAreNotSetupWhenNeitherClientNorDataPropertiesConfigured() {
         contextRunner.run(context -> {
-            assertThat(context).doesNotHaveBean(AerospikeClient.class);
+            assertThat(context).doesNotHaveBean(IAerospikeClient.class);
             assertThat(context).doesNotHaveBean(AerospikeTemplate.class);
             assertThat(context).doesNotHaveBean(ReactiveAerospikeTemplate.class);
             assertThat(context).doesNotHaveBean(AerospikeDataProperties.class);

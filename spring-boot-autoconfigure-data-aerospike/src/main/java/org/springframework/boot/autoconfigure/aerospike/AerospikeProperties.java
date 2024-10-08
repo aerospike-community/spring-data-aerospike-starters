@@ -38,10 +38,7 @@ public class AerospikeProperties {
      * <p>
      * See {@link com.aerospike.client.Host#parseHosts} documentation for more details.
      *
-     * @deprecated since 0.14.0, {@link AerospikeDataSettings} with the prefix "spring-data-aerospike.connection".
-     * will be used instead to read from application.properties
      */
-    @Deprecated(since = "0.14.0", forRemoval = true)
     private String hosts;
 
     /**
@@ -49,10 +46,7 @@ public class AerospikeProperties {
      * <p>
      * See {@link com.aerospike.client.Host#parseHosts} documentation for more details.
      *
-     * @deprecated since 0.14.0, {@link AerospikeDataSettings} with the prefix "spring-data-aerospike.connection".
-     * will be used instead to read from application.properties
      */
-    @Deprecated(since = "0.14.0", forRemoval = true)
     private int defaultPort = 3000;
 
     /**
