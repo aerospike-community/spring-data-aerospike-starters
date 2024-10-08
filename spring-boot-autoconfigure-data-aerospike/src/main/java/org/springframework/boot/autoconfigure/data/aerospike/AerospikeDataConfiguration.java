@@ -123,6 +123,7 @@ class AerospikeDataConfiguration {
                                                         AerospikeDataProperties aerospikeDataProperties) {
         dataSettings.setScansEnabled(aerospikeDataProperties.isScansEnabled());
         dataSettings.setCreateIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
+        dataSettings.setWriteSortedMaps(aerospikeDataProperties.isWriteSortedMaps());
         return dataSettings;
     }
 }
