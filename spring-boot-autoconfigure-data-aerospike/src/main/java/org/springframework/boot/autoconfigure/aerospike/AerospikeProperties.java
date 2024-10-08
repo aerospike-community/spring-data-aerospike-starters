@@ -112,6 +112,12 @@ public class AerospikeProperties {
 
     private BatchPolicyDefault batch = new BatchPolicyDefault();
 
+    private BatchWritePolicyDefault batchWrite = new BatchWritePolicyDefault();
+
+    private BatchDeletePolicyDefault batchDelete = new BatchDeletePolicyDefault();
+
+    private BatchUDFPolicyDefault batchUdf = new BatchUDFPolicyDefault();
+
     private QueryPolicyDefault query = new QueryPolicyDefault();
 
     /**
@@ -220,5 +226,41 @@ public class AerospikeProperties {
          * Send set name for every key in the batch.
          */
         public Boolean sendSetName;
+    }
+
+    /**
+     * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.BatchWritePolicy}.
+     */
+    @Data
+    public static class BatchWritePolicyDefault extends PolicyDefault {
+
+        /**
+         * If the transaction results in a record deletion, leave a tombstone for the record.
+         */
+        public Boolean durableDelete;
+    }
+
+    /**
+     * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.BatchDeletePolicy}.
+     */
+    @Data
+    public static class BatchDeletePolicyDefault extends PolicyDefault {
+
+        /**
+         * If the transaction results in a record deletion, leave a tombstone for the record.
+         */
+        public Boolean durableDelete;
+    }
+
+    /**
+     * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.BatchUDFPolicy}.
+     */
+    @Data
+    public static class BatchUDFPolicyDefault extends PolicyDefault {
+
+        /**
+         * If the transaction results in a record deletion, leave a tombstone for the record.
+         */
+        public Boolean durableDelete;
     }
 }

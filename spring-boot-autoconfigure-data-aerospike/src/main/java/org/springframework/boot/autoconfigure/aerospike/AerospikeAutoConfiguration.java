@@ -24,11 +24,14 @@ import com.aerospike.client.Host;
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.async.EventLoops;
 import com.aerospike.client.async.NioEventLoops;
-import com.aerospike.client.policy.BatchPolicy;
-import com.aerospike.client.policy.ClientPolicy;
 import com.aerospike.client.policy.Policy;
+import com.aerospike.client.policy.ClientPolicy;
 import com.aerospike.client.policy.QueryPolicy;
 import com.aerospike.client.policy.WritePolicy;
+import com.aerospike.client.policy.BatchPolicy;
+import com.aerospike.client.policy.BatchDeletePolicy;
+import com.aerospike.client.policy.BatchUDFPolicy;
+import com.aerospike.client.policy.BatchWritePolicy;
 import com.aerospike.client.reactor.AerospikeReactorClient;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -78,8 +81,11 @@ public class AerospikeAutoConfiguration {
 
         clientPolicy.readPolicyDefault = setupReadPolicy(properties);
         clientPolicy.writePolicyDefault = setupWritePolicy(properties);
-        clientPolicy.batchPolicyDefault = setupBatchPolicy(properties);
         clientPolicy.queryPolicyDefault = setupQueryPolicy(properties);
+        clientPolicy.batchPolicyDefault = setupBatchPolicy(properties);
+        clientPolicy.batchWritePolicyDefault = setupBatchWritePolicy(properties);
+        clientPolicy.batchDeletePolicyDefault = setupBatchDeletePolicy(properties);
+        clientPolicy.batchUDFPolicyDefault = setupBatchUDFPolicy(properties);
         aerospikeEventLoops.ifPresent(loops -> clientPolicy.eventLoops = loops);
 
         return clientPolicy;
@@ -138,6 +144,27 @@ public class AerospikeAutoConfiguration {
         whenPresent(queryPolicyDefault.includeBinData, p -> policy.includeBinData = p);
         whenPresent(queryPolicyDefault.maxConcurrentNodes, p -> policy.maxConcurrentNodes = p);
         whenPresent(queryPolicyDefault.recordQueueSize, p -> policy.recordQueueSize = p);
+        return policy;
+    }
+
+    private BatchWritePolicy setupBatchWritePolicy(AerospikeProperties properties) {
+        AerospikeProperties.BatchWritePolicyDefault batchWritePolicyDefault = properties.getBatchWrite();
+        BatchWritePolicy policy = new BatchWritePolicy();
+        whenPresent(batchWritePolicyDefault.durableDelete, p -> policy.durableDelete = p);
+        return policy;
+    }
+
+    private BatchDeletePolicy setupBatchDeletePolicy(AerospikeProperties properties) {
+        AerospikeProperties.BatchDeletePolicyDefault batchDeletePolicyDefault = properties.getBatchDelete();
+        BatchDeletePolicy policy = new BatchDeletePolicy();
+        whenPresent(batchDeletePolicyDefault.durableDelete, p -> policy.durableDelete = p);
+        return policy;
+    }
+
+    private BatchUDFPolicy setupBatchUDFPolicy(AerospikeProperties properties) {
+        AerospikeProperties.BatchUDFPolicyDefault batchUDFPolicyDefault = properties.getBatchUdf();
+        BatchUDFPolicy policy = new BatchUDFPolicy();
+        whenPresent(batchUDFPolicyDefault.durableDelete, p -> policy.durableDelete = p);
         return policy;
     }
 
