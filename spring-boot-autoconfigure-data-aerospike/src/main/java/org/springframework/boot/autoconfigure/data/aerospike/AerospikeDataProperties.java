@@ -90,4 +90,11 @@ public class AerospikeDataProperties {
      * true - preserve original type if supported
      */
     private boolean keepOriginalKeyTypes = false;
+
+    /**
+     * Define how Maps and POJOs are written: true - as sorted maps (TreeMaps, default), false - as unsorted (HashMaps)
+     * Writing unsorted maps (false) degrades performance of Map-related operations and does not allow comparing Maps,
+     * strongly recommended not to use except during upgrade from older versions of Spring Data Aerospike (if required)
+     */
+    boolean writeSortedMaps = true;
 }
