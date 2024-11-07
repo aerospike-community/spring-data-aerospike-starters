@@ -19,12 +19,13 @@ package org.springframework.boot.autoconfigure.data.aerospike;
 import com.aerospike.client.reactor.IAerospikeReactorClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.aerospike.AerospikeProperties;
+import org.springframework.boot.autoconfigure.utils.HasNamespaceProperty;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.aerospike.repository.ReactiveAerospikeRepository;
 import reactor.core.publisher.Flux;
@@ -37,11 +38,10 @@ import reactor.core.publisher.Flux;
  */
 @AutoConfiguration
 @ConditionalOnClass({IAerospikeReactorClient.class, ReactiveAerospikeRepository.class, Flux.class})
-@ConditionalOnSingleCandidate(IAerospikeReactorClient.class)
-@ConditionalOnProperty("spring.data.aerospike.namespace")
+@Conditional(HasNamespaceProperty.class)
 @AutoConfigureAfter(AerospikeAutoConfiguration.class)
-@EnableConfigurationProperties(AerospikeDataProperties.class)
-@Import({AerospikeReactiveDataConfiguration.class, AerospikeCommonDataConfiguration.class})
+@EnableConfigurationProperties({AerospikeProperties.class, AerospikeDataProperties.class})
+@Import(AerospikeReactiveDataConfiguration.class)
 public class AerospikeReactiveDataAutoConfiguration {
 
 }

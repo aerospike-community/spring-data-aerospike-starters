@@ -16,25 +16,13 @@
 
 package org.springframework.boot.autoconfigure.aerospike;
 
-import com.aerospike.client.AerospikeClient;
-import com.aerospike.client.Host;
 import com.aerospike.client.IAerospikeClient;
-import com.aerospike.client.async.EventLoops;
-import com.aerospike.client.async.NioEventLoops;
-import com.aerospike.client.policy.*;
-import com.aerospike.client.reactor.AerospikeReactorClient;
-import com.aerospike.client.reactor.IAerospikeReactorClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.aerospike.AerospikeDataProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import reactor.core.publisher.Flux;
-
-import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Aerospike client.
@@ -44,134 +32,6 @@ import java.util.function.Consumer;
 @AutoConfiguration
 @ConditionalOnClass(IAerospikeClient.class)
 @ConditionalOnProperty("spring.aerospike.hosts")
-@EnableConfigurationProperties(AerospikeProperties.class)
+@EnableConfigurationProperties({AerospikeProperties.class, AerospikeDataProperties.class}) // TODO: shoud data properties be here?
 public class AerospikeAutoConfiguration {
-
-    @Bean(name = "aerospikeClient", destroyMethod = "close")
-    @ConditionalOnMissingBean(IAerospikeClient.class)
-    public IAerospikeClient aerospikeClient(AerospikeProperties properties,
-                                            ClientPolicy aerospikeClientPolicy) {
-        Host[] hosts = Host.parseHosts(properties.getHosts(), properties.getDefaultPort());
-        return new AerospikeClient(aerospikeClientPolicy, hosts);
-    }
-
-    @Bean(name = "aerospikeClientPolicy")
-    @ConditionalOnMissingBean
-    public ClientPolicy aerospikeClientPolicy(AerospikeProperties properties,
-                                              Optional<EventLoops> aerospikeEventLoops) {
-        ClientPolicy clientPolicy = new ClientPolicy();
-        whenPresent(properties.getUser(), p -> clientPolicy.user = p);
-        whenPresent(properties.getPassword(), p -> clientPolicy.password = p);
-        whenPresent(properties.getClusterName(), p -> clientPolicy.clusterName = p);
-        whenPresent(properties.getAuthMode(), p -> clientPolicy.authMode = p);
-        whenPresent(properties.getConnectTimeout(), p -> clientPolicy.timeout = (int) p.toMillis());
-        whenPresent(properties.getLoginTimeout(), p -> clientPolicy.loginTimeout = (int) p.toMillis());
-        whenPresent(properties.getMinConnsPerNode(), p -> clientPolicy.minConnsPerNode = p);
-        whenPresent(properties.getMaxConnsPerNode(), p -> clientPolicy.maxConnsPerNode = p);
-        whenPresent(properties.getConnPoolsPerNode(), p -> clientPolicy.connPoolsPerNode = p);
-        whenPresent(properties.getMaxSocketIdle(), p -> clientPolicy.maxSocketIdle = (int) p.getSeconds());
-        whenPresent(properties.getTendInterval(), p -> clientPolicy.tendInterval = (int) p.toMillis());
-        whenPresent(properties.getFailIfNotConnected(), p -> clientPolicy.failIfNotConnected = p);
-
-        clientPolicy.readPolicyDefault = setupReadPolicy(properties);
-        clientPolicy.writePolicyDefault = setupWritePolicy(properties);
-        clientPolicy.batchPolicyDefault = setupBatchPolicy(properties);
-        clientPolicy.queryPolicyDefault = setupQueryPolicy(properties);
-        clientPolicy.batchWritePolicyDefault = setupBatchWritePolicy(properties);
-        clientPolicy.batchDeletePolicyDefault = setupBatchDeletePolicy(properties);
-        clientPolicy.batchUDFPolicyDefault = setupBatchUDFPolicy(properties);
-        aerospikeEventLoops.ifPresent(loops -> clientPolicy.eventLoops = loops);
-
-        return clientPolicy;
-    }
-
-    @ConditionalOnClass({IAerospikeReactorClient.class, Flux.class})
-    public static class AerospikeReactiveAutoConfiguration {
-
-        @Bean(name = "aerospikeReactorClient", destroyMethod = "")
-        @ConditionalOnMissingBean
-        //disable destroy method, because we do not want AerospikeReactorClient to close AerospikeClient
-        public IAerospikeReactorClient aerospikeReactorClient(IAerospikeClient aerospikeClient,
-                                                              EventLoops eventLoops) {
-            return new AerospikeReactorClient(aerospikeClient, eventLoops);
-        }
-
-        @Bean(name = "aerospikeEventLoops", destroyMethod = "close")
-        @ConditionalOnMissingBean
-        public EventLoops aerospikeEventLoops() {
-            return new NioEventLoops();
-        }
-    }
-
-    private WritePolicy setupWritePolicy(AerospikeProperties properties) {
-        AerospikeProperties.WritePolicyDefault writePolicyDefault = properties.getWrite();
-        WritePolicy policy = new WritePolicy();
-        setGeneralPolicyProperties(policy, writePolicyDefault);
-        whenPresent(writePolicyDefault.durableDelete, p -> policy.durableDelete = p);
-        return policy;
-    }
-
-    private Policy setupReadPolicy(AerospikeProperties properties) {
-        AerospikeProperties.ReadPolicyDefault readPolicyDefault = properties.getRead();
-        Policy policy = new Policy();
-        setGeneralPolicyProperties(policy, readPolicyDefault);
-        return policy;
-    }
-
-    private BatchPolicy setupBatchPolicy(AerospikeProperties properties) {
-        AerospikeProperties.BatchPolicyDefault batchPolicyDefault = properties.getBatch();
-        BatchPolicy policy = new BatchPolicy();
-        setGeneralPolicyProperties(policy, batchPolicyDefault);
-        whenPresent(batchPolicyDefault.maxConcurrentThreads, p -> policy.maxConcurrentThreads = p);
-        whenPresent(batchPolicyDefault.allowInline, p -> policy.allowInline = p);
-        whenPresent(batchPolicyDefault.sendSetName, p -> policy.sendSetName = p);
-        return policy;
-    }
-
-    private BatchWritePolicy setupBatchWritePolicy(AerospikeProperties properties) {
-        AerospikeProperties.BatchWritePolicyDefault batchWritePolicyDefault = properties.getBatchWrite();
-        BatchWritePolicy policy = new BatchWritePolicy();
-        whenPresent(batchWritePolicyDefault.durableDelete, p -> policy.durableDelete = p);
-        return policy;
-    }
-
-    private BatchDeletePolicy setupBatchDeletePolicy(AerospikeProperties properties) {
-        AerospikeProperties.BatchDeletePolicyDefault batchDeletePolicyDefault = properties.getBatchDelete();
-        BatchDeletePolicy policy = new BatchDeletePolicy();
-        whenPresent(batchDeletePolicyDefault.durableDelete, p -> policy.durableDelete = p);
-        return policy;
-    }
-
-    private BatchUDFPolicy setupBatchUDFPolicy(AerospikeProperties properties) {
-        AerospikeProperties.BatchUDFPolicyDefault batchUDFPolicyDefault = properties.getBatchUdf();
-        BatchUDFPolicy policy = new BatchUDFPolicy();
-        whenPresent(batchUDFPolicyDefault.durableDelete, p -> policy.durableDelete = p);
-        return policy;
-    }
-
-    private QueryPolicy setupQueryPolicy(AerospikeProperties properties) {
-        AerospikeProperties.QueryPolicyDefault queryPolicyDefault = properties.getQuery();
-        QueryPolicy policy = new QueryPolicy();
-        setGeneralPolicyProperties(policy, queryPolicyDefault);
-        whenPresent(queryPolicyDefault.maxRecords, p -> policy.maxRecords = p);
-        whenPresent(queryPolicyDefault.failOnClusterChange, p -> policy.failOnClusterChange = p);
-        whenPresent(queryPolicyDefault.includeBinData, p -> policy.includeBinData = p);
-        whenPresent(queryPolicyDefault.maxConcurrentNodes, p -> policy.maxConcurrentNodes = p);
-        whenPresent(queryPolicyDefault.recordQueueSize, p -> policy.recordQueueSize = p);
-        return policy;
-    }
-
-    private void setGeneralPolicyProperties(Policy policy, AerospikeProperties.PolicyDefault policyDefault) {
-        whenPresent(policyDefault.socketTimeout, p -> policy.socketTimeout = (int) p.toMillis());
-        whenPresent(policyDefault.totalTimeout, p -> policy.totalTimeout = (int) p.toMillis());
-        whenPresent(policyDefault.timeoutDelay, p -> policy.timeoutDelay = (int) p.toMillis());
-        whenPresent(policyDefault.maxRetries, p -> policy.maxRetries = p);
-        whenPresent(policyDefault.sleepBetweenRetries, p -> policy.sleepBetweenRetries = (int) p.toMillis());
-        whenPresent(policyDefault.sendKey, p -> policy.sendKey = p);
-    }
-
-    private <T> void whenPresent(T param, Consumer<T> consumer) {
-        if (param != null)
-            consumer.accept(param);
-    }
 }

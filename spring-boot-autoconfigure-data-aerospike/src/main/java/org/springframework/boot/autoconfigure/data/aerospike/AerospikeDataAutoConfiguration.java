@@ -19,13 +19,13 @@ package org.springframework.boot.autoconfigure.data.aerospike;
 import com.aerospike.client.IAerospikeClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.utils.HasNamespaceProperty;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.aerospike.repository.AerospikeRepository;
 
@@ -40,11 +40,9 @@ import org.springframework.data.aerospike.repository.AerospikeRepository;
 // we want sync context to be loaded when only sync client is on classpath
 @ConditionalOnMissingClass("com.aerospike.client.reactor.IAerospikeReactorClient")
 @ConditionalOnClass({IAerospikeClient.class, AerospikeRepository.class})
-@ConditionalOnSingleCandidate(IAerospikeClient.class)
-@ConditionalOnProperty("spring.data.aerospike.namespace")
+@Conditional(HasNamespaceProperty.class)
 @EnableConfigurationProperties(AerospikeDataProperties.class)
 @AutoConfigureAfter({AerospikeAutoConfiguration.class})
-@Import({AerospikeDataConfiguration.class, AerospikeCommonDataConfiguration.class})
+@Import(AerospikeDataConfiguration.class)
 public class AerospikeDataAutoConfiguration {
-
 }

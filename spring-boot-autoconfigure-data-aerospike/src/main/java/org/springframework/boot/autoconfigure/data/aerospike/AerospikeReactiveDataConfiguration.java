@@ -16,87 +16,59 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import com.aerospike.client.reactor.IAerospikeReactorClient;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.aerospike.config.AerospikeSettings;
-import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
-import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
-import org.springframework.data.aerospike.core.ReactiveAerospikeTemplate;
-import org.springframework.data.aerospike.index.AerospikeIndexResolver;
-import org.springframework.data.aerospike.index.ReactiveAerospikePersistenceEntityIndexCreator;
-import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
-import org.springframework.data.aerospike.query.FilterExpressionsBuilder;
-import org.springframework.data.aerospike.query.ReactorQueryEngine;
-import org.springframework.data.aerospike.query.StatementBuilder;
-import org.springframework.data.aerospike.query.cache.IndexInfoParser;
-import org.springframework.data.aerospike.query.cache.IndexesCacheUpdater;
-import org.springframework.data.aerospike.query.cache.InternalIndexOperations;
-import org.springframework.data.aerospike.query.cache.ReactorIndexRefresher;
-import org.springframework.data.aerospike.server.version.ServerVersionSupport;
+import com.aerospike.client.Host;
+import com.aerospike.client.async.EventLoops;
+import com.aerospike.client.async.NioEventLoops;
+import com.aerospike.client.policy.ClientPolicy;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.aerospike.AerospikeProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.aerospike.config.AbstractReactiveAerospikeDataConfiguration;
+import org.springframework.data.aerospike.config.AerospikeDataSettings;
+
+import java.util.Collection;
+
+import static org.springframework.boot.autoconfigure.utils.AerospikeConfigurationUtils.*;
 
 /**
- * Configure Spring Data's Reactive Aerospike support.
+ * Configure Spring Data's Aerospike support.
+ * Imported only when namespace property is given.
  *
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@AutoConfiguration
-class AerospikeReactiveDataConfiguration {
+@Slf4j
+@Configuration
+public class AerospikeReactiveDataConfiguration extends AbstractReactiveAerospikeDataConfiguration {
 
-    @Bean(name = "reactiveAerospikeTemplate")
-    @ConditionalOnMissingBean(name = "reactiveAerospikeTemplate")
-    public ReactiveAerospikeTemplate reactiveAerospikeTemplate(MappingAerospikeConverter mappingAerospikeConverter,
-                                                               AerospikeDataProperties aerospikeDataProperties,
-                                                               AerospikeMappingContext aerospikeMappingContext,
-                                                               AerospikeExceptionTranslator aerospikeExceptionTranslator,
-                                                               IAerospikeReactorClient aerospikeReactorClient,
-                                                               ReactorQueryEngine reactorQueryEngine,
-                                                               ReactorIndexRefresher reactorIndexRefresher,
-                                                               ServerVersionSupport serverVersionSupport) {
-        return new ReactiveAerospikeTemplate(aerospikeReactorClient, aerospikeDataProperties.getNamespace(),
-                mappingAerospikeConverter, aerospikeMappingContext,
-                aerospikeExceptionTranslator, reactorQueryEngine, reactorIndexRefresher, serverVersionSupport);
+    @Autowired
+    private AerospikeProperties properties;
+    @Autowired
+    private AerospikeDataProperties dataProperties;
+
+    @Override
+    protected Collection<Host> getHosts() {
+        return getClientHosts(properties);
     }
 
-    @Bean(name = "reactiveAerospikeQueryEngine")
-    @ConditionalOnMissingBean(name = "reactiveAerospikeQueryEngine")
-    public ReactorQueryEngine reactiveAerospikeQueryEngine(IAerospikeReactorClient aerospikeReactorClient,
-                                                           AerospikeDataProperties aerospikeDataProperties,
-                                                           FilterExpressionsBuilder filterExpressionsBuilder,
-                                                           StatementBuilder statementBuilder,
-                                                           AerospikeSettings settings) {
-        ReactorQueryEngine queryEngine = new ReactorQueryEngine(aerospikeReactorClient, statementBuilder,
-                filterExpressionsBuilder, settings.getDataSettings());
-        queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
-        queryEngine.setQueryMaxRecords(aerospikeDataProperties.getQueryMaxRecords());
-        return queryEngine;
+    @Override
+    protected String nameSpace() {
+        return getNamespace(dataProperties);
     }
 
-    @Bean(name = "reactiveAerospikeIndexRefresher")
-    @ConditionalOnMissingBean(name = "reactiveAerospikeIndexRefresher")
-    public ReactorIndexRefresher reactiveAerospikeIndexRefresher(IAerospikeReactorClient aerospikeReactorClient,
-                                                                 IndexesCacheUpdater indexesCacheUpdater,
-                                                                 ServerVersionSupport serverVersionSupport) {
-        ReactorIndexRefresher refresher = new ReactorIndexRefresher(aerospikeReactorClient, aerospikeReactorClient.getInfoPolicyDefault(),
-                new InternalIndexOperations(new IndexInfoParser()), indexesCacheUpdater, serverVersionSupport);
-        refresher.refreshIndexes().block();
-        return refresher;
+    @Override
+    protected EventLoops eventLoops() {
+        return new NioEventLoops();
     }
 
-    @Bean
-    @ConditionalOnMissingBean(name = "reactiveAerospikePersistenceEntityIndexCreator")
-    public ReactiveAerospikePersistenceEntityIndexCreator reactiveAerospikePersistenceEntityIndexCreator(
-            AerospikeDataProperties aerospikeDataProperties,
-            @Lazy ObjectProvider<ReactiveAerospikeTemplate> template,
-            ObjectProvider<AerospikeMappingContext> aerospikeMappingContext,
-            AerospikeIndexResolver aerospikeIndexResolver) {
-        return new ReactiveAerospikePersistenceEntityIndexCreator(aerospikeMappingContext,
-                aerospikeDataProperties.isCreateIndexesOnStartup(),
-                aerospikeIndexResolver,
-                template);
+    @Override
+    protected ClientPolicy getClientPolicy() {
+        return getClientPolicyConfig(super.getClientPolicy(), properties);
+    }
+
+    @Override
+    protected void configureDataSettings(AerospikeDataSettings aerospikeDataSettings) {
+        getDataSettings(dataProperties, aerospikeDataSettings);
     }
 }

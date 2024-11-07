@@ -16,114 +16,52 @@
 
 package org.springframework.boot.autoconfigure.data.aerospike;
 
-import com.aerospike.client.IAerospikeClient;
+import com.aerospike.client.Host;
+import com.aerospike.client.policy.ClientPolicy;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.aerospike.AerospikeProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.aerospike.config.AbstractAerospikeDataConfiguration;
 import org.springframework.data.aerospike.config.AerospikeDataSettings;
-import org.springframework.data.aerospike.config.AerospikeSettings;
-import org.springframework.data.aerospike.convert.MappingAerospikeConverter;
-import org.springframework.data.aerospike.core.AerospikeExceptionTranslator;
-import org.springframework.data.aerospike.core.AerospikeTemplate;
-import org.springframework.data.aerospike.index.AerospikeIndexResolver;
-import org.springframework.data.aerospike.index.AerospikePersistenceEntityIndexCreator;
-import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
-import org.springframework.data.aerospike.query.FilterExpressionsBuilder;
-import org.springframework.data.aerospike.query.QueryEngine;
-import org.springframework.data.aerospike.query.StatementBuilder;
-import org.springframework.data.aerospike.query.cache.IndexInfoParser;
-import org.springframework.data.aerospike.query.cache.IndexRefresher;
-import org.springframework.data.aerospike.query.cache.IndexesCacheUpdater;
-import org.springframework.data.aerospike.query.cache.InternalIndexOperations;
-import org.springframework.data.aerospike.server.version.ServerVersionSupport;
+
+import java.util.Collection;
+
+import static org.springframework.boot.autoconfigure.utils.AerospikeConfigurationUtils.*;
 
 /**
  * Configure Spring Data's Aerospike support.
+ * Imported only when namespace property is given.
  *
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
 @Slf4j
-@AutoConfiguration
-class AerospikeDataConfiguration {
+@Configuration
+public class AerospikeDataConfiguration extends AbstractAerospikeDataConfiguration {
 
-    @Bean(name = "aerospikeTemplate")
-    @ConditionalOnMissingBean(name = "aerospikeTemplate")
-    public AerospikeTemplate aerospikeTemplate(IAerospikeClient aerospikeClient,
-                                               AerospikeDataProperties aerospikeDataProperties,
-                                               MappingAerospikeConverter mappingAerospikeConverter,
-                                               AerospikeMappingContext aerospikeMappingContext,
-                                               AerospikeExceptionTranslator aerospikeExceptionTranslator,
-                                               QueryEngine queryEngine, IndexRefresher indexRefresher,
-                                               ServerVersionSupport serverVersionSupport) {
-        return new AerospikeTemplate(aerospikeClient,
-                aerospikeDataProperties.getNamespace(),
-                mappingAerospikeConverter,
-                aerospikeMappingContext,
-                aerospikeExceptionTranslator, queryEngine, indexRefresher,
-                serverVersionSupport);
+    @Autowired
+    private AerospikeProperties properties;
+    @Autowired
+    private AerospikeDataProperties dataProperties;
+
+    @Override
+    protected Collection<Host> getHosts() {
+        return getClientHosts(properties);
     }
 
-    @Bean(name = "aerospikeQueryEngine")
-    @ConditionalOnMissingBean(name = "aerospikeQueryEngine")
-    public QueryEngine aerospikeQueryEngine(IAerospikeClient aerospikeClient,
-                                            AerospikeDataProperties aerospikeDataProperties,
-                                            FilterExpressionsBuilder filterExpressionsBuilder,
-                                            StatementBuilder statementBuilder, AerospikeSettings settings) {
-        QueryEngine queryEngine = new QueryEngine(aerospikeClient, statementBuilder, filterExpressionsBuilder,
-                settings.getDataSettings());
-        queryEngine.setScansEnabled(aerospikeDataProperties.isScansEnabled());
-        queryEngine.setQueryMaxRecords(aerospikeDataProperties.getQueryMaxRecords());
-        return queryEngine;
+    @Override
+    protected String nameSpace() {
+        return getNamespace(dataProperties);
     }
 
-    @Bean(name = "aerospikeIndexRefresher")
-    @ConditionalOnMissingBean(name = "aerospikeIndexRefresher")
-    public IndexRefresher indexRefresher(IAerospikeClient aerospikeClient, IndexesCacheUpdater indexesCacheUpdater,
-                                         ServerVersionSupport serverVersionSupport,
-                                         AerospikeDataProperties aerospikeDataProperties,
-                                         AerospikeDataSettings dataSettings) {
-        IndexRefresher refresher = new IndexRefresher(aerospikeClient, aerospikeClient.getInfoPolicyDefault(),
-                new InternalIndexOperations(new IndexInfoParser()), indexesCacheUpdater, serverVersionSupport);
-        refresher.refreshIndexes();
-        int refreshFrequency = aerospikeDataSettings(aerospikeDataProperties, dataSettings).getIndexCacheRefreshSeconds();
-        processCacheRefreshFrequency(refreshFrequency, refresher);
-        return refresher;
+    @Override
+    protected ClientPolicy getClientPolicy() {
+        return getClientPolicyConfig(super.getClientPolicy(), properties);
     }
 
-    private void processCacheRefreshFrequency(int indexCacheRefreshSeconds, IndexRefresher indexRefresher) {
-        if (indexCacheRefreshSeconds <= 0) {
-            log.info("Periodic index cache refreshing is not scheduled, interval ({}) is <= 0",
-                    indexCacheRefreshSeconds);
-        } else {
-            indexRefresher.scheduleRefreshIndexes(indexCacheRefreshSeconds);
-        }
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(name = "aerospikePersistenceEntityIndexCreator")
-    public AerospikePersistenceEntityIndexCreator aerospikePersistenceEntityIndexCreator(
-            AerospikeDataProperties aerospikeDataProperties,
-            @Lazy ObjectProvider<AerospikeTemplate> template,
-            ObjectProvider<AerospikeMappingContext> aerospikeMappingContext,
-            AerospikeIndexResolver aerospikeIndexResolver) {
-        return new AerospikePersistenceEntityIndexCreator(aerospikeMappingContext,
-                aerospikeDataProperties.isCreateIndexesOnStartup(), aerospikeIndexResolver, template);
-    }
-
-    private AerospikeDataSettings aerospikeDataSettings(AerospikeDataProperties aerospikeDataProperties,
-                                                        AerospikeDataSettings dataSettings) {
-        return configureDataSettings(dataSettings, aerospikeDataProperties);
-    }
-
-    private AerospikeDataSettings configureDataSettings(AerospikeDataSettings dataSettings,
-                                                        AerospikeDataProperties aerospikeDataProperties) {
-        dataSettings.setScansEnabled(aerospikeDataProperties.isScansEnabled());
-        dataSettings.setCreateIndexesOnStartup(aerospikeDataProperties.isCreateIndexesOnStartup());
-        dataSettings.setWriteSortedMaps(aerospikeDataProperties.isWriteSortedMaps());
-        return dataSettings;
+    @Override
+    protected void configureDataSettings(AerospikeDataSettings aerospikeDataSettings) {
+        getDataSettings(dataProperties, aerospikeDataSettings);
     }
 }
