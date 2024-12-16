@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.data.aerospike.city.City;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.aerospike.convert.AerospikeCustomConversions;
+import org.springframework.data.aerospike.convert.AerospikeCustomConverters;
 import org.springframework.data.aerospike.query.cache.ReactorIndexRefresher;
 import org.springframework.data.aerospike.server.version.ServerVersionSupport;
 
@@ -60,9 +60,9 @@ public class AerospikeTestConfigurations {
     @AutoConfiguration
     public static class CustomConversionsConfig {
 
-        @Bean(name = "aerospikeCustomConversions")
-        AerospikeCustomConversions myCustomConversions() {
-            return new AerospikeCustomConversions(List.of(new CityToStringConverter()));
+        @Bean
+        AerospikeCustomConverters myCustomConversions() {
+            return new AerospikeCustomConverters(List.of(new CityToStringConverter()));
         }
     }
 

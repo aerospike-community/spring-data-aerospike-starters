@@ -71,7 +71,7 @@ public class AerospikeReactiveDataAutoConfigurationTest {
                 });
     }
 
-//    @Test // TODO: requires ability to configure typeKey
+    @Test
     public void classKeyDefault() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
@@ -80,16 +80,16 @@ public class AerospikeReactiveDataAutoConfigurationTest {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
                     String typeKey = getField(aliasAccessor, "classKey");
 
-                    assertThat(typeKey).isEqualTo(AerospikeConverter.CLASS_KEY);
+                    assertThat(typeKey).isEqualTo(AerospikeConverter.CLASS_KEY_DEFAULT);
                 });
     }
 
-//    @Test
+    @Test
     public void classKeyCanBeCustomized() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withPropertyValues("spring.data.aerospike.type-key=++amazing++")
+                .withPropertyValues("spring.data.aerospike.class-key=++amazing++")
                 .run((context) -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
                     String typeKey = getField(aliasAccessor, "classKey");
@@ -98,16 +98,12 @@ public class AerospikeReactiveDataAutoConfigurationTest {
                 });
     }
 
-//    @Test
-    // TODO: there already is CustomConversions bean, needs a change: override the method
-    // or change SpringData Aerospike
+    @Test
     public void customConversions() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withUserConfiguration(AerospikeTestConfigurations.CustomConversionsConfig.class,
-                        AerospikeClientMockConfiguration.class, MockReactiveIndexRefresher.class,
-                        AerospikeServerVersionSupportMockConfiguration.class)
+                .withUserConfiguration(AerospikeTestConfigurations.CustomConversionsConfig.class)
                 .run(context -> {
                     MappingAerospikeConverter converter = context.getBean(MappingAerospikeConverter.class);
                     assertThat(converter.getConversionService().canConvert(City.class, String.class)).isTrue();

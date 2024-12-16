@@ -17,6 +17,7 @@
 package org.springframework.boot.autoconfigure.data.aerospike;
 
 import com.aerospike.client.AerospikeClient;
+import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.reactor.AerospikeReactorClient;
 import com.aerospike.client.reactor.IAerospikeReactorClient;
 import com.aerospike.client.reactor.retry.AerospikeReactorRetryClient;
@@ -84,16 +85,16 @@ public class AerospikeDataAutoConfigurationTest {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
                     String classKey = getField(aliasAccessor, "classKey");
 
-                    assertThat(classKey).isEqualTo(AerospikeConverter.CLASS_KEY);
+                    assertThat(classKey).isEqualTo(AerospikeConverter.CLASS_KEY_DEFAULT);
                 });
     }
 
-//    @Test // TODO: requires ability to configure typeKey
+    @Test
     public void typeKeyCanBeCustomized() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withPropertyValues("spring.data.aerospike.type-key=++amazing++")
+                .withPropertyValues("spring.data.aerospike.class-key=++amazing++")
                 .run((context) -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
                     String typeKey = getField(aliasAccessor, "classKey");
@@ -102,12 +103,12 @@ public class AerospikeDataAutoConfigurationTest {
                 });
     }
 
-//    @Test
+    @Test
     public void typeKeyCanBeNull() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
                 .withPropertyValues("spring.data.aerospike.namespace=TEST")
-                .withPropertyValues("spring.data.aerospike.type-key=")
+                .withPropertyValues("spring.data.aerospike.class-key=")
                 .run((context) -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
                     String typeKey = getField(aliasAccessor, "classKey");
@@ -116,9 +117,7 @@ public class AerospikeDataAutoConfigurationTest {
                 });
     }
 
-//    @Test
-    // TODO: there already is CustomConversions bean, needs a change: override the method
-    // or change SpringData Aerospike
+    @Test
     public void customConversions() {
         contextRunner
                 .withPropertyValues("spring.aerospike.hosts=localhost:3000")
@@ -127,6 +126,27 @@ public class AerospikeDataAutoConfigurationTest {
                 .run(context -> {
                     MappingAerospikeConverter converter = context.getBean(MappingAerospikeConverter.class);
                     assertThat(converter.getConversionService().canConvert(City.class, String.class)).isTrue();
+                });
+    }
+
+    @Test
+    public void sendKeyPropertyIsRead() {
+        contextRunner
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000")
+                .withPropertyValues("spring.data.aerospike.namespace=TEST")
+                .withPropertyValues("spring.aerospike.write.sendKey=false")
+                .run(context -> {
+                    IAerospikeClient client = context.getBean(IAerospikeClient.class);
+                    assertThat(client.getWritePolicyDefault().sendKey).isFalse();
+                });
+
+        contextRunner
+                .withPropertyValues("spring.aerospike.hosts=localhost:3000")
+                .withPropertyValues("spring.data.aerospike.namespace=TEST")
+                .withPropertyValues("spring.aerospike.write.sendKey=true")
+                .run(context -> {
+                    IAerospikeClient client = context.getBean(IAerospikeClient.class);
+                    assertThat(client.getWritePolicyDefault().sendKey).isTrue();
                 });
     }
 

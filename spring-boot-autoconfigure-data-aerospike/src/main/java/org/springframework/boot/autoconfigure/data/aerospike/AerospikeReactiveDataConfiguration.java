@@ -58,7 +58,7 @@ public class AerospikeReactiveDataConfiguration extends AbstractReactiveAerospik
     }
 
     @Override
-    protected EventLoops eventLoops() {
+    public EventLoops eventLoops() {
         return new NioEventLoops();
     }
 

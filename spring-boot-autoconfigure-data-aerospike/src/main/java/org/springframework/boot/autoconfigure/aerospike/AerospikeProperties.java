@@ -157,7 +157,7 @@ public class AerospikeProperties {
         public Duration sleepBetweenRetries;
 
         /**
-         * If the key is sent on a write, the key will be stored with the record on the server.
+         * If the key is sent in a write operation, it will be stored with the record on the server.
          */
         public Boolean sendKey;
     }

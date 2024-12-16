@@ -32,6 +32,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @AutoConfiguration
 @ConditionalOnClass(IAerospikeClient.class)
 @ConditionalOnProperty("spring.aerospike.hosts")
-@EnableConfigurationProperties({AerospikeProperties.class, AerospikeDataProperties.class}) // TODO: shoud data properties be here?
+@EnableConfigurationProperties({AerospikeProperties.class, AerospikeDataProperties.class}) // TODO: should data properties be here?
 public class AerospikeAutoConfiguration {
 }

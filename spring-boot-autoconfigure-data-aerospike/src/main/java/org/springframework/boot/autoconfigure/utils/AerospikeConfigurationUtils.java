@@ -59,6 +59,9 @@ public class AerospikeConfigurationUtils {
         clientPolicy.batchUDFPolicyDefault = setupBatchUDFPolicy(properties);
 //        aerospikeEventLoops.ifPresent(loops -> clientPolicy.eventLoops = loops); // TODO
 
+//        clientPolicy.user = "tester";
+//        clientPolicy.password = "psw";
+
         return clientPolicy;
     }
 
