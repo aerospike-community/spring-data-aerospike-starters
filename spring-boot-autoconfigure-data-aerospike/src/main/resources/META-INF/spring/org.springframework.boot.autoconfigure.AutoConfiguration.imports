@@ -1,6 +1,0 @@
-org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration
-org.springframework.boot.autoconfigure.data.aerospike.AerospikeDataAutoConfiguration
-org.springframework.boot.autoconfigure.aerospike.AerospikeClientConfiguration
-org.springframework.boot.autoconfigure.data.aerospike.AerospikeRepositoriesAutoConfiguration
-org.springframework.boot.autoconfigure.data.aerospike.AerospikeReactiveDataAutoConfiguration
-org.springframework.boot.autoconfigure.data.aerospike.AerospikeReactiveRepositoriesAutoConfiguration

@@ -1,0 +1,112 @@
+/*
+ * Copyright 2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.springframework.boot.aerospike.data;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.aerospike.data.city.ReactiveCityRepository;
+import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.aerospike.data.city.City;
+import org.springframework.boot.aerospike.data.city.CityRepository;
+import org.springframework.boot.aerospike.data.empty.EmptyDataPackage;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.aerospike.core.AerospikeTemplate;
+import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
+import org.springframework.data.mapping.context.MappingContext;
+
+/**
+ * Tests for {@link AerospikeRepositoriesAutoConfiguration}.
+ *
+ * @author Igor Ermolenko
+ */
+public class AerospikeRepositoriesAutoConfigurationTest {
+    private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+            .withConfiguration(AutoConfigurations.of(AerospikeRepositoriesAutoConfiguration.class,
+                    MockConfiguration.class));
+
+    @Test
+    public void repositoryIsCreated() {
+        contextRunner
+                .withUserConfiguration(DefaultConfiguration.class)
+                .run(context -> {
+                    Assertions.assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
+                    Assertions.assertThat(context).hasSingleBean(CityRepository.class);
+                });
+    }
+
+    @Test
+    public void repositoryIsNotCreatedWhenRepositoryInterfaceDoesNotExists() {
+        contextRunner
+                .withUserConfiguration(NoRepositoryConfiguration.class)
+                .run(context -> {
+                    Assertions.assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
+                    Assertions.assertThat(context).doesNotHaveBean(CityRepository.class);
+                });
+    }
+
+    @Test
+    public void repositoryIsNotCreatedForTypeReactive() {
+        contextRunner
+                .withUserConfiguration(DefaultConfiguration.class)
+                .withPropertyValues("spring.data.aerospike.repositories.type=reactive")
+                .run(context -> {
+                    Assertions.assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
+                    Assertions.assertThat(context).doesNotHaveBean(CityRepository.class);
+                });
+    }
+
+    @Test
+    public void repositoryIsNotCreatedForTypeNone() {
+        contextRunner
+                .withUserConfiguration(DefaultConfiguration.class)
+                .withPropertyValues("spring.data.aerospike.repositories.type=none")
+                .run(context -> {
+                    Assertions.assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
+                    Assertions.assertThat(context).doesNotHaveBean(CityRepository.class);
+                });
+    }
+
+
+    @Configuration
+    @TestAutoConfigurationPackage(City.class)
+    static class DefaultConfiguration {
+    }
+
+    @Configuration
+    @TestAutoConfigurationPackage(EmptyDataPackage.class)
+    static class NoRepositoryConfiguration {
+    }
+
+    @Configuration
+    static class MockConfiguration {
+        @Bean
+        public AerospikeTemplate aerospikeTemplate() {
+            AerospikeMappingContext context = new AerospikeMappingContext();
+            AerospikeTemplate mock = Mockito.mock(AerospikeTemplate.class);
+            Mockito.when(mock.getMappingContext()).thenReturn((MappingContext) context);
+            return mock;
+        }
+
+        @Bean
+        public MappingContext aerospikeMappingContext() {
+            return Mockito.mock(MappingContext.class);
+        }
+    }
+}
