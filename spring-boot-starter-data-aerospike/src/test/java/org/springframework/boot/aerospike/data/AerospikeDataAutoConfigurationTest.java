@@ -49,9 +49,8 @@ import static org.springframework.boot.aerospike.data.TestUtils.getField;
 public class AerospikeDataAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withClassLoader(new FilteredClassLoader(IAerospikeReactorClient.class))
-            .withConfiguration(AutoConfigurations.of(
-                    AerospikeAutoConfiguration.class, AerospikeDataAutoConfiguration.class));
+            .withConfiguration(
+                    AutoConfigurations.of(AerospikeAutoConfiguration.class, AerospikeDataAutoConfiguration.class));
 
     @Test
     public void aerospikeTemplateAndClientAreNotSetupWhenNoHostsPropertyGiven() {

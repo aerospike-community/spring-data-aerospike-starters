@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * value.
  *
  * @author Phillip Webb
- *
+ * <p>
  * Copied from spring-boot project
  * https://github.com/spring-projects/spring-boot/issues/6718
  */
@@ -40,6 +40,5 @@ import java.lang.annotation.Target;
 @Import(TestAutoConfigurationPackageRegistrar.class)
 public @interface TestAutoConfigurationPackage {
 
-	Class<?> value();
-
+    Class<?> value();
 }

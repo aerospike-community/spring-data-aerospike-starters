@@ -24,6 +24,7 @@ import org.springframework.boot.aerospike.reactive.data.city.CityRepository;
 import org.springframework.boot.aerospike.reactive.data.city.ReactiveCityRepository;
 import org.springframework.boot.aerospike.reactive.data.empty.EmptyDataPackage;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,9 +38,11 @@ import org.springframework.data.mapping.context.MappingContext;
  * @author Igor Ermolenko
  */
 public class AerospikeReactiveRepositoriesAutoConfigurationTest {
-    private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(AerospikeReactiveRepositoriesAutoConfiguration.class,
-                    MockConfiguration.class));
+    private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+            .withConfiguration(AutoConfigurations.of(AerospikeAutoConfiguration.class,
+                    AerospikeReactiveDataAutoConfiguration.class, AerospikeReactiveRepositoriesAutoConfiguration.class))
+            .withPropertyValues("spring.aerospike.hosts=localhost:3000")
+            .withPropertyValues("spring.data.aerospike.namespace=TEST");
 
     @Test
     public void reactiveRepositoryIsCreated() {
@@ -93,23 +96,4 @@ public class AerospikeReactiveRepositoriesAutoConfigurationTest {
     @TestAutoConfigurationPackage(EmptyDataPackage.class)
     static class NoRepositoryConfiguration {
     }
-
-    @Configuration
-    static class MockConfiguration {
-
-        @Bean
-        public ReactiveAerospikeTemplate reactiveAerospikeTemplate() {
-            AerospikeMappingContext context = new AerospikeMappingContext();
-            ReactiveAerospikeTemplate mock = Mockito.mock(ReactiveAerospikeTemplate.class);
-            Mockito.when(mock.getMappingContext()).thenReturn((MappingContext) context);
-            return mock;
-        }
-
-
-        @Bean
-        public MappingContext aerospikeMappingContext() {
-            return Mockito.mock(MappingContext.class);
-        }
-    }
-
 }
