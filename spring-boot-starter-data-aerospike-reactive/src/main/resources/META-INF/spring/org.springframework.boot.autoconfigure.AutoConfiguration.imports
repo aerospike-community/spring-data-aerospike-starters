@@ -1,0 +1,2 @@
+org.springframework.boot.aerospike.reactive.data.AerospikeReactiveDataAutoConfiguration
+org.springframework.boot.aerospike.reactive.data.AerospikeReactiveRepositoriesAutoConfiguration

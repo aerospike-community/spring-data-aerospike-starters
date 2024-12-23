@@ -9,6 +9,11 @@ image:https://github.com/aerospike-community/spring-data-aerospike-starters/work
 
 |===
 |`spring-data-aerospike-starters` |`spring-data-aerospike` |`aerospike-client` |`aerospike-reactor-client`
+|0.17.x
+|5.0.x
+|7.2.x
+|7.1.x
+
 |0.15.x, 0.16.x
 |4.8.x
 |7.2.x
@@ -108,11 +113,11 @@ spring.data.aerospike.repositories.type=NONE
 
 == Example
 
-You can find usage example in {repo-master}/spring-boot-starter-data-aerospike-example[_spring-boot-starter-data-aerospike-example_] module.
+You can find usage example in {repo-master}/spring-boot-starter-example-aerospike[_spring-boot-starter-example-aerospike_] module.
 
-Both reactive and sync examples are based on `embedded-aerospike` dependency usage (which requires docker to be running on the machine). This is the only requirement to be able to run the tests on your machine.
+Both reactive and sync examples are based on `embedded-aerospike` dependency usage (which requires Docker to be running on the machine). This is the only requirement to be able to run the tests on your machine.
 
-If you want to run the tests in these modules against your Aerospike instance follow the steps:
+If you want to run the tests in these modules against your Aerospike instance follow these steps:
 
-. Update `application.properties` file with the required Aerospike settings (host, port, namespace). This will point spring-data to your Aerospike instance.
-. Update with `bootstrap.properties` file with `embedded.containers.enabled=false`. This will disable setup of embedded Aerospike.
+. Update `application.properties` file with the required Aerospike settings (hosts, namespace). This will point spring-data to your Aerospike instance.
+. Update `bootstrap.properties` file with `embedded.containers.enabled=false`. This will disable setup of embedded Aerospike.

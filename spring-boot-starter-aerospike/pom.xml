@@ -9,9 +9,9 @@
         <version>${revision}</version>
     </parent>
 
-    <name>Spring Data Aerospike Starters: spring-boot-starter-data-aerospike</name>
-    <artifactId>spring-boot-starter-data-aerospike</artifactId>
-    <description>Starter for using Spring Data Aerospike</description>
+    <name>Spring Data Aerospike Starters: spring-boot-starter-aerospike</name>
+    <artifactId>spring-boot-starter-aerospike</artifactId>
+    <description>Starter for using Aerospike Java client</description>
 
     <dependencies>
         <dependency>
@@ -24,21 +24,12 @@
         </dependency>
         <dependency>
             <groupId>com.aerospike</groupId>
-            <artifactId>spring-data-aerospike</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.aerospike</groupId>
-            <artifactId>spring-boot-starter-aerospike</artifactId>
+            <artifactId>aerospike-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
