@@ -23,8 +23,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.data.aerospike.AerospikeDataProperties;
-import org.springframework.boot.autoconfigure.util.IsClientOnly;
-import org.springframework.boot.autoconfigure.util.IsNotClientOnly;
+import org.springframework.boot.autoconfigure.condition.IsClientOnly;
+import org.springframework.boot.autoconfigure.condition.IsNotClientOnly;
 import org.springframework.boot.client.autoconfigure.AerospikeClientConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Conditional;
@@ -40,11 +40,11 @@ import org.springframework.data.aerospike.repository.AerospikeRepository;
 @AutoConfiguration
 @ConditionalOnClass({IAerospikeClient.class, AerospikeRepository.class})
 @AutoConfigureAfter({AerospikeAutoConfiguration.class})
-@Import(AerospikeDataConfiguration.class)
 public class AerospikeDataAutoConfiguration {
 
     @Conditional(IsNotClientOnly.class)
     @EnableConfigurationProperties(AerospikeDataProperties.class)
+    @Import(AerospikeDataConfiguration.class)
     static class DataConfigurationImport {
     }
 

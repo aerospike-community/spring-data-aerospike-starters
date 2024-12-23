@@ -1,4 +1,4 @@
-package org.springframework.boot.autoconfigure.util;
+package org.springframework.boot.autoconfigure.condition;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;

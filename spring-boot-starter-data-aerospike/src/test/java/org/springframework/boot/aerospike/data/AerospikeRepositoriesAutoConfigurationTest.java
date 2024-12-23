@@ -18,7 +18,6 @@ package org.springframework.boot.aerospike.data;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.aerospike.data.city.ReactiveCityRepository;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.aerospike.data.city.City;
@@ -26,11 +25,10 @@ import org.springframework.boot.aerospike.data.city.CityRepository;
 import org.springframework.boot.aerospike.data.empty.EmptyDataPackage;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeAutoConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.aerospike.core.AerospikeTemplate;
-import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
-import org.springframework.data.mapping.context.MappingContext;
+
+import static org.springframework.data.aerospike.config.AerospikeDataConfigurationSupport.CONFIG_PREFIX_CONNECTION;
+import static org.springframework.data.aerospike.config.AerospikeDataConfigurationSupport.CONFIG_PREFIX_DATA;
 
 /**
  * Tests for {@link AerospikeRepositoriesAutoConfiguration}.
@@ -41,8 +39,8 @@ public class AerospikeRepositoriesAutoConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(AerospikeAutoConfiguration.class,
                     AerospikeDataAutoConfiguration.class, AerospikeRepositoriesAutoConfiguration.class))
-            .withPropertyValues("spring.aerospike.hosts=localhost:3000")
-            .withPropertyValues("spring.data.aerospike.namespace=TEST");
+            .withPropertyValues(CONFIG_PREFIX_CONNECTION + ".hosts=localhost:3000")
+            .withPropertyValues(CONFIG_PREFIX_DATA + ".namespace=TEST");
 
     @Test
     public void repositoryIsCreated() {
@@ -68,7 +66,7 @@ public class AerospikeRepositoriesAutoConfigurationTest {
     public void repositoryIsNotCreatedForTypeReactive() {
         contextRunner
                 .withUserConfiguration(DefaultConfiguration.class)
-                .withPropertyValues("spring.data.aerospike.repositories.type=reactive")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".repositories.type=reactive")
                 .run(context -> {
                     Assertions.assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
                     Assertions.assertThat(context).doesNotHaveBean(CityRepository.class);
@@ -79,7 +77,7 @@ public class AerospikeRepositoriesAutoConfigurationTest {
     public void repositoryIsNotCreatedForTypeNone() {
         contextRunner
                 .withUserConfiguration(DefaultConfiguration.class)
-                .withPropertyValues("spring.data.aerospike.repositories.type=none")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".repositories.type=none")
                 .run(context -> {
                     Assertions.assertThat(context).doesNotHaveBean(ReactiveCityRepository.class);
                     Assertions.assertThat(context).doesNotHaveBean(CityRepository.class);
