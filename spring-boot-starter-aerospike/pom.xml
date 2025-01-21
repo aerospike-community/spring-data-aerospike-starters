@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>com.aerospike</groupId>
-            <artifactId>aerospike-client</artifactId>
+            <artifactId>aerospike-client-jdk8</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

@@ -63,7 +63,7 @@
                             <goal>deploy</goal>
                         </goals>
                         <configuration>
-                            <deploy>false</deploy>
+                            <skip>true</skip>
                         </configuration>
                     </execution>
                 </executions>
