@@ -15,8 +15,10 @@
     <description>Examples for using Spring Boot Data Aerospike Starter</description>
 
     <modules>
-        <module>sync-data</module>
-        <module>reactive-data</module>
+        <module>starter-example-client</module>
+        <module>starter-example-data</module>
+        <module>starter-example-reactive-client</module>
+        <module>starter-example-reactive-data</module>
     </modules>
 
     <properties>

@@ -14,7 +14,7 @@
     <version>${revision}</version>
 
     <name>Spring Data Aerospike Starters</name>
-    <description>Autoconfiguration project for Spring Data Aerospike.</description>
+    <description>Autoconfiguration project for Spring Data Aerospike</description>
     <url>https://github.com/aerospike-community/spring-data-aerospike-starters</url>
     <organization>
         <name>Aerospike Inc.</name>
