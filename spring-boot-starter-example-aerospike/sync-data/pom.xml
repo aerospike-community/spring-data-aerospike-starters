@@ -9,8 +9,8 @@
         <version>${revision}</version>
     </parent>
 
-    <name>Spring Data Aerospike Starters: spring-boot-starter-example-aerospike, sync</name>
-    <artifactId>sync-data</artifactId>
+    <name>Spring Data Aerospike Starters: spring-boot-starter-example-aerospike</name>
+    <artifactId>starter-example-data</artifactId>
 
     <dependencies>
         <dependency>

@@ -10,7 +10,7 @@
     </parent>
 
     <name>Spring Data Aerospike Starters: spring-boot-starter-example-aerospike, reactive client</name>
-    <artifactId>reactive-client</artifactId>
+    <artifactId>starter-example-reactive-client</artifactId>
 
     <dependencies>
         <dependency>

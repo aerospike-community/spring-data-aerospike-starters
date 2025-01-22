@@ -20,13 +20,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import static org.springframework.data.aerospike.config.AerospikeDataConfigurationSupport.CONFIG_PREFIX_DATA;
+
 /**
  * Configuration properties for Spring Data Aerospike.
  *
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@ConfigurationProperties(prefix = "spring.data.aerospike")
+@ConfigurationProperties(prefix = CONFIG_PREFIX_DATA)
 @Getter
 @Setter
 public class AerospikeDataProperties {

@@ -9,5 +9,4 @@ public class SpringReactorAerospikeClientExampleApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringReactorAerospikeClientExampleApplication.class, args);
 	}
-
 }

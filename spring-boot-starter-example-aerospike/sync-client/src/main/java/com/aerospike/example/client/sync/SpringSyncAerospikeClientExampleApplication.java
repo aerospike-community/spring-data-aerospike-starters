@@ -9,5 +9,4 @@ public class SpringSyncAerospikeClientExampleApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringSyncAerospikeClientExampleApplication.class, args);
 	}
-
 }

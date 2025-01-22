@@ -17,6 +17,7 @@
 package org.springframework.boot.autoconfigure.aerospike;
 
 import com.aerospike.client.IAerospikeClient;
+import com.aerospike.client.async.NioEventLoops;
 import com.aerospike.client.policy.ClientPolicy;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -43,6 +44,8 @@ public class AerospikeAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ClientPolicy aerospikeClientPolicy(AerospikeProperties properties) {
-        return getClientPolicyConfig(new ClientPolicy(), properties);
+        ClientPolicy clientPolicy = new ClientPolicy();
+        clientPolicy.eventLoops = new NioEventLoops();
+        return getClientPolicyConfig(clientPolicy, properties);
     }
 }

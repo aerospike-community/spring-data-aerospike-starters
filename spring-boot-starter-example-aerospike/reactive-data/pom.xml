@@ -11,7 +11,7 @@
     </parent>
 
     <name>Spring Data Aerospike Starters: spring-boot-starter-example-aerospike, reactive</name>
-    <artifactId>reactive-data</artifactId>
+    <artifactId>starter-example-reactive-data</artifactId>
 
     <dependencies>
         <dependency>

@@ -18,7 +18,6 @@ package org.springframework.boot.aerospike.data;
 
 import com.aerospike.client.Host;
 import com.aerospike.client.policy.ClientPolicy;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

@@ -14,18 +14,17 @@ import org.springframework.boot.autoconfigure.data.aerospike.AerospikeDataProper
 import org.springframework.data.aerospike.config.AerospikeDataSettings;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class AerospikeConfigurationUtils {
 
-    public static Collection<Host> getClientHosts(AerospikeProperties properties) {
+    public static List<Host> getClientHosts(AerospikeProperties properties) {
         if (properties.getHosts() != null) {
             Host[] hosts = Host.parseHosts(properties.getHosts(), properties.getDefaultPort());
             return Arrays.stream(hosts).toList();
-        } else {
-            return null;
         }
+        return null;
     }
 
     public static ClientPolicy getClientPolicyConfig(ClientPolicy clientPolicy, AerospikeProperties properties) {
@@ -127,9 +126,8 @@ public class AerospikeConfigurationUtils {
     public static String getNamespace(AerospikeDataProperties dataProperties) {
         if (dataProperties.getNamespace() != null) {
             return dataProperties.getNamespace();
-        } else {
-            return null;
         }
+        return null;
     }
 
     public static void getDataSettings(AerospikeDataProperties dataProperties,

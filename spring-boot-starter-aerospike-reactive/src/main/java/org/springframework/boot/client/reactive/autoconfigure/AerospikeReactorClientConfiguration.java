@@ -32,12 +32,11 @@ import org.springframework.context.annotation.Conditional;
 import reactor.core.publisher.Flux;
 
 /**
- * {@link EnableAutoConfiguration Auto-configuration} for Aerospike client.
+ * {@link EnableAutoConfiguration Auto-configuration} for Aerospike Reactor client.
  * Loaded only for client-only modules or when no namespace property is given.
  *
  * @author Anastasiia Smirnova
  */
-//@EnableAutoConfiguration
 @AutoConfiguration
 @Conditional(IsClientOnly.class)
 @ConditionalOnClass({IAerospikeClient.class, IAerospikeReactorClient.class, Flux.class})
@@ -51,6 +50,5 @@ public class AerospikeReactorClientConfiguration {
     public IAerospikeReactorClient aerospikeReactorClient(IAerospikeClient aerospikeClient) {
         log.info("Initializing Aerospike Reactor Java client");
         return new AerospikeReactorClient(aerospikeClient);
-
     }
 }
