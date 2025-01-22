@@ -1,8 +1,13 @@
-package com.aerospike.example.sync;
+package com.aerospike.example;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
@@ -11,10 +16,10 @@ import static org.hamcrest.Matchers.hasSize;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(
-        classes = SyncSpringDataAerospikeExampleApplication.class,
+        classes = SpringDataAerospikeExampleApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-public class SyncIntegrationTest {
+public class IntegrationTest {
 
     @LocalServerPort
     int port;

@@ -1,5 +1,6 @@
-package com.aerospike.example.sync;
+package com.aerospike.example;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataRetrievalFailureException;
@@ -14,16 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
 import java.util.List;
 
 @Slf4j
 @RequestMapping("/sync")
 @RestController
-public class SyncCustomerController {
+public class CustomerController {
 
     @Autowired
-    private SyncCustomerRepository repository;
+    private CustomerRepository repository;
 
     @PostMapping("/customer")
     public Customer createCustomer(@Valid @RequestBody Customer customer) {

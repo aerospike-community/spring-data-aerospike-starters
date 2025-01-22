@@ -34,6 +34,7 @@ import org.springframework.data.aerospike.core.AerospikeTemplate;
 import org.springframework.data.aerospike.core.ReactiveAerospikeTemplate;
 import org.springframework.data.aerospike.mapping.AerospikeMappingContext;
 import org.springframework.data.util.TypeInformation;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.boot.aerospike.data.TestUtils.getField;
@@ -151,7 +152,7 @@ public class AerospikeDataAutoConfigurationTest {
                 .withPropertyValues(CONFIG_PREFIX_CONNECTION + ".hosts=localhost:3000")
                 .withPropertyValues(CONFIG_PREFIX_DATA + ".namespace=TEST")
                 .run(context -> {
-                    // In Spring Data Aerospike only the relevant flow beans are loaded (sync in this case)
+                    // In Spring Data Aerospike only the relevant flow beans are loaded
                     assertThat(context).doesNotHaveBean(ReactiveAerospikeTemplate.class);
                     assertThat(context).hasSingleBean(AerospikeTemplate.class);
                     assertThat(context).hasSingleBean(AerospikeDataProperties.class);

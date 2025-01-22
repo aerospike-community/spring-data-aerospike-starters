@@ -1,4 +1,4 @@
-package com.aerospike.example.sync;
+package com.aerospike.example;
 
 import com.aerospike.client.query.IndexCollectionType;
 import com.aerospike.client.query.IndexType;

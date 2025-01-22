@@ -1,4 +1,4 @@
-package com.aerospike.example.client.sync;
+package com.aerospike.example.client;
 
 import com.aerospike.client.AerospikeClient;
 import com.aerospike.client.Bin;
@@ -8,12 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Objects;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class SyncClientTest {
+public class ClientTest {
 
     @Autowired
     AerospikeClient client;
@@ -26,7 +24,7 @@ public class SyncClientTest {
     }
 
     @Test
-    void syncClientExists() {
+    void clientExists() {
         assertThat(client.getReadPolicyDefault()).isNotNull();
     }
 

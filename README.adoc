@@ -115,7 +115,7 @@ spring.data.aerospike.repositories.type=NONE
 
 You can find usage example in {repo-master}/spring-boot-starter-example-aerospike[_spring-boot-starter-example-aerospike_] module.
 
-Both reactive and sync examples are based on `embedded-aerospike` dependency usage (which requires Docker to be running on the machine). This is the only requirement to be able to run the tests on your machine.
+Examples are based on `embedded-aerospike` dependency usage (which requires Docker to be running on the machine). This is the only requirement to be able to run the tests on your machine.
 
 If you want to run the tests in these modules against your Aerospike instance follow these steps:
 
