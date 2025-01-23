@@ -19,4 +19,3 @@ public class Customer {
     private String lastName;
     private long age;
 }
-
