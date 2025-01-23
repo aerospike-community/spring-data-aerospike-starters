@@ -10,8 +10,8 @@
         <version>${revision}</version>
     </parent>
 
-    <name>Spring Data Aerospike Starters: spring-boot-starter-example-aerospike, reactive</name>
-    <artifactId>starter-example-reactive-data</artifactId>
+    <name>Spring Boot Starter Aerospike example, reactive</name>
+    <artifactId>starter-example-data-reactive</artifactId>
 
     <dependencies>
         <dependency>

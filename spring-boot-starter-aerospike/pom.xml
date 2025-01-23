@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.aerospike</groupId>
-            <artifactId>spring-boot-autoconfigure-aerospike-common</artifactId>
+            <artifactId>spring-boot-autoconfigure-data-aerospike</artifactId>
         </dependency>
         <dependency>
             <groupId>com.aerospike</groupId>

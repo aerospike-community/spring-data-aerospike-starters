@@ -9,8 +9,8 @@
         <version>${revision}</version>
     </parent>
 
-    <name>Spring Data Aerospike Starters: spring-boot-starter-example-aerospike, reactive client</name>
-    <artifactId>starter-example-reactive-client</artifactId>
+    <name>Spring Boot Starter Aerospike example, reactive client</name>
+    <artifactId>starter-example-client-reactive</artifactId>
 
     <dependencies>
         <dependency>

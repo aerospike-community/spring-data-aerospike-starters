@@ -16,9 +16,9 @@
 
     <modules>
         <module>starter-example-client</module>
+        <module>starter-example-client-reactive</module>
         <module>starter-example-data</module>
-        <module>starter-example-reactive-client</module>
-        <module>starter-example-reactive-data</module>
+        <module>starter-example-data-reactive</module>
     </modules>
 
     <properties>

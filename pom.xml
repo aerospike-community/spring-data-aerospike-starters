@@ -24,7 +24,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>spring-boot-autoconfigure-aerospike-common</module> <!-- Common configuration, internal dependency -->
+        <module>spring-boot-autoconfigure-data-aerospike</module> <!-- Common configuration, internal dependency -->
         <module>spring-boot-starter-aerospike</module> <!-- Aerospike client -->
         <module>spring-boot-starter-aerospike-reactive</module> <!-- Reactive Aerospike client -->
         <module>spring-boot-starter-data-aerospike</module>  <!-- Spring Data Aerospike flow -->
@@ -102,7 +102,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.aerospike</groupId>
-                <artifactId>spring-boot-autoconfigure-aerospike-common</artifactId>
+                <artifactId>spring-boot-autoconfigure-data-aerospike</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
