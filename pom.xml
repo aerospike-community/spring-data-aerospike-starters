@@ -27,8 +27,8 @@
         <module>spring-boot-autoconfigure-data-aerospike</module> <!-- Common configuration, internal dependency -->
         <module>spring-boot-starter-aerospike</module> <!-- Aerospike client -->
         <module>spring-boot-starter-aerospike-reactive</module> <!-- Reactive Aerospike client -->
-        <module>spring-boot-starter-data-aerospike</module>  <!-- Spring Data Aerospike flow -->
-        <module>spring-boot-starter-data-aerospike-reactive</module>  <!-- Reactive Spring Data Aerospike flow -->
+        <module>spring-boot-starter-data-aerospike</module>  <!-- Spring Data Aerospike -->
+        <module>spring-boot-starter-data-aerospike-reactive</module>  <!-- Reactive Spring Data Aerospike -->
         <module>spring-boot-starter-example-aerospike</module> <!-- Usage examples -->
     </modules>
 
