@@ -19,9 +19,10 @@ package org.springframework.boot.autoconfigure.aerospike;
 import com.aerospike.client.policy.AuthMode;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.data.aerospike.config.AerospikeDataSettings;
 
 import java.time.Duration;
+
+import static org.springframework.data.aerospike.config.AerospikeDataConfigurationSupport.CONFIG_PREFIX_CONNECTION;
 
 /**
  * Basic configuration properties for Aerospike client.
@@ -30,7 +31,7 @@ import java.time.Duration;
  * @author Anastasiia Smirnova
  */
 @Data
-@ConfigurationProperties(prefix = "spring.aerospike")
+@ConfigurationProperties(prefix = CONFIG_PREFIX_CONNECTION)
 public class AerospikeProperties {
 
     /**
@@ -157,7 +158,7 @@ public class AerospikeProperties {
         public Duration sleepBetweenRetries;
 
         /**
-         * If the key is sent on a write, the key will be stored with the record on the server.
+         * If the key is sent in a write operation, it will be stored with the record on the server.
          */
         public Boolean sendKey;
     }

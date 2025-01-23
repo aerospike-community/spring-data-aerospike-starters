@@ -19,7 +19,8 @@ package org.springframework.boot.autoconfigure.data.aerospike;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.data.aerospike.config.AerospikeDataSettings;
+
+import static org.springframework.data.aerospike.config.AerospikeDataConfigurationSupport.CONFIG_PREFIX_DATA;
 
 /**
  * Configuration properties for Spring Data Aerospike.
@@ -27,7 +28,7 @@ import org.springframework.data.aerospike.config.AerospikeDataSettings;
  * @author Igor Ermolenko
  * @author Anastasiia Smirnova
  */
-@ConfigurationProperties(prefix = "spring.data.aerospike")
+@ConfigurationProperties(prefix = CONFIG_PREFIX_DATA)
 @Getter
 @Setter
 public class AerospikeDataProperties {
@@ -38,12 +39,12 @@ public class AerospikeDataProperties {
     private String namespace;
 
     /**
-     * Bin name that will be used for storing entity's type.
+     * Bin name that will be used for storing entity's type. Default value is null
      * <p>
      *
      * @see org.springframework.data.aerospike.convert.AerospikeTypeAliasAccessor
      */
-    private String typeKey = "@_class";
+    private String classKey = "@_class";
 
     /**
      * Gives ability to disable queries that will run scan on Aerospike server.

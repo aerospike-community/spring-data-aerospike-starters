@@ -5,8 +5,8 @@
 
     <parent>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>3.3.0</version>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.1</version>
     </parent>
 
     <groupId>com.aerospike</groupId>
@@ -14,7 +14,7 @@
     <version>${revision}</version>
 
     <name>Spring Data Aerospike Starters</name>
-    <description>Autoconfiguration project for Spring Data Aerospike.</description>
+    <description>Autoconfiguration project for Spring Data Aerospike</description>
     <url>https://github.com/aerospike-community/spring-data-aerospike-starters</url>
     <organization>
         <name>Aerospike Inc.</name>
@@ -24,14 +24,16 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>spring-boot-autoconfigure-data-aerospike</module>
-        <module>spring-boot-starter-data-aerospike</module>
-        <module>spring-boot-starter-data-aerospike-reactive</module>
-        <module>spring-boot-starter-data-aerospike-example</module>
+        <module>spring-boot-autoconfigure-data-aerospike</module> <!-- Common configuration, internal dependency -->
+        <module>spring-boot-starter-aerospike</module> <!-- Aerospike client -->
+        <module>spring-boot-starter-aerospike-reactive</module> <!-- Reactive Aerospike client -->
+        <module>spring-boot-starter-data-aerospike</module>  <!-- Spring Data Aerospike -->
+        <module>spring-boot-starter-data-aerospike-reactive</module>  <!-- Reactive Spring Data Aerospike -->
+        <module>spring-boot-starter-example-aerospike</module> <!-- Usage examples -->
     </modules>
 
     <properties>
-        <revision>0.16.1</revision>
+        <revision>0.17.0</revision>
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -39,13 +41,11 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <flatten.maven.plugin.version>1.6.0</flatten.maven.plugin.version>
-
-        <spring-data-aerospike.version>4.8.0</spring-data-aerospike.version>
-        <aerospike-reactor-client.version>7.1.0</aerospike-reactor-client.version>
-        <aerospike-client.version>7.2.1</aerospike-client.version>
-        <embedded-aerospike.version>3.1.6</embedded-aerospike.version>
-
-        <spring-cloud-starter.version>4.1.2</spring-cloud-starter.version>
+        <spring-data-aerospike.version>5.0.0</spring-data-aerospike.version>
+        <aerospike-reactor-client.version>9.0.2</aerospike-reactor-client.version>
+        <aerospike-client.version>9.0.3</aerospike-client.version>
+        <embedded-aerospike.version>3.1.10</embedded-aerospike.version>
+        <spring-cloud-starter.version>4.2.0</spring-cloud-starter.version>
     </properties>
 
     <licenses>
@@ -107,7 +107,12 @@
             </dependency>
             <dependency>
                 <groupId>com.aerospike</groupId>
-                <artifactId>spring-boot-starter-data-aerospike-reactive</artifactId>
+                <artifactId>spring-boot-starter-aerospike</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aerospike</groupId>
+                <artifactId>spring-boot-starter-aerospike-reactive</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -115,24 +120,26 @@
                 <artifactId>spring-boot-starter-data-aerospike</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.aerospike</groupId>
+                <artifactId>spring-boot-starter-data-aerospike-reactive</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.aerospike</groupId>
                 <artifactId>spring-data-aerospike</artifactId>
                 <version>${spring-data-aerospike.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.aerospike</groupId>
+                <artifactId>aerospike-client-jdk8</artifactId>
+                <version>${aerospike-client.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.aerospike</groupId>
                 <artifactId>aerospike-reactor-client</artifactId>
                 <version>${aerospike-reactor-client.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.aerospike</groupId>
-                <artifactId>aerospike-client</artifactId>
-                <version>${aerospike-client.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-test-support</artifactId>
