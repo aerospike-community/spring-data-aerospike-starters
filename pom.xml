@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.2</version>
     </parent>
 
     <groupId>com.aerospike</groupId>
@@ -33,7 +33,7 @@
     </modules>
 
     <properties>
-        <revision>0.17.0</revision>
+        <revision>0.17.1</revision>
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -41,10 +41,10 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <flatten.maven.plugin.version>1.6.0</flatten.maven.plugin.version>
-        <spring-data-aerospike.version>5.0.0</spring-data-aerospike.version>
+        <spring-data-aerospike.version>5.0.1</spring-data-aerospike.version>
         <aerospike-reactor-client.version>9.0.2</aerospike-reactor-client.version>
-        <aerospike-client.version>9.0.3</aerospike-client.version>
-        <embedded-aerospike.version>3.1.10</embedded-aerospike.version>
+        <aerospike-client.version>9.0.4</aerospike-client.version>
+        <embedded-aerospike.version>3.1.11</embedded-aerospike.version>
         <spring-cloud-starter.version>4.2.0</spring-cloud-starter.version>
     </properties>
 
