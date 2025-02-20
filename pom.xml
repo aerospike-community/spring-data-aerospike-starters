@@ -33,7 +33,7 @@
     </modules>
 
     <properties>
-        <revision>0.17.0</revision>
+        <revision>0.17.1</revision>
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
