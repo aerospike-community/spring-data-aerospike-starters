@@ -45,7 +45,7 @@
         <aerospike-reactor-client.version>9.0.2</aerospike-reactor-client.version>
         <aerospike-client.version>9.0.4</aerospike-client.version>
         <embedded-aerospike.version>3.1.11</embedded-aerospike.version>
-        <spring-cloud-starter.version>4.2.0</spring-cloud-starter.version>
+        <spring-cloud-starter.version>4.2.1</spring-cloud-starter.version>
     </properties>
 
     <licenses>
