@@ -41,7 +41,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <flatten.maven.plugin.version>1.6.0</flatten.maven.plugin.version>
-        <spring-data-aerospike.version>5.0.1</spring-data-aerospike.version>
+        <spring-data-aerospike.version>5.1.0</spring-data-aerospike.version>
         <aerospike-reactor-client.version>9.0.2</aerospike-reactor-client.version>
         <aerospike-client.version>9.0.4</aerospike-client.version>
         <embedded-aerospike.version>3.1.11</embedded-aerospike.version>
