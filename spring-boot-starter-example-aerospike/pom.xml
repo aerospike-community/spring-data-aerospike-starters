@@ -21,10 +21,6 @@
         <module>starter-example-data-reactive</module>
     </modules>
 
-    <properties>
-        <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -60,11 +56,13 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>${maven-deploy-plugin.version}</version>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>${central.publishing.maven.plugin}</version>
                 <configuration>
-                    <skip>true</skip>
+                    <excludeArtifacts>
+                        spring-boot-starter-example-aerospike,starter-example-client,starter-example-client-reactive,starter-example-data,starter-example-data-reactive
+                    </excludeArtifacts>
                 </configuration>
             </plugin>
         </plugins>
