@@ -46,7 +46,7 @@
         <spring-cloud-starter.version>4.2.1</spring-cloud-starter.version>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <flatten.maven.plugin.version>1.7.0</flatten.maven.plugin.version>
-        <central.publishing.maven.plugin>0.7.0</central.publishing.maven.plugin>
+        <central.publishing.maven.plugin>0.8.0</central.publishing.maven.plugin>
     </properties>
 
     <licenses>
