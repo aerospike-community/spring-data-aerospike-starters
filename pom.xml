@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.5.1</version>
     </parent>
 
     <groupId>com.aerospike</groupId>
@@ -33,20 +33,20 @@
     </modules>
 
     <properties>
-        <revision>0.18.0</revision>
+        <revision>0.18.1</revision>
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-data-aerospike.version>5.1.1</spring-data-aerospike.version>
+        <spring-data-aerospike.version>5.2.0</spring-data-aerospike.version>
         <aerospike-reactor-client.version>9.0.5</aerospike-reactor-client.version>
         <aerospike-client.version>9.0.5</aerospike-client.version>
-        <embedded-aerospike.version>3.1.11</embedded-aerospike.version>
-        <spring-cloud-starter.version>4.2.1</spring-cloud-starter.version>
+        <embedded-aerospike.version>3.1.14</embedded-aerospike.version>
+        <spring-cloud-starter.version>4.3.0</spring-cloud-starter.version>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <flatten.maven.plugin.version>1.7.0</flatten.maven.plugin.version>
-        <central.publishing.maven.plugin>0.7.0</central.publishing.maven.plugin>
+        <central.publishing.maven.plugin>0.8.0</central.publishing.maven.plugin>
     </properties>
 
     <licenses>
@@ -93,10 +93,6 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
     </distributionManagement>
 
     <dependencyManagement>
