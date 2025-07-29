@@ -45,7 +45,7 @@
         <embedded-aerospike.version>3.1.14</embedded-aerospike.version>
         <spring-cloud-starter.version>4.3.0</spring-cloud-starter.version>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
-        <flatten.maven.plugin.version>1.7.0</flatten.maven.plugin.version>
+        <flatten.maven.plugin.version>1.7.2</flatten.maven.plugin.version>
         <central.publishing.maven.plugin>0.8.0</central.publishing.maven.plugin>
     </properties>
 
