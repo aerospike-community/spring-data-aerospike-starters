@@ -34,7 +34,7 @@ import org.springframework.context.annotation.Conditional;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Aerospike client.
- * Loaded only for client-only modules or when no namespace property is given.
+ * Loaded just for client-only modules or when no namespace property is given.
  *
  * @author Anastasiia Smirnova
  */
