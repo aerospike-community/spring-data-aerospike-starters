@@ -33,7 +33,7 @@ import reactor.core.publisher.Flux;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Aerospike Reactor client.
- * Loaded only for client-only modules or when no namespace property is given.
+ * Loaded just for client-only modules or when no namespace property is given.
  *
  * @author Anastasiia Smirnova
  */
