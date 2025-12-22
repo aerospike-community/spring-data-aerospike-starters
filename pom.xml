@@ -40,7 +40,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-data-aerospike.version>5.3.0</spring-data-aerospike.version>
-        <aerospike-reactor-client.version>9.0.5</aerospike-reactor-client.version>
+        <aerospike-reactor-client.version>9.2.0</aerospike-reactor-client.version>
         <aerospike-client.version>9.2.0</aerospike-client.version>
         <embedded-aerospike.version>3.1.17</embedded-aerospike.version>
         <spring-cloud-starter.version>4.3.0</spring-cloud-starter.version>
