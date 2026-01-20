@@ -1,7 +1,9 @@
 =  Auto configuration for Spring Data Aerospike
 
-image:https://img.shields.io/maven-central/v/com.aerospike/spring-data-aerospike-starters.svg?maxAge=259200["maven", link="https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22spring-data-aerospike-starters%22"]
-image:https://github.com/aerospike-community/spring-data-aerospike-starters/workflows/Build%20project/badge.svg["build", link="https://github.com/aerospike-community/spring-data-aerospike-starters/actions?query=branch%3Amaster"]
+image:https://img.shields.io/maven-central/v/com.aerospike/spring-data-aerospike-starters.svg?maxAge=259200
+["maven", link="https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22spring-data-aerospike-starters%22"]
+image:https://github.com/aerospike-community/spring-data-aerospike-starters/workflows/Build%20project/badge.svg
+["build", link="https://github.com/aerospike-community/spring-data-aerospike-starters/actions?query=branch%3Amaster"]
 
 :repo-master: https://github.com/aerospike-community/spring-data-aerospike-starters/blob/master
 
@@ -9,6 +11,11 @@ image:https://github.com/aerospike-community/spring-data-aerospike-starters/work
 
 |===
 |`spring-data-aerospike-starters` |`spring-data-aerospike` |`aerospike-client` |`aerospike-reactor-client`
+|0.21.x
+|5.4.x
+|9.2.x
+|9.2.x
+
 |0.20.x
 |5.3.x
 |9.2.x
