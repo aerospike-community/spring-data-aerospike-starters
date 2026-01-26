@@ -287,8 +287,12 @@ public class AerospikeProperties {
     }
 
     /**
-     * Properties of optional EventLoops to be used in asynchronous commands in ClientPolicy, for details see
-     * {@link com.aerospike.client.async.EventLoops}.
+     * Properties for EventLoops configuration used in reactive Aerospike clients.
+     * Applied when using reactive modules
+     * via {@link org.springframework.boot.autoconfigure.util.NettyEventLoopsFactory}.
+     * <p>
+     * For details see {@link com.aerospike.client.async.EventPolicy}.
+     * Note: These properties require Netty to be on the classpath.
      */
     @Data
     public static class EventLoopsProperties {
@@ -298,7 +302,7 @@ public class AerospikeProperties {
          */
         public int maxCommandsInProcess = 0;
         /**
-         * Maximal amount of async commands to be stored in each even loop's delay queue. Default value is 0.
+         * Maximal amount of async commands to be stored in each event loop's delay queue. Default value is 0.
          */
         public int maxCommandsInQueue = 0;
         /**

@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.aerospike.AerospikeProperties;
 import org.springframework.boot.autoconfigure.data.aerospike.AerospikeDataProperties;
+import org.springframework.boot.autoconfigure.util.NettyEventLoopsFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.aerospike.config.AbstractReactiveAerospikeDataConfiguration;
 import org.springframework.data.aerospike.config.AerospikeDataSettings;
@@ -40,7 +41,7 @@ import static org.springframework.boot.autoconfigure.util.AerospikeConfiguration
  */
 @Slf4j
 @Configuration
-public class  AerospikeReactiveDataConfiguration extends AbstractReactiveAerospikeDataConfiguration {
+public class AerospikeReactiveDataConfiguration extends AbstractReactiveAerospikeDataConfiguration {
 
     @Autowired
     private AerospikeProperties properties;
@@ -59,7 +60,7 @@ public class  AerospikeReactiveDataConfiguration extends AbstractReactiveAerospi
 
     @Override
     public EventLoops eventLoops() {
-        return setupEventLoops(properties.getEventLoops());
+        return NettyEventLoopsFactory.createEventLoops(properties.getEventLoops());
     }
 
     @Override
