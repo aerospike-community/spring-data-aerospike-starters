@@ -171,5 +171,7 @@ public class AerospikeConfigurationUtils {
         whenPresent(dataProperties.getQueryMaxRecords(), aerospikeDataSettings::setQueryMaxRecords);
         whenPresent(dataProperties.getBatchWriteSize(), aerospikeDataSettings::setBatchWriteSize);
         whenPresent(dataProperties.isKeepOriginalKeyTypes(), aerospikeDataSettings::setKeepOriginalKeyTypes);
+        // Use getEffectiveClassKey() to handle legacy typeKey with precedence
+        aerospikeDataSettings.setClassKey(dataProperties.getEffectiveClassKey());
     }
 }

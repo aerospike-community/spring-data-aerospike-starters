@@ -86,30 +86,90 @@ public class AerospikeDataAutoConfigurationTest {
     }
 
     @Test
-    public void typeKeyCanBeCustomized() {
+    public void classKeyCanBeCustomized() {
         contextRunner
                 .withPropertyValues(CONFIG_PREFIX_CONNECTION + ".hosts=localhost:3000")
                 .withPropertyValues(CONFIG_PREFIX_DATA + ".namespace=TEST")
                 .withPropertyValues(CONFIG_PREFIX_DATA + ".class-key=++amazing++")
                 .run((context) -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
-                    String typeKey = getField(aliasAccessor, "classKey");
+                    String classKey = getField(aliasAccessor, "classKey");
 
-                    assertThat(typeKey).isEqualTo("++amazing++");
+                    assertThat(classKey).isEqualTo("++amazing++");
                 });
     }
 
     @Test
-    public void typeKeyCanBeNull() {
+    public void classKeyCanBeNull() {
         contextRunner
                 .withPropertyValues(CONFIG_PREFIX_CONNECTION + ".hosts=localhost:3000")
                 .withPropertyValues(CONFIG_PREFIX_DATA + ".namespace=TEST")
                 .withPropertyValues(CONFIG_PREFIX_DATA + ".class-key=")
                 .run((context) -> {
                     AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
-                    String typeKey = getField(aliasAccessor, "classKey");
+                    String classKey = getField(aliasAccessor, "classKey");
 
-                    assertThat(typeKey).isNull();
+                    assertThat(classKey).isNull();
+                });
+    }
+
+    @Test
+    public void legacyTypeKeyCanBeUsed() {
+        contextRunner
+                .withPropertyValues(CONFIG_PREFIX_CONNECTION + ".hosts=localhost:3000")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".namespace=TEST")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".type-key=@legacy_type")
+                .run((context) -> {
+                    AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
+                    String classKey = getField(aliasAccessor, "classKey");
+
+                    assertThat(classKey).isEqualTo("@legacy_type");
+                });
+    }
+
+    @Test
+    public void legacyTypeKeyTakesPrecedenceOverClassKey() {
+        contextRunner
+                .withPropertyValues(CONFIG_PREFIX_CONNECTION + ".hosts=localhost:3000")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".namespace=TEST")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".class-key=@new_class_key")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".type-key=@legacy_type_key")
+                .run((context) -> {
+                    AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
+                    String classKey = getField(aliasAccessor, "classKey");
+
+                    // typeKey takes precedence for backward compatibility
+                    assertThat(classKey).isEqualTo("@legacy_type_key");
+                });
+    }
+
+    @Test
+    public void classKeyUsedWhenLegacyTypeKeyIsEmpty() {
+        contextRunner
+                .withPropertyValues(CONFIG_PREFIX_CONNECTION + ".hosts=localhost:3000")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".namespace=TEST")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".class-key=@my_class_key")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".type-key=")
+                .run((context) -> {
+                    AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
+                    String classKey = getField(aliasAccessor, "classKey");
+
+                    // Empty typeKey falls back to classKey
+                    assertThat(classKey).isEqualTo("@my_class_key");
+                });
+    }
+
+    @Test
+    public void classKeyUsedWhenLegacyTypeKeyNotSet() {
+        contextRunner
+                .withPropertyValues(CONFIG_PREFIX_CONNECTION + ".hosts=localhost:3000")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".namespace=TEST")
+                .withPropertyValues(CONFIG_PREFIX_DATA + ".class-key=@my_class_key")
+                .run((context) -> {
+                    AerospikeTypeAliasAccessor aliasAccessor = context.getBean(AerospikeTypeAliasAccessor.class);
+                    String classKey = getField(aliasAccessor, "classKey");
+
+                    assertThat(classKey).isEqualTo("@my_class_key");
                 });
     }
 
