@@ -110,6 +110,8 @@ public class AerospikeProperties {
      */
     private Boolean failIfNotConnected = true;
 
+    private InfoPolicyDefault info = new InfoPolicyDefault();
+
     private ReadPolicyDefault read = new ReadPolicyDefault();
 
     private WritePolicyDefault write = new WritePolicyDefault();
@@ -123,6 +125,8 @@ public class AerospikeProperties {
     private BatchUDFPolicyDefault batchUdf = new BatchUDFPolicyDefault();
 
     private QueryPolicyDefault query = new QueryPolicyDefault();
+
+    private EventLoopsProperties eventLoops = new EventLoopsProperties();
 
     /**
      * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.Policy}.
@@ -268,5 +272,65 @@ public class AerospikeProperties {
          * If the transaction results in a record deletion, leave a tombstone for the record.
          */
         public Boolean durableDelete;
+    }
+
+    /**
+     * For more details on each option see corresponding field documentation in {@link com.aerospike.client.policy.InfoPolicy}.
+     */
+    @Data
+    public static class InfoPolicyDefault {
+
+        /**
+         * Info command socket timeout.
+         */
+        public Duration timeout;
+    }
+
+    /**
+     * Properties for EventLoops configuration used in reactive Aerospike clients.
+     * Applied when using reactive modules
+     * via {@link org.springframework.boot.autoconfigure.util.NettyEventLoopsFactory}.
+     * <p>
+     * For details see {@link com.aerospike.client.async.EventPolicy}.
+     * Note: These properties require Netty to be on the classpath.
+     */
+    @Data
+    public static class EventLoopsProperties {
+
+        /**
+         * Maximal amount of async commands to be processed in each event loop. Default value is 0.
+         */
+        public int maxCommandsInProcess = 0;
+        /**
+         * Maximal amount of async commands to be stored in each event loop's delay queue. Default value is 0.
+         */
+        public int maxCommandsInQueue = 0;
+        /**
+         * Initial capacity of each event loop's delay queue. Default value is 256.
+         */
+        public int queueInitialCapacity = 256;
+        /**
+         * Minimum command timeout in milliseconds that will be specified for this event loop group.
+         * Default value is 100.
+         */
+        public int minTimeout = 100;
+        /**
+         * The number of ticks per wheel for HashedWheelTimer in each event loop. Default value is 256.
+         */
+        public int ticksPerWheel = 256;
+        /**
+         * Expected number of concurrent asynchronous commands in each event loop that are active at any point in time.
+         * Default value is 256.
+         */
+        public int commandsPerEventLoop = 256;
+        /**
+         * Number of threads to be used. Default value is 0.
+         */
+        public int threads = 0;
+        /**
+         * EventLoops type: NioEventLoopGroup, EpollEventLoopGroup, KQueueEventLoopGroup.
+         * Default value is NioEventLoopGroup.
+         */
+        public String groupType;
     }
 }
