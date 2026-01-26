@@ -18,7 +18,6 @@ package org.springframework.boot.aerospike.reactive.data;
 
 import com.aerospike.client.Host;
 import com.aerospike.client.async.EventLoops;
-import com.aerospike.client.async.NioEventLoops;
 import com.aerospike.client.policy.ClientPolicy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +59,7 @@ public class  AerospikeReactiveDataConfiguration extends AbstractReactiveAerospi
 
     @Override
     public EventLoops eventLoops() {
-        return new NioEventLoops();
+        return setupEventLoops(properties.getEventLoops());
     }
 
     @Override
