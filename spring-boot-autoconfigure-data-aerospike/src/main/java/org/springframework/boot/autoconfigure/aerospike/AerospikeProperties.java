@@ -16,8 +16,10 @@
 
 package org.springframework.boot.autoconfigure.aerospike;
 
+import com.aerospike.client.async.EventPolicy;
 import com.aerospike.client.policy.AuthMode;
 import lombok.Data;
+import org.springframework.boot.autoconfigure.util.EventLoopsFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
@@ -289,14 +291,20 @@ public class AerospikeProperties {
     /**
      * Properties for EventLoops configuration used in reactive Aerospike clients.
      * Applied when using reactive modules
-     * via {@link org.springframework.boot.autoconfigure.util.NettyEventLoopsFactory}.
+     * via {@link EventLoopsFactory}.
      * <p>
      * For details see {@link com.aerospike.client.async.EventPolicy}.
-     * Note: These properties require Netty to be on the classpath.
+     * Note: When using NettyEventLoops, it is required to have Netty on the classpath
      */
     @Data
     public static class EventLoopsProperties {
 
+        /**
+         * EventLoops type: {@code netty} (stands for NettyEventLoops) or {@code nio} (stands for NioEventLoops). For details see
+         * {@link com.aerospike.client.async.NioEventLoops}, {@link com.aerospike.client.async.NettyEventLoops}.
+         * Default value is {@code nio}.
+         */
+        public String eventLoopsType = "nio";
         /**
          * Maximal amount of async commands to be processed in each event loop. Default value is 0.
          */
@@ -328,9 +336,21 @@ public class AerospikeProperties {
          */
         public int threads = 0;
         /**
-         * EventLoops type: NioEventLoopGroup, EpollEventLoopGroup, KQueueEventLoopGroup.
+         * EventLoops group type: NioEventLoopGroup, EpollEventLoopGroup, KQueueEventLoopGroup.
          * Default value is NioEventLoopGroup.
          */
-        public String groupType;
+        public String groupType = "NioEventLoopGroup";
+        /**
+         * Only if NioEventLoops are used. Daemon parameter for NioEventLoops constructor. For details see
+         * {@link com.aerospike.client.async.NioEventLoops#NioEventLoops(EventPolicy, int, boolean, String)}.
+         * Default value is {@code false}.
+         */
+        public boolean nioDaemonThreads = false;
+        /**
+         * Only if NioEventLoops are used. Event loop thread pool name for NioEventLoops constructor. For details see
+         * {@link com.aerospike.client.async.NioEventLoops#NioEventLoops(EventPolicy, int, boolean, String)}.
+         * Default value is "aerospike-nio-event-loop".
+         */
+        public String nioPoolName = "aerospike-nio-event-loop";
     }
 }

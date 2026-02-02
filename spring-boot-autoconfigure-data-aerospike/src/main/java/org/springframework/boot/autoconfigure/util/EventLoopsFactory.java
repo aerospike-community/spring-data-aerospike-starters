@@ -19,6 +19,7 @@ package org.springframework.boot.autoconfigure.util;
 import com.aerospike.client.async.EventLoops;
 import com.aerospike.client.async.EventPolicy;
 import com.aerospike.client.async.NettyEventLoops;
+import com.aerospike.client.async.NioEventLoops;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
@@ -30,14 +31,14 @@ import org.springframework.boot.autoconfigure.aerospike.AerospikeProperties;
 import org.springframework.util.StringUtils;
 
 /**
- * Factory for creating Netty-based EventLoops for reactive Aerospike clients.
+ * Factory for creating EventLoops for reactive Aerospike clients.
  * This class is isolated to avoid loading Netty classes when not needed.
  * Should only be used in reactive modules where Netty is a required dependency.
  *
  * @author Anastasiia Smirnova
  */
 @Slf4j
-public class NettyEventLoopsFactory {
+public class EventLoopsFactory {
 
     /**
      * Creates and configures EventLoops using Netty for reactive operations.
@@ -67,7 +68,24 @@ public class NettyEventLoopsFactory {
             eventPolicy.commandsPerEventLoop = eventLoopsProperties.commandsPerEventLoop;
         }
 
-        return new NettyEventLoops(eventPolicy, chooseLoopGroup(eventLoopsProperties));
+        if (eventLoopsProperties.eventLoopsType.equalsIgnoreCase("netty")) {
+            return new NettyEventLoops(eventPolicy, chooseLoopGroup(eventLoopsProperties));
+        }
+        return getNioEventLoopsOrFail(eventPolicy, eventLoopsProperties);
+    }
+
+    private static EventLoops getNioEventLoopsOrFail(EventPolicy eventPolicy,
+                                                     AerospikeProperties.EventLoopsProperties eventLoopsProperties) {
+        if (!eventLoopsProperties.eventLoopsType.equalsIgnoreCase("nio")) {
+            throw new UnsupportedOperationException(
+                    String.format("Expecting 'nio' or 'netty' as eventLoopsType, got '%s' instead",
+                            eventLoopsProperties.eventLoopsType)
+            );
+        }
+        int threads = Math.max(eventLoopsProperties.getThreads(), 0);
+        boolean useDaemonThreads = eventLoopsProperties.nioDaemonThreads;
+        String poolName = eventLoopsProperties.nioPoolName;
+        return new NioEventLoops(eventPolicy, threads, useDaemonThreads, poolName);
     }
 
     private static EventLoopGroup chooseLoopGroup(AerospikeProperties.EventLoopsProperties eventLoopsProperties) {
