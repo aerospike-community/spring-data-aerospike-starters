@@ -43,7 +43,7 @@
         <aerospike-reactor-client.version>9.2.0</aerospike-reactor-client.version>
         <aerospike-client.version>9.2.0</aerospike-client.version>
         <embedded-aerospike.version>3.1.18</embedded-aerospike.version>
-        <spring-cloud-starter.version>4.3.1</spring-cloud-starter.version>
+        <spring-cloud-starter.version>5.0.1</spring-cloud-starter.version>
         <mockito.version>5.17.0</mockito.version>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <flatten.maven.plugin.version>1.7.3</flatten.maven.plugin.version>
